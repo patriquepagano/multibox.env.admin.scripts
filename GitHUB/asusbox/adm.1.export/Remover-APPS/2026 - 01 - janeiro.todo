@@ -1,0 +1,43 @@
+
+# remover apps obsoletos e desnecessarios
+
+com.stremio.one < é via url direto
+org.xbmc.kodi < é via url direto
+
+
+
+# atualizar pelo app mesmo
+[x] {NEW ONE P2P} [com.newone.p2p1] (1.0.5)
+[x] {SmartTube} [com.teamsmart.videomanager.tv] (14.16)
+[x] {Tele Latino} [com.global.latinotv] (5.42.0)
+
+234 ok
+235 ok
+236
+
+
+
+
+
+/ debug / app / [Remove APP] (b) remove app from torrent pack
+
+
+
+---------------------------
+# instalar novos
+
+
+
+
+--------- atualizar existentes ---------
+[x] atualizar dados
+
+
+
+todos apps instalados gera nova lista e posta no grupo
+
+pega os novos apps e loga aqui abaixo
+
+
+
+

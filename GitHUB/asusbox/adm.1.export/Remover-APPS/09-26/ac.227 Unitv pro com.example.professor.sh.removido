@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="CG4Wvv9dCyEQAqk30IWixV6cJzh1PtpU5LJwXxuMUn6EzwYUXT6wGa2dIuxJlVcPgRArVO"
+# app vars
+app="com.example.professor"
+fakeName="Unitv PRO (5.40.0)"
+apkSection="clones"
+apkName="ac.227"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# {Unitv PRO} [com.example.professor] (5.40.0)

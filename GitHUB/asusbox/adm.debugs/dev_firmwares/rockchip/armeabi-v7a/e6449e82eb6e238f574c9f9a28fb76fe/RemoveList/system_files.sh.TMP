@@ -1,0 +1,5 @@
+/system/preinstall
+/system/preinstall_del
+/system/media/bootanimation.zip
+/system/bin/preinstall.sh
+/system/bin/preinstall_cleanup.sh

@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="aJS8gpEA53VPvcHCHM5TuFtEottKX8tj5UNjYxC2bCsrQWomQo4bzUSY4h1uH39fV0amQS"
+# app vars
+app="com.rookiestudio.perfectviewer"
+fakeName="Perfect Viewer (5.0.4.4)"
+apkSection="oem"
+apkName="ao.25"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+#   com.rookiestudio.perfectviewer
+

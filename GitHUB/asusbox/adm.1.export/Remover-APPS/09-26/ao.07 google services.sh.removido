@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="uV69qNQlzGw0zcIqUb5grSPFOEGoTm6vP6LyMEoCQ3nwN85b3Z0B3D5U5BlLwFOEmbvedP"
+# app vars
+app="com.google.android.gms"
+fakeName="Google Play services (22.15.14 (040300-441847897))"
+apkSection="oem"
+apkName="ao.07"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+# {Google Play services} [com.google.android.gms] (22.15.14 (040300-441847897))
+
+
+

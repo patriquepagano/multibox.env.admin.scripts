@@ -1,0 +1,27 @@
+aria2 version 1.35.0
+Copyright (C) 2006, 2019 Tatsuhiro Tsujikawa
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+** Configuration **
+Enabled Features: Async DNS, BitTorrent, GZip, HTTPS, Message Digest, Metalink, XML-RPC, SFTP
+Hash Algorithms: sha-1, sha-224, sha-256, sha-384, sha-512, md5, adler32
+Libraries: zlib/1.2.9 expat/2.2.9 OpenSSL/1.1.1d c-ares/1.14.0 libssh2/1.9.0_DEV
+Compiler: clang 9.0.8 (https://android.googlesource.com/toolchain/llvm-project 98c855489587874b2a325e7a516b99d838599c6f)
+  built by  x86_64-pc-linux-gnu
+  targeting x86_64-pc-linux-android
+  on        Nov  8 2020 21:23:20
+System: Linux 4.9.54-android-x86_64-gfb63269e5ada #1 SMP PREEMPT Tue Oct 10 19:35:35 CST 2017 i686
+
+Report bugs to https://github.com/aria2/aria2/issues
+Visit https://aria2.github.io/
+
+https://github.com/devgianlu/Aria2App

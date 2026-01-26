@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="65R3X3ioLWKIKvlPfeUyWMS6EKH2Id3LWkwm75G5YLGDA8oTFxLslOaOjsHmDcmGGE3gr8"
+# app vars
+app="com.eai.tvsimple"
+fakeName="EAI MUNDO (2.2.8)"
+apkSection="clones"
+apkName="ac.221"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# {EAI MUNDO} [com.eai.tvsimple] (2.2.8)

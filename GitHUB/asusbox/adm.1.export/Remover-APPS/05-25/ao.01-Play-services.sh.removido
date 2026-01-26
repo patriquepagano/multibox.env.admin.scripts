@@ -1,0 +1,32 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="S0AE2wZYKyghMusdNI4Ku9wKKOexMmn0MXGDi3EbsOhIkBIwG2JvdiakHS5lCSoMlAqFjl"
+# app vars
+app="com.google.android.gms"
+fakeName="Google Play services (23.45.23 (040300-587848529))"
+apkSection="oem"
+apkName="ao.01"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=''
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+

@@ -1,0 +1,4 @@
+#!/system/bin/sh
+source /storage/DevMount/GitHUB/asusbox/adm.debugs/dev_firmwares/_Functions/generate.sh
+source /storage/DevMount/GitHUB/asusbox/adm.debugs/dev_firmwares/_Functions/allFunctions.sh
+uninstall_user_apps

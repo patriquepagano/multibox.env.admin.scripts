@@ -1,0 +1,7 @@
+#!/system/bin/sh
+
+path=$( cd "${0%/*}" && pwd -P )
+cd $path/.devbox
+x
+
+

@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="U6QVO6pGirPM2rfVibdTZz5Zu8dskzionNKoKzd24MRjVks8NoS5DgjfWD54o8exVFI0zZ"
+# app vars
+app="com.brtzel.tv"
+fakeName="ONIX TV (1.0)"
+apkSection="clones"
+apkName="ac.096"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# {Onix} [com.onixapp.app] (1.0.10)
+# {ONIX TV} [com.brtzel.tv] (1.0)

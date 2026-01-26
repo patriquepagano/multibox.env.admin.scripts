@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="REbuXPLxW86xaxi6LMl5icpQkuPtMuz1MdAR9q0te6mR2bs4tVNkWqZwETxlNNzDgBsBcs"
+# app vars
+app="com.multip2p"
+fakeName="Prime TV (1.6)"
+apkSection="clones"
+apkName="ac.091"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# {Prime TV} [com.multip2p] (1.6).apk

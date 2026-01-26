@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="HHPKqW3H5b9mMCwbBEQtlzGneks4792BNVYAXSO4U8dha0kA5yug0YHF1bFKonplsrHy3Q"
+# app vars
+app="com.eaigo"
+fakeName="eaigo+ (4.14.4)"
+apkSection="clones"
+apkName="ac.213"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {eaigo+} [com.eaigo] (4.14.4)
+
+

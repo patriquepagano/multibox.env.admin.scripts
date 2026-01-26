@@ -1,0 +1,32 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="DfYRyYnwB5FdX0Gs44B6orcEWI9R7Do6KBRRon1oVlyvBJZmAtuTgw3uPwR3OrdMg7bNCL"
+# app vars
+app="com.iptv.stv.blive"
+fakeName="B-Live (1.11.16)"
+apkSection="clones"
+apkName="ac.117"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+# {BLive} [com.iptv.stv.blive] (1.11.16).apk" pede acesso ao cartao sd

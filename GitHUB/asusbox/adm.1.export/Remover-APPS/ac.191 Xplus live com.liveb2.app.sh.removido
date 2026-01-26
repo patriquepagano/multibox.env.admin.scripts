@@ -1,0 +1,40 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="XX4L7rdYp91Ttno2CdYYAk7owgApQNPpRbLksvhFcHDZXtEzJ5QJ8J4E00AkwcWQXlK7rn"
+# app vars
+app="com.liveb2.app"
+fakeName="Xplus live (6.5.5)"
+apkSection="clones"
+apkName="ac.191"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Xplus live} [com.liveb2.app] (6.5.5)
+
+# input text '20io8rrubogg44'
+
+# login via card
+
+

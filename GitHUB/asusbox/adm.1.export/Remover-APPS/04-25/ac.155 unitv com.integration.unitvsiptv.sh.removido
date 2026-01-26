@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="IgB2IRF8yfcWm0rHB2qi3UsRsGgTYwFS0csjNj7dqzfHJ9sVZPru0XMwq105x7U69sssnV"
+# app vars
+app="com.integration.unitvsiptv"
+fakeName="UniTV Free (5.0.0)"
+apkSection="clones"
+apkName="ac.155"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# base.apk = {UniTV Free} [com.integration.unitvsiptv] (5.0.0)

@@ -1,0 +1,11 @@
+tag="Cloud"
+group="Linode"
+HostName="pixkey"
+ext="vps"
+user="gambatte"
+IP="66.175.210.64"
+homeDev="/home/gambatte"
+key="~/_Work/_keys/digitalOcean/id_rsa"
+port="22"
+
+

@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="xznEcFCNJbJbkVEycAO9oPbFYoFmwoT7BHIv37bOKHs8FfgDeRW2sZY6Okz96yj1iZ7mMp"
+# app vars
+app="com.android.vo_cinema"
+fakeName="Enjoy Cinema (v1.0.8)"
+apkSection="clones"
+apkName="ac.198"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+#AppGrantLoop=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Enjoy Cinema} [com.android.vo_cinema] (v1.0.8)
+

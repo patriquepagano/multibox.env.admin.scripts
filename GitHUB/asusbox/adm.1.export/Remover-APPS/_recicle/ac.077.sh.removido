@@ -1,0 +1,39 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="VZS3zzdH1WnItL8tDMNiAoGwJ5kSbLvKz9oh6D8eEdz5kCMp24HoRtSK0E8sdY84HtAguY"
+# app vars
+app="com.google.youtv"
+fakeName="YouTv"
+apkSection="clones"
+apkName="ac.077"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {YouTv} [com.google.youtv] (1.3.3)
+
+
+
+
+

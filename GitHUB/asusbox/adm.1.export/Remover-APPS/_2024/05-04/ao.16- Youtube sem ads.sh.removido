@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="ImXWX2zvSYRLm5BG4SeH8ZaGOyaDvgejlzMycN7HSvOouHemxUbz3u35Ic22CCdQK9fbyt"
+# app vars
+app="com.teamsmart.videomanager.tv"
+fakeName="SmartTube (20.05)"
+apkSection="oem"
+apkName="ao.16"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+# {SmartTube} [com.teamsmart.videomanager.tv] (14.16)
+
+
+

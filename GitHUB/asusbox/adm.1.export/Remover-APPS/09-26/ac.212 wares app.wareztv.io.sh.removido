@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="CnejAuGVFZaXp6NCAIFBEUyJugFP10do4mBS2Ue9Idsj0ZRTJ5JfbuJt1axPelyLYefiyQ"
+# app vars
+app="app.wareztv.io"
+fakeName="Warez (4.0)"
+apkSection="clones"
+apkName="ac.212"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Warez} [app.wareztv.io] (4.0)
+
+

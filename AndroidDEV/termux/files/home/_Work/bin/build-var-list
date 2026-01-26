@@ -1,0 +1,10 @@
+#!/system/bin/bash
+# lista de palavras/comandos a ofuscar
+SearchCreate="
+-s -m 2 -H
+-X PATCH -H
+-H
+X-API-Key
+Content-Type: application/json
+/system/bin/busybox"
+

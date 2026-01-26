@@ -1,0 +1,6 @@
+#!/system/bin/sh
+path=$( cd "${0%/*}" && pwd -P )
+
+cd "$path/Build Scripts"
+x
+

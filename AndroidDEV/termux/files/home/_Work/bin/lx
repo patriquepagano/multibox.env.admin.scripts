@@ -1,0 +1,74 @@
+#!/system/bin/sh
+BB="/system/bin/busybox"
+
+$BB ls -la | $BB awk '
+{
+  if (NR == 1) { print "total " $2; next }
+
+  k = 0
+  for (i = 0; i < 9; i++) {
+    c = substr($1, i+2, 1)
+    if (c ~ /[rwx]/) k += 2^(8 - i)
+  }
+
+  # bits especiais
+  if (substr($1, 4, 1) == "s") k += 4000  # setuid
+  if (substr($1, 7, 1) == "s") k += 2000  # setgid
+  if (substr($1,10, 1) == "t") k += 1000  # sticky
+
+  printf "%04o %s\n", k, $0
+}'
+
+
+
+
+
+
+
+
+
+
+
+# /system/bin/busybox ls -la | /system/bin/busybox awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf("%0o ",k);print}'
+
+# este é o conteudo do script lx ele esta em path no env ai no terminal estando no diretorio que eu estiver o resutado que tenho é este
+
+# localhost=root@10.0.0.116:~:) lx
+# total 52
+# 700 drwx------    7 root     root          4096 Jun 24 14:39 .
+# 777 drwxrwxrwx    4 root     root          4096 Dec  9  2020 ..
+# 600 -rw-------    1 root     root          8041 Jun 19 22:37 .bash_history
+# 600 -rw-------    1 root     root          1283 Jun 19 12:10 .bashrc
+# 700 drwx------    4 root     root          4096 Feb 10  2021 .cache
+# 700 drwx------    4 root     root          4096 Dec 18  2021 .config
+# 600 -rw-------    1 root     root          3001 May 11  2024 .dialogrc
+# 700 drwx------    3 root     root          4096 Feb 10  2021 .local
+# 700 drwx------    2 root     root          4096 Mar 30  2023 .ssh
+# 600 -rw-------    1 root     root           828 Jun 24 14:39 .wget-hsts
+# 777 lrwxrwxrwx    1 root     root            28 Dec 31  1969 AndroidDEV -> /storage/DevMount/AndroidDEV
+# 777 lrwxrwxrwx    1 root     root            32 Dec 31  1969 Git-asusbox -> /storage/DevMount/GitHUB/asusbox
+# 700 drwx------    5 root     root          4096 Nov  1  2024 _Work
+# 600 -rw-------    1 root     root           201 Jan 19  2024 index.html
+
+# queria ter este mesmo resultando tanto no tvbox quanto no computador. as soluçãso com find não estao boas
+
+
+
+
+path=$( cd "${0%/*}" && pwd -P )
+
+# echo "$path"
+# exit
+
+
+# /system/bin/busybox find "$path" -mindepth 1 -maxdepth 1 | while read -r path; do
+#     [ -e "$path" ] || continue
+#     perms=$(ls -ld "$path" | awk '{k=0; for(i=0;i<9;i++) k+=((substr($1,i+2,1)~/[rwx]/)*2^(8-i)); if (substr($1,5,1)=="s") k+=2000; if (substr($1,8,1)=="s") k+=1000; if (substr($1,11,1)=="t") k+=1000; printf "%04o", k}')
+#     owner=$(ls -ld "$path" | awk '{print $3}')
+#     group=$(ls -ld "$path" | awk '{print $4}')
+#     echo "$perms|$owner:$group|$path"
+# done 
+
+
+
+

@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="ZGTOmw7SQBGDJfXQGB9TVIQwZB5kG33hN0ITnsGYhcN1bvckN1M43ZLEHdZqw6fwm3Fkzl"
+# app vars
+app="com.tv.blacktv"
+fakeName="PLAY-Black (Black TV)"
+apkSection="clones"
+apkName="ac.226"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+#
+
+#
+
+
+
+
+
+# 22) {PLAY-Black} [com.tv.blacktv] (Black TV)

@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="rLKFexXnqVGcTCAdbU2yCeE84Ob3TolQU1K5P18WGS7FdcXdkqiRKVBclPu4ihhF63u1Os"
+# app vars
+app="com.mm.droid.livetv.stb31000173"
+fakeName="Pulse Live (2.1.0)"
+apkSection="clones"
+apkName="ac.157"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+#
+
+#
+
+
+
+
+# pulse luxo.apk = {Pulse Live} [com.mm.droid.livetv.stb31000173] (2.1.0)

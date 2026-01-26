@@ -1,0 +1,67 @@
+[x] remover
+{Duo Prime} [com.mm.droid.livetv.duoprime] (2.0.5)
+{EAI MUNDO} [com.eai.tvsimple] (2.2.8)
+
+
+---------------------------
+# instalar novos
+
+{TV EXPRESS} [com.mm.droid.livetv.tve] (Sr Martins oficial )
+{Duo Prime} [com.mm.droid.livetv.duoprime] (2.0.5)
+
+
+/ debug / app / [Remove APP] (b) remove app from torrent pack
+
+--------- atualizar existentes ---------
+
+[x] atualizar dados
+
+
+{RedPlay Live} [com.mm.droid.livetv.redplaybox] (4.0.0)
+{Duna TV} [com.mm.droid.livetv.duna] (1.0.0)
+{TV EXPRESS} [com.mm.droid.livetv.tve] (Sr Martins oficial )
+
+pm clear com.mm.droid.livetv.duna
+pm clear com.mm.droid.livetv.redplaybox
+
+
+# email login
+input text 'a70072025@gmail.com' 
+input text '25800852'
+
+
+
+
+# --------------- atualizar apps
+{SmartTube} [com.teamsmart.videomanager.tv] (29.13)
+{Tele Latino} [com.global.latinotv] (5.46.0)
+{MAGIS} [com.android.mgstv] (4.24.1)
+{STV} [com.bx.livf] (20250701)
+
+
+
+
+
+
+----------------
+enviar via rsync todos os apps
+instalar novos apps em apk ( menu instalar todos )
+instalar os backups via appk ( app2sdk escaneia e espera )
+
+
+
+todos apps instalados gera nova lista e posta no grupo
+
+pega os novos apps e loga aqui abaixo
+
++ gerar ficha tecnica e pack p2p
+
+
+
+ac 0.35 dando erro no install
+
+
+
+
+
+

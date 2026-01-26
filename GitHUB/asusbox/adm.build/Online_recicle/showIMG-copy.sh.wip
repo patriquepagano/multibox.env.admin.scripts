@@ -1,0 +1,49 @@
+#!/system/bin/sh
+
+# admExport=$(dirname $0)
+
+# clear
+# app=com.google.android.webview
+# app=com.not.aa_image_viewer
+# dumpsys package $app > $admExport/DumpLog_$app
+
+# $EXTERNAL_STORAGE/Android/data/asusbox/.imgMsg/
+# $EXTERNAL_STORAGE/Android/data/asusbox/.imgMsg/01.install.navegador.web.jpg
+# $EXTERNAL_STORAGE/Android/data/asusbox/.imgMsg/02.transmission.jpg
+# $EXTERNAL_STORAGE/Android/data/asusbox/.imgMsg/03.autenticando.jpg
+# $EXTERNAL_STORAGE/Android/data/asusbox/.imgMsg/04.update.base.jpg
+# $EXTERNAL_STORAGE/Android/data/asusbox/.imgMsg/server.offline.jpg
+
+
+app=com.not.aa_image_viewer
+am force-stop $app
+file=/sdcard/Android/data/asusbox/.imgMsg/04.update.base.jpg
+clear
+du -sh $file
+
+am start --user 0 \
+-n com.not.aa_image_viewer/com.not.aa.ImageDetailActivity \
+-a android.intent.action.VIEW -d file://$file
+
+
+# exit
+
+
+# pm uninstall $app
+# pm install /storage/emulated/0/Download/com.not.aa_image_viewer_0.95.apk
+# # #pm install /storage/emulated/0/Download/com.not.aa_image_viewer_0.9533.apk
+
+# pm grant $app android.permission.READ_EXTERNAL_STORAGE
+
+# # # abre a tela principal
+# # am start --user 0 \
+# # -n com.not.aa_image_viewer/com.not.aa.StartActivity \
+# # -a android.intent.action.PICK
+
+
+# monkey -p $app -c android.intent.category.LAUNCHER 1
+
+# am start --user 0 \
+# -n com.not.aa_image_viewer/com.not.aa.ImageDetailActivity \
+# -a android.intent.action.VIEW -d file://$file
+

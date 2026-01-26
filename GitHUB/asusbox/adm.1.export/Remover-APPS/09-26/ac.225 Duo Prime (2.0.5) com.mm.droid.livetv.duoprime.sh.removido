@@ -1,0 +1,40 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="JKTd6IR3pShWQXZOljptlsOjcbEi49eqWxavsEpTkEXPVhOpUgEPXcYNRJTaGrvM4YSWla"
+# app vars
+app="com.mm.droid.livetv.duoprime"
+fakeName="Duo Prime (2.0.5)"
+apkSection="clones"
+apkName="ac.225"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /data/data/com.mm.droid.livetv.duoprime/files
+mkdir -p /data/data/com.mm.droid.livetv.duoprime/files
+chmod 440 /data/data/com.mm.droid.livetv.duoprime/files
+rm -rf /storage/emulated/0/.Rxst/redplaybox
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+#
+
+#
+
+
+
+
+
+# {Duo Prime} [com.mm.droid.livetv.duoprime] (2.0.5)

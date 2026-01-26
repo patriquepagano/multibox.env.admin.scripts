@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="J6kdKUY45BuGGBmFqvkyJSRGOxG3jlk340VEyVrprQo5wLTbvQF4F6VZZ3DmgFq7vpgZQy"
+# app vars
+app="zz.tv.btvPro02"
+fakeName="btv Pro"
+apkSection="clones"
+apkName="ac.066"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {btv Pro} [zz.tv.btvPro02] (2.1.1)

@@ -1,0 +1,53 @@
+{
+  "//first_comment": "Os deviceID devem ser dos clientes que deseja compartilhar o proprio ID o syncthing se encarrega de botar",
+  "//second_comment": "serverdebug => WQ5F4PG-BIX5SI7-UJIQG2X-YX5PMSD-4GUQB7U-SXV57DJ-JAB76M7-B6LXGQZ",
+  "id": "72gcq-viuud",
+  "label": "a share debug teste",
+  "filesystemType": "basic",
+  "path": "/storage/emulated/0/Download/A.Trial.test/",
+  "type": "sendreceive",
+  "devices": [
+    {
+      "deviceID": "WQ5F4PG-BIX5SI7-UJIQG2X-YX5PMSD-4GUQB7U-SXV57DJ-JAB76M7-B6LXGQZ",
+      "introducedBy": "",
+      "encryptionPassword": ""
+    }
+  ],
+  "rescanIntervalS": 3600,
+  "fsWatcherEnabled": true,
+  "fsWatcherDelayS": 10,
+  "ignorePerms": false,
+  "autoNormalize": true,
+  "minDiskFree": {
+    "value": 1,
+    "unit": "%"
+  },
+  "versioning": {
+    "type": "",
+    "params": {},
+    "cleanupIntervalS": 3600,
+    "fsPath": "",
+    "fsType": "basic"
+  },
+  "copiers": 1,
+  "pullerMaxPendingKiB": 0,
+  "hashers": 0,
+  "order": "random",
+  "ignoreDelete": false,
+  "scanProgressIntervalS": 0,
+  "pullerPauseS": 0,
+  "maxConflicts": 10,
+  "disableSparseFiles": false,
+  "disableTempIndexes": false,
+  "paused": false,
+  "weakHashThresholdPct": 25,
+  "markerName": ".stfolder",
+  "copyOwnershipFromParent": false,
+  "modTimeWindowS": 0,
+  "maxConcurrentWrites": 2,
+  "disableFsync": false,
+  "blockPullOrder": "standard",
+  "copyRangeMethod": "standard",
+  "caseSensitiveFS": false,
+  "junctionsAsDirs": false
+}

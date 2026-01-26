@@ -1,0 +1,38 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="4KgBTR2vvY7rIrghxfKYu3JOUZvIkVM4hKmOVzqW1MMg2sotY6nAGNArRDt83mTDrVC5BP"
+# app vars
+app="com.unitp.mago"
+fakeName="Fantasma Iptv (2.9)"
+apkSection="clones"
+apkName="ac.203"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Fantasma Iptv} [com.unitp.mago] (2.9)
+
+
+
+

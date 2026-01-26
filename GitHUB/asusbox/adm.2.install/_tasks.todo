@@ -1,0 +1,33 @@
+Definições:
+    + adm.2.install é um path para install e debug antes de exportar para os clientes
+
+
+
+
+☐ enviar uma mensagem de overlay sobre o screen na tela seria o maximo! ( libera a box para os users )
+    adb command to allow the permission:
+        adb shell appops set com.zdworks.clockontop SYSTEM_ALERT_WINDOW allow
+
+
+
+✔ testar o app do amazon @done(22-03-15 16:10)
++ funcionando perfeitamente!
+input text "brendonpagano@gmail.com"
+input text "5dq8z34r7g0m"
+
+
+
+☐ bug da escolha da launcher
+1) chamo um app para frente
+2) am force-stop da launcher full
+3) vou para a home
+    as vezes pergunta pela launcher e as vezes não?
+
+
+
+
+
+
+☐ codec hevc muito interessante marca a licença de uso dentro do arquivo de video. estudar a respeito disto
+
+

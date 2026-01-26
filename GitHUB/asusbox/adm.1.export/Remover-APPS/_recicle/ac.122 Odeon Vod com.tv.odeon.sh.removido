@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="PsfR6RlAsATICFewremKzlm4je1dDXkxpQ7JqFrC12mN245SoIoaVwmYMH9I1xUWuJ6KgS"
+# app vars
+app="com.tv.odeon"
+fakeName="Odeon Vod (2.3.5release)"
+apkSection="clones"
+apkName="ac.122"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Odeon Vod} [com.tv.odeon] (2.3.5release)

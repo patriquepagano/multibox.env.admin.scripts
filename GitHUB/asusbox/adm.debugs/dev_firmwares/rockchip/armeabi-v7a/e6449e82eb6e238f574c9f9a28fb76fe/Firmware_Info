@@ -1,0 +1,15 @@
+Android OS = 9.1
+API Level = 25
+Dispositivo = rk322x_box
+Placa = rk30sdk
+Fabricante = rockchip
+cpu = armeabi-v7a
+Modelo = TV BOX
+Nome = rk322x_box
+fingerprint = Android/rk322x_box/rk322x_box:7.1.2/NHG47K/akrd210080714:userdebug/test-keys
+date.utc = 1570533275
+date = Tue Oct  8 07:14:35 EDT 2019
+description = rk322x_box-userdebug 7.1.2 NHG47K eng.akrd2.20191008.071435 test-keys
+bootimage.build.fingerprint = Android/rk322x_box/rk322x_box:7.1.2/NHG47K/akrd210080714:userdebug/test-keys
+display.id = TV BOX eng.akrd2.20191008.071435
+version.incremental = eng.akrd2.20191008.071435

@@ -1,0 +1,32 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="MkKtHMqiybP5Hjlg4GHntkwacQ3DD3YEhs6NSuil4UivLzKh5o0tBGatWpcxqwHzW49tbm"
+# app vars
+app="org.libreflix.android"
+fakeName="Libreflix"
+apkSection="oem"
+apkName="ao.13"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+# {Libreflix} [org.libreflix.android] (1.0)
+

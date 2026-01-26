@@ -1,0 +1,39 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="xkL7TKijFQxo45n2HJwRIQM0T9915C5lKphJVdK98gW1MQ7K2WdS3bybfbHVeFttFDbfs7"
+# app vars
+app="com.new2tourosat.app"
+fakeName="Touro box1"
+apkSection="clones"
+apkName="ac.082"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+# ☐ {Touro box1} [com.new2tourosat.app] (1.1.0)  
+#     input text "321278507"
+#     ☐ gerar nova ficha tecnica bkp data
+#     ☐ exportar
+
+
+

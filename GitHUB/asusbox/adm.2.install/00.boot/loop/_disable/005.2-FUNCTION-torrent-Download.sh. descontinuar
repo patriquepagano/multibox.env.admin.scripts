@@ -1,0 +1,103 @@
+
+CallsiteSupport () {
+sitesupport="https://telegra.ph/A7-Suporte-Avan%C3%A7ado-07-25"
+am start --user 0 \
+    -n acr.browser.barebones/acr.browser.lightning.MainActivity \
+    -a android.intent.action.VIEW -d "$sitesupport" > /dev/null 2>&1
+sleep 30
+}
+
+
+# teve clientes travados em uma versão antiga de torrent file! isto pode indicar que este downloader não ta fazendo o update ou overwrite
+TorrentFileMD5Local=$(/system/bin/busybox md5sum /data/asusbox/.install.torrent | /system/bin/busybox awk '{print $1}')
+if [ ! "$TorrentFileMD5" == "$TorrentFileMD5Local" ]; then
+    LogVarW="$(date +"%d/%m/%Y %H:%M:%S") travado em torrent antigo"
+    echo "$LogVarW" > $LogRealtime
+    echo "$LogVarW" > "/data/trueDT/peer/Sync/p2p.BUG.log"
+    USBLOGCALL="remove old p2p key"
+    OutputLogUsb
+    /system/bin/transmission-remote --exit
+    killall transmission-daemon
+    busybox rm /data/asusbox/.install.torrent
+fi
+
+
+
+function Download_torrent_File () {
+# erro 301 esta baixando o link
+# 1 - nosso linode oficial
+# 2 - site do asusbox
+# 3 - linode do elton
+# http://45.79.133.216/asusboxA1/.install.torrent
+# http://asusbox.com.br/asusboxA1/.install.torrent
+# http://45.79.48.215/asusboxA1/.install.torrent
+multilinks="
+http://45.79.133.216/asusboxA1/.install.torrent
+"
+    ### DOWNLOAD COM SISTEMA MULTI-LINKS
+    for LinkUpdate in $multilinks; do 
+        echo "ADM DEBUG ########################################################"
+        echo "ADM DEBUG ### Entrando na função > Download_torrent_File"
+        echo "ADM DEBUG ### tentando o link > $LinkUpdate"
+        TorrentFileInstall="false" # ate que se prove o contrario não baixou o arquivo
+        # Tenta conectar ao link 7 vezes 
+        #/system/bin/wget --timeout=1 --tries=7 -O $bootFile --no-check-certificate $LinkUpdate
+        /system/bin/wget -N --no-check-certificate --timeout=1 --tries=7 -P /data/asusbox/ $LinkUpdate > "/data/asusbox/wget.log" 2>&1
+        CheckWgetCode=`/system/bin/busybox cat "/data/asusbox/wget.log" | /system/bin/busybox grep "HTTP request sent, awaiting response..."`
+        #rm "/data/asusbox/wget.log"
+            # Se tiver acesso finaliza esta função
+            if [ "$CheckWgetCode" == "HTTP request sent, awaiting response... 200 OK" ] ; then
+                echo "ADM DEBUG ### Wget :) $CheckWgetCode"
+                TorrentFileInstall="true"
+                break # fecha a função por completo
+            fi
+            if [ "$CheckWgetCode" == "HTTP request sent, awaiting response... 304 Not Modified" ] ; then
+                echo "ADM DEBUG ### Wget :) $CheckWgetCode"
+                TorrentFileInstall="true"
+                break # fecha a função por completo
+            fi            
+    done ### DOWNLOAD COM SISTEMA MULTI-LINKS
+    echo "ADM DEBUG ### fim da função TorrentFileInstall > TorrentFileInstall=$TorrentFileInstall"
+}
+
+
+function LoopForceDownloadtorrent_File () { # entra em looping até baixar o arquivo de boot
+while true; do
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### Entrando na função > LoopForceDownloadtorrent_File"
+    Download_torrent_File 
+	if [ "$TorrentFileInstall" == "false" ]; then
+        LogVarW="$(date +"%d/%m/%Y %H:%M:%S") Nova tentativa em loop para baixar torrent"
+        echo "$LogVarW" > $LogRealtime
+        echo "$LogVarW" >> "/data/trueDT/peer/Sync/p2p.Download.log"
+    else
+        break
+    fi
+done
+FileMark="/data/trueDT/peer/Sync/p2p.Download.log"
+if [ -f "$FileMark" ]; then
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### Reduz numero de linhas do log $FileMark"
+    NEWLogSwp=`busybox cat $FileMark | busybox head -n100`
+    echo -n "$NEWLogSwp" > $FileMark
+fi
+}
+
+FileMark="/storage/asusboxUpdate/GitHUB/asusbox/adm.2.install/.install.torrent"
+if [ ! -f $FileMark ]; then
+    # code for box customers
+    # rm /data/asusbox/.install.torrent # estava ativado! forçando a cada hora TODOS os clientes baixarem este torrent! fica ligado na burrice
+    LoopForceDownloadtorrent_File
+else
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### build generator testes detectado."
+    echo "ADM DEBUG ### torrent vai fazer share do torrent local"
+    rm /data/asusbox/.install.torrent
+    /system/bin/busybox ln -sf $FileMark /data/asusbox/.install.torrent
+fi
+
+
+
+USBLOGCALL="download p2p key"
+OutputLogUsb
+

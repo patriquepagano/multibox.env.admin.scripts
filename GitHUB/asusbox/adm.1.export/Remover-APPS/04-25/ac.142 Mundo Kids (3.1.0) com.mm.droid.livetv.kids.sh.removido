@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="dxGnzB83ZiOhBwb14nYPcmnM0LlJ7RdH24ByDZAVK3uMCfd5EqJfjBIJrFA3VlGpYP69IV"
+# app vars
+app="com.mm.droid.livetv.kids"
+fakeName="Mundo Kids (3.1.0)"
+apkSection="clones"
+apkName="ac.142"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+#
+
+#
+
+
+
+
+
+# mundo_kids.apk = {Mundo Kids} [com.mm.droid.livetv.kids] (3.1.0)

@@ -1,0 +1,34 @@
+☐ desliga no controle a box não volta (reclamação do anibal)
+    certo seria retirar esta função de desligar pelo controle
+    Oque realmente acontece box 2.4ghz:
+        led fica azul ao desligar
+        a box se desconecta do wifi!
+        torrent PARA DE SEMEAR
+        a box religa do standby mas não funcionou a internet deu problema de conexão
+    Oque realmente acontece box 5.8ghz:
+        led fica vermelho ao desligar
+        a box se desconecta do wifi!
+        torrent PARA DE SEMEAR
+        a box religa do standby e retoma as funções! ssh server, torrent, webserver funcionando.
+        CRON TRAVA E NÃO ATUALIZA SUAS TAREFAS
+    ✔ desativar o botão de power da box @done(21-06-04 18:47)
+    busybox sed -i -e 's/key 116.*/key 116   HOME/g' $"$file"
+    ☐ add script a uma função do botão
+        ate o momento não consegui:
+            ao pressionar o botão não corre a função do init
+
+☐ remote.conf add acesso a outros controles no tvbox
+sample de rasp > http://www.orangepi.org/orangepibbsen/forum.php?mod=viewthread&tid=1343
+
+
+
+Estudo do init para chamar um script:
+https://android.googlesource.com/platform/system/core/+/master/init/README.md
+
+
+☐ reload keylaout sem reiniciar
+    - não achei pelo google nada que consiga fazer isto
+    https://www.google.com/search?q=android+reload+keylaout&rlz=1C1GCEB_enBR945BR948&oq=android+reload+keylaout&aqs=chrome..69i57.9858j0j7&sourceid=chrome&ie=UTF-8
+    https://forum.freaktab.com/forum/development-area/android-os-development-discussions/639433-tutorial-redefine-any-keys-of-your-android-keybord-remote-controller-gamepad-to-your-needs
+
+

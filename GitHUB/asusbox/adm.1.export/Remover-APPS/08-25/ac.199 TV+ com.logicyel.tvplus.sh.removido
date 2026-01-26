@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="3beptlomXJXtDx9OqqvtxQhb63DXV0pTYqt23HbS8ZjGG11Z3yLJZV7OEloRxkgGANcqH4"
+# app vars
+app="com.logicyel.tvplus"
+fakeName="TV+ (3.288)"
+apkSection="clones"
+apkName="ac.199"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+#AppGrantLoop=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {TV+} [com.logicyel.tvplus] (3.288)
+

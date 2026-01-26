@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="OgVVpilaXUP4q5ZCL73dKmTeKFo4P7uOWwZrpqoR7SD70XPDHnkYWPhPsKyvIYrtLRKcdf"
+# app vars
+app="com.mm.droid.livetv.voqx"
+fakeName="Super Tv (5.5.2)"
+apkSection="clones"
+apkName="ac.224"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# {Super Tv} [com.mm.droid.livetv.voqx] (5.5.2)

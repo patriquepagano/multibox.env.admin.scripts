@@ -1,0 +1,11 @@
+# real block info space
+/dev/block/mmcblk0p13      2.4G  1.2G  1.1G  54% /system
+/dev/block/mmcblk0p10      122M  120K  122M   1% /cache
+/dev/block/mmcblk0p11       12M   40K   12M   1% /metadata
+/dev/block/mmcblk0p14      3.8G  531M  3.3G  14% /data
+
+#can view disk usage in kb and free space percentage
+Latency: 1ms [512B Data Write]
+Data-Free: 3482492K / 4043008K total = 86% free
+Cache-Free: 3482492K / 4043008K total = 86% free
+System-Free: 1163696K / 2539312K total = 45% free

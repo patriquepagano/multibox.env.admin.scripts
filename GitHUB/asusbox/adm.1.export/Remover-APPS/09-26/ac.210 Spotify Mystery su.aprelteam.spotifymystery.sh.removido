@@ -1,0 +1,37 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="2fgZusRZ2dZYyyKAVtJ7lVcgXfRBzSK3c5xUquCRQ27UkJUE6PxsXBQwZkLuohLpA0fA9S"
+# app vars
+app="su.aprelteam.spotifymystery"
+fakeName="Spotify Mystery (9.0.70.14)"
+apkSection="clones"
+apkName="ac.210"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+#
+
+#
+
+
+
+
+# SPOTIFY (1).apk = {Spotify Mystery} [su.aprelteam.spotifymystery] (9.0.70.14)
+
+
+

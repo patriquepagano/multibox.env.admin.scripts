@@ -1,0 +1,79 @@
+>ÌáèYbÂ«É¶ÐQ²¡íâõ*“b²¼œDwã®†ô
+»µ¢cÆTœéZ ñQcë˜Ì)÷¶\ËBùçnÚã9í*j-Ïò–ÿ—-÷HÂóåZŽ?õIäÿBw=Ÿ¸ƒFGÉ;:;µ
+ä¶¼×¦#P\ÅT%eëÃàJ¶_(d`lL±„N³ÐÅTRŠµaýàÖ˜¶Û Ô@¹îÓºŒ?•^KLa‹ÉÈœ2…(“ú–ÑlT$œ•ñî¶,ý0ã~2;öÚV?Híì:ä†®º/±}C¥9énð¾]@Lš¸äxÃ‹+¡ËÍÓ,¬ojI¢‘ôºyÑ{‡Ç<’zt–M&á‘À×€»y/†õœm³jÁUaÅ¬ß4nÌ–RNÔÆÜkáÜJ%×C¦P­ê²¼\B¡€vá‚bØ¿UOîzrØð‡*ÝƒzýÂõb¹‰ì<ÚØ,ó…âH¬]Å®Ü½Ó5U|âïtÍ‘×X/^›¬ÅŽÀí”óÄè€'_{ :“z“`Î1ö2ŒÁØæ„= %ÑÞÀ¿?1Ër½Ê|1Ü¸DOÌ'Å ‡Y¼ÆîSŠrŒ0Í
+4èf>¯ê<@!Ðïrk¹¾&HÇ„Âƒ—7RÏÝŸü'\á§Š-‚j`nK#§~ 1w¡
+Sat Nov  2 21:07:11 UTC___ 2024
+Timestamp: 1730592431N
+Random Hex String: c107c70fc8bc1a5d62cb8f594706f5ee332dde155751e419c139183165ee8583
+System Info: Linux localhost 3.10.104 #1 SMP PREEMPT Wed Dec 6 18:41:35 CST 2017 armv7l
+Environment Hash: fbefeb4927ca08d1020c0d8338d6bf4461bbc0302eb2f022848f8d58180b199f  -
+Random Number: 122577225
+Process ID: 20834
+Hostname: localhost
+Hardware Info: armv7l
+System Uptime: 41778.60
+9973e5731ea2c3b7a6d5ec5888d835d5
+02/11/2024 20:34:33
+Pasta /storage/emulated/0
+EspaÃ§o utilizado = 28700	/storage/emulated/0
+---------------------------------------------------
+Lista permissÃµes e symlinks
+total 36K    
+drwxrwx--x    2 root     sdcard_r    4.0K Jul  2 23:32 duna_stb
+drwxrwx--x    2 root     sdcard_r    4.0K Jun 28 23:35 Pictures1
+drwxrwx--x    3 root     sdcard_r    4.0K Dec  7  2023 download
+drwxrwx--x   12 root     sdcard_r    4.0K Sep 20  2023 .Rxst
+drwxrwx--x    2 root     sdcard_r    4.0K Sep 20  2023 KidVod
+drwxrwx--x    2 root     sdcard_r    4.0K Sep 20  2023 Screenshots
+-rw-rw----    1 root     sdcard_r    1.1K Jun 17  2023 .config
+-rw-rw----    1 root     sdcard_r    1.1K Jun 17  2023 .properties
+drwxrwx--x    3 root     sdcard_r    4.0K Dec 31  1969 Android
+---------------------------------------------------
+340.0K	/storage/emulated/0/Screenshots
+8.0K	/storage/emulated/0/KidVod
+12.0K	/storage/emulated/0/.Rxst/31000715
+16.0K	/storage/emulated/0/.Rxst/31000173
+40.0K	/storage/emulated/0/.Rxst/playHis
+12.0K	/storage/emulated/0/.Rxst/duoprimelive
+12.0K	/storage/emulated/0/.Rxst/btvbox
+16.0K	/storage/emulated/0/.Rxst/31026931
+12.0K	/storage/emulated/0/.Rxst/31026826
+12.0K	/storage/emulated/0/.Rxst/tve_web
+16.0K	/storage/emulated/0/.Rxst/redplaybox
+12.0K	/storage/emulated/0/.Rxst/bluetv
+164.0K	/storage/emulated/0/.Rxst
+8.0K	/storage/emulated/0/duna_stb
+8.0K	/storage/emulated/0/download/naoApagueUpdate
+12.0K	/storage/emulated/0/download
+16.0K	/storage/emulated/0/Pictures1
+24.2M	/storage/emulated/0/Android/data/asusbox
+32.0K	/storage/emulated/0/Android/data/org.telegram.messenger.web
+16.0K	/storage/emulated/0/Android/data/com.mm.droid.livetv.kids
+20.0K	/storage/emulated/0/Android/data/com.spotify.music
+1.9M	/storage/emulated/0/Android/data/com.teamsmart.videomanager.tv
+1.3M	/storage/emulated/0/Android/data/com.android.mgstv
+27.5M	/storage/emulated/0/Android/data
+27.5M	/storage/emulated/0/Android
+28.0M	/storage/emulated/0
+External File detected in: 02/11/2024 20:34:34
+---
+block info
+/dev/block/sdb1: LABEL="RETROGAME" UUID="1234-5678" TYPE="vfat"
+/dev/block/sda1: LABEL="ThumbDriveDEV" UUID="f3d594de-da82-584b-8757-44cbb3744182" TYPE="ext4"
+---
+mounted
+
+/dev/block/vold/public:8,1 on /mnt/media_rw/f3d594de-da82-584b-8757-44cbb3744182 type ext4 (rw,dirsync,nosuid,nodev,noatime,data=ordered)
+/dev/block/vold/public:8,17 on /mnt/media_rw/1234-5678 type vfat (rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro)
+/dev/block/vold/public:8,1 on /storage/DevMount type ext4 (rw,dirsync,relatime,data=ordered)
+/dev/block/vold/public:8,1 on /mnt/runtime/default/DevMount type ext4 (rw,dirsync,relatime,data=ordered)
+/dev/block/vold/public:8,1 on /storage/asusboxUpdate type ext4 (rw,dirsync,relatime,data=ordered)
+/dev/block/vold/public:8,1 on /mnt/runtime/default/asusboxUpdate type ext4 (rw,dirsync,relatime,data=ordered)
+---
+space
+/dev/block/vold/public:8,1           14.5G      2.6G     11.1G  19% /mnt/media_rw/f3d594de-da82-584b-8757-44cbb3744182
+/dev/block/vold/public:8,17            14.0G     10.8G      3.2G  77% /mnt/media_rw/1234-5678
+/dev/block/vold/public:8,1           14.5G      2.6G     11.1G  19% /storage/DevMount
+/dev/block/vold/public:8,1           14.5G      2.6G     11.1G  19% /mnt/runtime/default/DevMount
+/dev/block/vold/public:8,1           14.5G      2.6G     11.1G  19% /storage/asusboxUpdate
+/dev/block/vold/public:8,1           14.5G      2.6G     11.1G  19% /mnt/runtime/default/asusboxUpdate

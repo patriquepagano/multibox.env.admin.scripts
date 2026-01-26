@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="7DxQq2uEqemIWRPuS1p5MrdUUSbylXgXAGCND4q1rwPj87rI6MkQM0ZJvt1B06u14SUzjD"
+# app vars
+app="com.valor.mfc.droid.tvapp.generic"
+fakeName="My Family Cinema (3.2.1)"
+apkSection="clones"
+apkName="ac.133"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {My Family Cinema} [com.valor.mfc.droid.tvapp.generic] (3.2.1)
+# versão original travada em mac D0:76:6C:31:0C:49

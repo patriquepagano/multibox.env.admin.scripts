@@ -1,0 +1,58 @@
+#!/system/bin/sh
+path=$( cd "${0%/*}" && pwd -P )
+clear
+
+# basta ir add sources para debugar
+source="/storage/asusboxUpdate/GitHUB/asusbox/adm.build/boot/initRc.drv"
+source="/storage/asusboxUpdate/GitHUB/asusbox/adm.build/boot/log"
+
+mkdir -p "$path/.shcall"
+
+/system/bin/rsync --progress -avz --delete --recursive --force "$source/" "$path/.shcall/"
+
+
+echo "select choice:
+yes    = to shc all
+enter  = to clean scripts only to review"
+read choice
+
+# limpar os códigos
+/system/bin/busybox find "$path/.shcall" -type f \( -iname \*.sh \) | /system/bin/busybox sort | while read fname; do
+    echo "$fname"
+        # remove TABS
+        /system/bin/busybox sed -i -e 's|^[[:blank:]]*||g' "$fname"
+        # remove todos echo ADM comentando o mesmo
+        /system/bin/busybox sed -i -e  's/echo "ADM DEBUG ###.*/#barbaridade/g' "$fname"
+        # remove comentários
+        /system/bin/busybox sed -i -e 's/\s*#.*$//' "$fname"
+        # insere na primeira linha
+        /system/bin/busybox sed -i -e '1i#!/system/bin/sh\' "$fname"
+        #/system/bin/busybox sed -i -e '1i#!/system/usr/bin/bash\' "$fname"
+        # remove novas linhas
+        /system/bin/busybox sed -i -e '/^\s*$/d' "$fname"
+
+        if [ ! -f /system/bin/cc ];then
+            /system/bin/busybox mount -o remount,rw /system
+            ln -sf /storage/DevMount/AndroidDEV/termux/files/usr/bin/shc /system/bin/shc
+            ln -sf /storage/DevMount/AndroidDEV/termux/files/usr/bin/clang-10 /system/bin/cc
+            ln -sf /storage/DevMount/AndroidDEV/termux/files/usr/bin/strip /system/bin/strip
+        fi
+        if [ "$choice" == "yes" ]; then
+            if [ -f /data/data/com.termux/files/usr/bin/shc ];then
+                clear
+                echo "Termux + SHC detectado!"
+                echo "Compilando script via shc"
+                # shc File
+                # /data/data/com.termux/files/usr/bin/shc -v -f "$fname" -e 20/10/2035
+                /data/data/com.termux/files/usr/bin/shc -vr -f "$fname"
+                rm "$fname.x.c"
+                mv "$fname.x" "$fname"
+                chmod 755 "$fname"
+            fi
+        fi
+        echo "echo 'press to any button to continue'" >> "$fname"
+        echo "read bah" >> "$fname"
+done
+
+mc "/storage/asusboxUpdate/AndroidDEV/termux/files/home/_Work/bin/.shcall"
+

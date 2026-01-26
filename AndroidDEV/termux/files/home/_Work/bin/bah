@@ -1,0 +1,4432 @@
+#!/system/bin/sh
+path="$( cd "${0%/*}" && pwd -P )"
+clear
+TMP_DIR="/data/trueDT/peer/TMP"
+
+
+
+# UNIQ DEVICE IDENTIFICATION
+Placa=$(getprop ro.product.board)
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+MacLanReal=`/system/bin/busybox cat /data/macLan.hardware | busybox sed 's;:;;g'`
+
+# CurlData=`curl -s -w "HttpCode='%{http_code}'" -d  "secretAPI=$secretAPI&\
+
+do_post() {
+curl -sS --connect-timeout 8 --max-time 25 --retry 4 --retry-delay 2 --retry-max-time 25 --retry-connrefused \
+    -w "\nHTTP_STATUS=%{http_code}\n" -X POST "$PostURL" \
+    -H "X-Auth-Token: mbx_9f3a7d1b2c4e6f8a0b1c3d5e7f9a1b2c3d4e6f8a" \
+    -d "hardware_hash=${hardware_hash:-}" \
+    -d "Placa=${Placa:-}" \
+    -d "CpuSerial=${CpuSerial:-}" \
+    -d "MacLanReal=${MacLanReal:-}" \
+    -d "MacWiFiReal=${MacWiFiReal:-}" \
+    -d "FirstsignupUnix=${FirstsignupUnix:-}" \
+    -d "FirmwareInstallUnix=${FirmwareInstallUnix:-}" \
+    -d "FirmwareHardResetUnix=${FirmwareHardResetUnix:-}" \
+    -d "LocationGeoIP=${LocationGeoIP:-}" \
+    -d "WanIPhp=${WanIPhp:-}" \
+    -d "UpdateSystemVersion=${UpdateSystemVersion:-}" \
+    -d "FirmwareFullSpecsID=${FirmwareFullSpecsID:-}" \
+    -d "AppInUse=${AppInUse:-}" \
+    -d "FileSystemPartitionData=${FileSystemPartitionData:-}" \
+    -d "FileSystemPartitionSystem=${FileSystemPartitionSystem:-}" \
+    -d "ExternalDrivers=${ExternalDrivers:-}" \
+    -d "FileSystemSDCARD=${FileSystemSDCARD:-}" \
+    -d "FirmwareInstallLOG=${FirmwareInstallLOG:-}" \
+    -d "FirmwareHardResetLOG=${FirmwareHardResetLOG:-}" \
+    -d "AppInUseLOG=${AppInUseLOG:-}" \
+    -d "FirmwareFullSpecs=${FirmwareFullSpecs:-}"
+}
+UUIDPath="/system/UUID.Uniq.key.txt"
+if [ -f "$UUIDPath" ]; then
+  RandUniq=`busybox cat "$UUIDPath" | busybox tr -d '\r\n'`
+else
+  RandUniq=`/system/usr/bin/openssl rand -hex 32`
+  wrote_ok=0
+  attempt=1
+  while [ "$attempt" -le 11 ]; do
+    echo "$RandUniq" > "$UUIDPath" 2>/dev/null
+    if [ -f "$UUIDPath" ]; then
+      check_value=`busybox cat "$UUIDPath" 2>/dev/null | busybox tr -d '\r\n'`
+      if [ "$check_value" = "$RandUniq" ]; then
+        wrote_ok=1
+        break
+      fi
+    fi
+    busybox mount -o remount,rw /system 2>/dev/null
+    attempt=$((attempt + 1))
+    busybox sleep 1
+  done
+  if [ "$wrote_ok" != "1" ]; then
+    #echo "UUID write failed after 11 attempts; skipping POST."
+    wrote_ok=0
+  fi
+fi
+HardwareID="$Placa│$CpuSerial│$MacLanReal│"
+hardware_hash="${HardwareID}${RandUniq}"
+DeviceName="$HardwareID$RandUniq"
+
+#echo "DeviceName=$DeviceName"
+
+# Optional fields can be empty; keep them defined for the POST.
+FirstsignupUnix="${FirstsignupUnix:-}"
+FirmwareInstallUnix="${FirmwareInstallUnix:-}"
+FirmwareHardResetUnix="${FirmwareHardResetUnix:-}"
+LocationGeoIP="${LocationGeoIP:-}"
+WanIPhp="${WanIPhp:-}"
+UpdateSystemVersion="${UpdateSystemVersion:-}"
+FirmwareFullSpecsID="${FirmwareFullSpecsID:-}"
+AppInUse="${AppInUse:-}"
+FileSystemPartitionData="${FileSystemPartitionData:-}"
+FileSystemPartitionSystem="${FileSystemPartitionSystem:-}"
+ExternalDrivers="${ExternalDrivers:-}"
+FileSystemSDCARD="${FileSystemSDCARD:-}"
+FirmwareInstallLOG="${FirmwareInstallLOG:-}"
+FirmwareHardResetLOG="${FirmwareHardResetLOG:-}"
+AppInUseLOG="${AppInUseLOG:-}"
+FirmwareFullSpecs="${FirmwareFullSpecs:-}"
+
+
+PostURL="https://painel.iaupdatecentral.com/telemetria.php"
+
+if [ "$wrote_ok" = "1" ] || [ -f "$UUIDPath" ]; then
+  Response=$(do_post 2>&1)
+  echo "$Response"
+  echo "$Response" > /data/trueDT/peer/Sync/Debug-collect-data.sh
+else
+  echo "UUID not available; skipping POST."
+fi
+
+if [ -f "$UUIDPath" ]; then
+  echo "UUID marker present: $UUIDPath" >> /data/trueDT/peer/Sync/Debug-collect-data.sh
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exit
+
+BB=/system/bin/busybox
+NTP_SERVER=a.st1.ntp.br
+SNTP_TIMEOUT=11
+TIMEZONE=America/Sao_Paulo
+
+sites=(
+https://www.coinbase.com
+https://www.kraken.com
+https://www.coinmarketcap.com
+https://www.coindesk.com
+https://etherscan.io
+https://www.facebook.com
+https://www.github.com
+https://www.binance.com
+https://www.google.com
+https://www.cloudflare.com
+https://www.reddit.com
+https://stackoverflow.com
+https://ipv4.icanhazip.com
+https://www.youtube.com
+https://steamcommunity.com
+)
+
+HTTPDateFallback() {
+  date_hdr=""
+  for site in "${sites[@]}"; do
+    date_hdr=$($BB timeout 11 /system/bin/wget --no-check-certificate -T2 --spider -S "$site" 2>&1 | $BB grep -i '^ *Date:' | $BB head -1 | tr -d '\r')
+    date_hdr=${date_hdr#*: }
+    date_hdr=${date_hdr#*, }
+    date_hdr=${date_hdr% GMT}
+    [ -n "$date_hdr" ] && break
+  done
+
+  if [ -n "$date_hdr" ]; then
+    set -- $date_hdr
+    day=$1; mon=$2; year=$3; time=$4
+    hh=${time%%:*}
+    mm=${time#*:}; mm=${mm%:*}
+    ss=${time##*:}
+    case $mon in
+      Jan) m=01;; Feb) m=02;; Mar) m=03;; Apr) m=04;;
+      May) m=05;; Jun) m=06;; Jul) m=07;; Aug) m=08;;
+      Sep) m=09;; Oct) m=10;; Nov) m=11;; Dec) m=12;;
+    esac
+    offset=-3
+    hh_dec=$((10#$hh + offset))
+    [ $hh_dec -lt 0 ] && hh_dec=$((hh_dec + 24))
+    if [ $hh_dec -lt 10 ]; then
+      hh_local="0$hh_dec"
+    else
+      hh_local="$hh_dec"
+    fi
+    iso_local="${year}-${m}-${day} ${hh_local}:${mm}:${ss}"
+    $BB date -s "$iso_local"
+    return 0
+  fi
+
+  return 1
+}
+
+settings put global ntp_server $NTP_SERVER
+settings put global auto_time 0
+settings put global auto_time 1
+
+if $BB timeout $SNTP_TIMEOUT $BB ntpd -q -n -p $NTP_SERVER >/dev/null 2>&1; then
+  :
+else
+  HTTPDateFallback >/dev/null 2>&1
+fi
+
+setprop persist.sys.timezone $TIMEZONE
+
+
+# File="/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/2 - Firmware Build Generator/[r] (SHC)                 = 24.01.2026 18.41.54 UpdateSystem-armeabi-v7a [Official Published].sh"
+# chmod +x "$File"
+# ./"$File"
+
+# exit
+
+# UNIQ DEVICE IDENTIFICATION
+Placa=$(getprop ro.product.board)
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+MacLanReal=`/system/bin/busybox cat /data/macLan.hardware | busybox sed 's;:;;g'`
+
+do_post() {
+  /system/bin/curl -sS --connect-timeout 8 --max-time 20 --retry 2 --retry-delay 2 --retry-max-time 20 \
+    -w "\nHTTP_STATUS=%{http_code}\n" -X POST "$PostURL" \
+    -H "X-Auth-Token: mbx_9f3a7d1b2c4e6f8a0b1c3d5e7f9a1b2c3d4e6f8a" \
+    -d "hardware_hash=${hardware_hash:-}" \
+    -d "Placa=${Placa:-}" \
+    -d "CpuSerial=${CpuSerial:-}" \
+    -d "MacLanReal=${MacLanReal:-}" \
+    -d "MacWiFiReal=${MacWiFiReal:-}" \
+    -d "FirstsignupUnix=${FirstsignupUnix:-}" \
+    -d "FirmwareInstallUnix=${FirmwareInstallUnix:-}" \
+    -d "FirmwareHardResetUnix=${FirmwareHardResetUnix:-}" \
+    -d "LocationGeoIP=${LocationGeoIP:-}" \
+    -d "WanIPhp=${WanIPhp:-}" \
+    -d "UpdateSystemVersion=${UpdateSystemVersion:-}" \
+    -d "FirmwareFullSpecsID=${FirmwareFullSpecsID:-}" \
+    -d "AppInUse=${AppInUse:-}" \
+    -d "FileSystemPartitionData=${FileSystemPartitionData:-}" \
+    -d "FileSystemPartitionSystem=${FileSystemPartitionSystem:-}" \
+    -d "ExternalDrivers=${ExternalDrivers:-}" \
+    -d "FileSystemSDCARD=${FileSystemSDCARD:-}" \
+    -d "FirmwareInstallLOG=${FirmwareInstallLOG:-}" \
+    -d "FirmwareHardResetLOG=${FirmwareHardResetLOG:-}" \
+    -d "AppInUseLOG=${AppInUseLOG:-}" \
+    -d "FirmwareFullSpecs=${FirmwareFullSpecs:-}"
+}
+UUIDPath="/system/UUID.Uniq.key.txt"
+if [ -f "$UUIDPath" ]; then
+  RandUniq=`busybox cat "$UUIDPath" | busybox tr -d '\r\n'`
+else
+  RandUniq=`/system/usr/bin/openssl rand -hex 32`
+  wrote_ok=0
+  attempt=1
+  while [ "$attempt" -le 11 ]; do
+    echo "$RandUniq" > "$UUIDPath" 2>/dev/null
+    if [ -f "$UUIDPath" ]; then
+      check_value=`busybox cat "$UUIDPath" 2>/dev/null | busybox tr -d '\r\n'`
+      if [ "$check_value" = "$RandUniq" ]; then
+        wrote_ok=1
+        break
+      fi
+    fi
+    busybox mount -o remount,rw /system 2>/dev/null
+    attempt=$((attempt + 1))
+    busybox sleep 1
+  done
+  if [ "$wrote_ok" != "1" ]; then
+    echo "UUID write failed after 11 attempts; skipping POST."
+    wrote_ok=0
+  fi
+fi
+HardwareID="$Placa│$CpuSerial│$MacLanReal│"
+hardware_hash="${HardwareID}${RandUniq}"
+DeviceName="$HardwareID$RandUniq"
+
+echo "DeviceName=$DeviceName"
+
+# Optional fields can be empty; keep them defined for the POST.
+FirstsignupUnix="${FirstsignupUnix:-}"
+FirmwareInstallUnix="${FirmwareInstallUnix:-}"
+FirmwareHardResetUnix="${FirmwareHardResetUnix:-}"
+LocationGeoIP="${LocationGeoIP:-}"
+WanIPhp="${WanIPhp:-}"
+UpdateSystemVersion="${UpdateSystemVersion:-}"
+FirmwareFullSpecsID="${FirmwareFullSpecsID:-}"
+AppInUse="${AppInUse:-}"
+FileSystemPartitionData="${FileSystemPartitionData:-}"
+FileSystemPartitionSystem="${FileSystemPartitionSystem:-}"
+ExternalDrivers="${ExternalDrivers:-}"
+FileSystemSDCARD="${FileSystemSDCARD:-}"
+FirmwareInstallLOG="${FirmwareInstallLOG:-}"
+FirmwareHardResetLOG="${FirmwareHardResetLOG:-}"
+AppInUseLOG="${AppInUseLOG:-}"
+FirmwareFullSpecs="${FirmwareFullSpecs:-}"
+
+
+PostURL="https://painel.iaupdatecentral.com/telemetria.php"
+
+if [ "$wrote_ok" = "1" ] || [ -f "$UUIDPath" ]; then
+  Response=$(do_post)
+  echo "$Response"
+else
+  echo "UUID not available; skipping POST."
+fi
+
+
+
+
+
+
+exit
+
+
+busybox mount -o remount,rw /system 2>/dev/null
+rm "/system/UUID.Uniq.key.txt"
+busybox mount -o remount,ro /system 2>/dev/null
+
+cat "/system/UUID.Uniq.key.txt"
+
+
+exit
+
+
+
+
+
+
+
+exit
+
+
+# UNIQ DEVICE IDENTIFICATION
+Placa=$(getprop ro.product.board)
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+MacLanReal=`/system/bin/busybox cat /data/macLan.hardware | busybox sed 's;:;;g'`
+RandPath="$path/bah.UUIDUniq.txt"
+if [ -f "$RandPath" ]; then
+  RandUniq=`busybox cat "$RandPath" | busybox tr -d '\r\n'`
+else
+  RandUniq=`/system/usr/bin/openssl rand -hex 32`
+  echo "$RandUniq" > "$RandPath"
+fi
+DeviceName="$Placa=$CpuSerial=$MacLanReal=$RandUniq"
+
+echo "DeviceName=$DeviceName"
+
+# https://painel.iaupdatecentral.com/
+# http://10.0.0.254:1111/telemetria.php
+curl -sS -X POST "http://painel.iaupdatecentral.com/telemetria.php" \
+  -H "X-Auth-Token: mbx_9f3a7d1b2c4e6f8a0b1c3d5e7f9a1b2c3d4e6f8a" \
+  -d "hardware_hash=123" \
+  -d "Placa=123" \
+  -d "CpuSerial=123" \
+  -d "MacLanReal=123" \
+  -d "MacWiFiReal=123" \
+  -d "RandPath=123" \
+  -d "FirstsignupUnix=123" \
+  -d "FirmwareInstallUnix=123" \
+  -d "FirmwareHardResetUnix=123" \
+  -d "LocationGeoIP=123" \
+  -d "WanIPhp=123" \
+  -d "UpdateSystemVersion=123" \
+  -d "FirmwareFullSpecsID=123" \
+  -d "AppInUse=123" \
+  -d "FileSystemPartitionData=123" \
+  -d "FileSystemPartitionSystem=123" \
+  -d "ExternalDrivers=123" \
+  -d "FileSystemSDCARD=123" \
+  -d "FirmwareInstallLOG=123" \
+  -d "FirmwareHardResetLOG=123" \
+  -d "AppInUseLOG=123" \
+  -d "FirmwareFullSpecs=123"
+
+
+
+
+exit
+
+
+# cmdline não serve como ID único; serve só como “impressão digital da ROM/modelo”.
+echo "cmdline:"
+/system/bin/busybox cat /proc/cmdline 2>/dev/null
+
+
+
+
+
+exit
+
+# English comment: Packages to remove
+PACKAGES="
+org.xbmc.kodi
+com.stremio.one
+"
+
+# English comment: Uninstall packages (ignore errors if not installed)
+for PKG in $PACKAGES; do
+  pm uninstall --user 0 "$PKG" #>/dev/null 2>&1
+done
+
+
+
+exit
+
+
+
+am force-stop acr.browser.barebones
+ACRURL="file:///sdcard/info/index.html"
+am start --user 0 \
+    -n acr.browser.barebones/acr.browser.lightning.MainActivity \
+    -a android.intent.action.VIEW -d "$ACRURL" > /dev/null 2>&1
+
+exit
+
+/storage/self/primary/info/index.html
+
+ACRURL="file:///sdcard/info/index.html"
+
+OnScreenNow=$(dumpsys window windows | grep mCurrentFocus | cut -d " " -f 5 | cut -d "/" -f 1)
+echo "$OnScreenNow"
+
+app="com.android.tv.settings"
+monkey -p $app -c android.intent.category.LAUNCHER 1
+
+# exit
+
+
+
+
+exit
+
+
+
+
+#pm unhide md.obsidian
+
+
+# # Obsidian-1.10.6.apk = {Obsidian} [md.obsidian] (1.10.6)
+app="md.obsidian"
+monkey -p $app -c android.intent.category.LAUNCHER 1
+
+#cp "/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/1 - Apps/1 - ScreenShot.png" "/storage/self/primary/Obsidian/A7/image.png"
+
+
+file="/storage/self/primary/Obsidian/A7/teste.md"
+printf "%s\n" "# $(date)
+- [ ] Disney app remover
+- [ ] não quero utilizar o youtube music pode desativar blablablablablablablablablablablabla
+
+![[image.png|450]]
+
+O Obsidian não foi feito pra TV, mas com esse CSS ele vira:
+📺 painel industrial
+🧾 relatório contínuo
+🖥️ terminal visual
+
+[➡ Próxima página](log-2.md)
+
+
+" > "$file"
+sync
+
+
+exit
+
+rm -rf "/data/trueDT/peer/TMP"
+rm -rf "/data/trueDT/peer/config"
+rm -rf "/data/trueDT/peer/data/client/BKP/21027"
+
+sh "/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/Service ( BOOT )/Boot Novo Sucesso/Service Install = Remove/ReInstall Update [ init.update.boot ].sh" skip
+sh "/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/Service ( syncthing )/Service Install = Remove/ReInstall Update [ init.21027 ].sh" skip
+
+
+
+
+
+exit
+
+
+
+
+exit
+
+
+
+
+
+
+exit
+
+
+# mandar isto para a faxina das boxes
+du -hs /data/system/dropbox
+rm -rf /data/system/dropbox/*
+
+exit
+
+# pesquisar para que serve isto de fato
+pm disable-user --user 0 com.google.android.configupdater
+
+
+# desativa apps da launcher
+# /data/data/com.google.android.partnersetup/shared_prefs/RLZ.xml
+
+
+
+
+
+
+am force-stop com.rookiestudio.perfectviewer
+
+rm -rf /storage/emulated/0/PerfectViewer
+
+
+
+
+
+
+
+
+
+exit
+
+input text "http://10.0.0.254:8096/"
+
+
+exit
+
+cd "/storage/DevMount/4Android/+APK+DEBUG+iNSTAL/Jellyfin+for+Android+TV_0.19.2"
+
+# Create session
+SESSION=$(pm install-create -r | awk -F'[][]' '{print $2}')
+
+# Write base + configs
+pm install-write $SESSION base.apk org.jellyfin.androidtv.apk
+pm install-write $SESSION config.armeabi_v7a.apk config.armeabi_v7a.apk
+pm install-write $SESSION config.en.apk config.en.apk
+pm install-write $SESSION config.xxhdpi.apk config.xxhdpi.apk
+
+# Commit session
+pm install-commit $SESSION
+
+
+
+
+exit
+
+/storage/DevMount/4Android/+APK+DEBUG+iNSTAL/Jellyfin+for+Android+TV_0.19.2/
+
+#pm uninstall com.stremio.one
+
+
+if ! ls /data/app/ | grep -q "com.stremio.one"; then
+    echo "iniciando instalação stremio"
+    link="https://dl.strem.io/android/v1.7.4-androidTV/com.stremio.one-1.7.4-11049200-armeabi-v7a.apk"
+    /system/bin/wget \
+        --no-check-certificate \
+        --user-agent="Mozilla/5.0 (Linux; Android 7.1.2; AFTN) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Mobile Safari/537.36" \
+        --timeout=11 --tries=11 \
+        -O /data/local/tmp/base.apk \
+        "https://dl.strem.io/android/v1.7.4-androidTV/com.stremio.one-1.7.4-11049200-armeabi-v7a.apk"
+    pm install -r /data/local/tmp/base.apk
+    du -hs /data/local/tmp/base.apk
+    rm /data/local/tmp/base.apk
+fi
+
+if ! ls /data/app/ | grep -q "org.xbmc.kodi"; then
+    /system/bin/wget \
+        --no-check-certificate \
+        --user-agent="Mozilla/5.0 (Linux; Android 7.1.2; AFTN) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Mobile Safari/537.36" \
+        --timeout=11 --tries=11 \
+        -O /data/local/tmp/base.apk \
+        "https://mirrors.kodi.tv/releases/android/arm/kodi-21.2-Omega-armeabi-v7a.apk"
+    pm install -r /data/local/tmp/base.apk
+    du -hs /data/local/tmp/base.apk
+    rm /data/local/tmp/base.apk
+    # permissoes
+    pm grant org.xbmc.kodi android.permission.READ_EXTERNAL_STORAGE
+    pm grant org.xbmc.kodi android.permission.WRITE_EXTERNAL_STORAGE
+    pm grant org.xbmc.kodi android.permission.RECORD_AUDIO
+fi
+
+
+
+exit
+
+# rsync="/data/data/com.termux/files/usr/bin/rsync"
+# $rsync --progress \
+# -avz \
+# --delete \
+# --recursive \
+# "/storage/emulated/0/Android/data/org.xbmc.kodi/" \
+# "/storage/emulated/0/Android/data/org.xbmc.kodi.bkp/"
+# du -hs /storage/emulated/0/Android/data/org.xbmc.kodi.bkp
+# exit
+
+pm clear org.xbmc.kodi
+
+# me livro das mensagems
+pm grant org.xbmc.kodi android.permission.READ_EXTERNAL_STORAGE
+pm grant org.xbmc.kodi android.permission.WRITE_EXTERNAL_STORAGE
+pm grant org.xbmc.kodi android.permission.RECORD_AUDIO
+
+
+
+exit
+
+
+
+
+
+
+
+
+
+
+exit
+
+
+touch /data/local/tmp/batata.apk
+touch /data/local/tmp/base.apk
+touch /data/local/tmp/sdfg.apk
+touch /data/local/tmp/sdfg.apk
+
+
+
+/system/bin/busybox find "/data/local/tmp/" -type f -name "*.apk" | while read fname ; do
+    echo "$fname"
+    rm "$fname"
+done
+
+
+
+
+
+
+
+exit
+
+
+# Senha7z="123"
+# File="/storage/DevMount/4Android/BKP-Splitted-Apps/com.google.android.gms/AKP.7z.001"
+# /system/bin/7z e -aoa -y -p$Senha7z "$File" -o"/storage/DevMount/4Android/BKP-Splitted-Apps/" >/dev/null 2>&1
+
+
+
+
+cd "/storage/DevMount/4Android/BKP-Splitted-Apps"
+# 1. Cria uma sessão de instalação
+SESSION=$(pm install-create -r | awk -F'[' '{print $2}' | tr -d ']')
+
+# 2. Envia cada APK da instalação
+pm install-write $SESSION base.apk base.apk
+pm install-write $SESSION config.armeabi_v7a.apk config.armeabi_v7a.apk
+pm install-write $SESSION config.xhdpi.apk config.xhdpi.apk
+
+
+
+
+
+exit
+
+
+
+BB=/system/bin/busybox
+IFC="$BB ifconfig eth0"
+
+#bash "/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/Build Scripts/21027/global/21027-remove-full-sync.sh"
+
+CfgXML="/data/trueDT/peer/config/config.xml"
+APIKEY=$($BB awk -F '[><]' '/<apikey>/ {print $3}' "$CfgXML")
+APIURL="http://127.0.0.1:8384/rest"
+folder="TVBox-6987905daccc14fb0ece1-Client"
+
+ClientHardware="/data/trueDT/peer/data/client/ClientHardware"
+DeviceName=$(< "$ClientHardware/UniqID")
+SyncID=$(< "$TMP_DIR/init.21027.ID")
+
+echo "$DeviceName"
+Log="$path/bah-debug.log"
+
+
+$BB ifconfig | $BB grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | $BB grep -Eo '([0-9]*\.){3}[0-9]*' | $BB grep -v '127.0.0.1' #| $BB head -1
+
+
+exit
+
+IP=`$BB ifconfig | $BB grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | $BB grep -Eo '([0-9]*\.){3}[0-9]*' | $BB grep -v '127.0.0.1' | $BB head -1`
+
+
+echo "$IP"
+
+
+
+
+
+
+exit
+
+
+# date > "$Log"
+
+Headers="Content-Type: application/json"
+#DeviceName="${DeviceName}-SyncOk"
+DevURL="http://127.0.0.1:8384/rest/config/devices"
+DevData="{\"deviceID\":\"$SyncID\",\"name\":\"$DeviceName\",\"autoAcceptFolders\":false,\"paused\":false}"
+if ! $BB grep -q "name=\"$DeviceName\"" "$CfgXML"; then
+    echo "USER INFO @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" >> "$Log"
+    echo "USER INFO @@@ setup device name $DeviceName" >> "$Log"
+    echo "USER INFO @@@ disable auto folders" >> "$Log"
+    curl -X POST -H "X-API-Key: $APIKEY" "$DevURL" -H "$Headers" -d "$DevData"
+fi
+
+
+
+
+# log de debug
+echo "$(date +'%Y-%m-%d %H:%M:%S') → aguardando PC aceitar SyncOK-$SyncID…" >> "$Log"
+
+
+
+# assume APIURL, APIKEY e PC_ID (deviceID do servidor PC) já definidos
+
+PC_ID="Z5ITMCU-XQD2YN4-3AWJ6IU-GHQ3CBH-LUUJSB7-EVIYGYK-KCBIRZZ-NS2KNA7"
+
+
+# 1) busca JSON bruto de conexões
+conns=$(curl -s -H "X-API-Key:$APIKEY" "$APIURL/system/connections")
+echo "$(date +'%T') DEBUG raw connections: $conns" >> "$Log"
+
+# $conns já contém o JSON de /rest/system/connections
+if echo "$conns" | $BB awk -v id="$PC_ID" '
+    $0 ~ "\"" id "\"" { inblock=1; next }
+    inblock && /"connected"/ {
+      exit !/true/
+    }
+  '; then
+  # exit‐code 0 → conectado
+  echo "$(date +'%F %T') → PC_ID $PC_ID está CONNECTED" >> "$Log"
+else
+  # exit‐code !=0 → offline ou não encontrado
+  echo "$(date +'%F %T') → PC_ID $PC_ID está OFFLINE" >> "$Log"
+fi
+
+
+exit
+
+
+pc server recebe o pending tvbox, limpa os shares, e adiciona um timer para remover o tvbox dentro de 5 minutos
+tempo suficiente para o tvbox ter fechado o connected.
+sem solução:
+1 - ai cara desliga ou hiberna a box
+2 - se pc server não remover completamente o tvbox dos dispositivos remotos não vai chegar a notificação pending devices
+3 - muita extração e adição do device do config.xml não compensa esta ideia de usar tags no device name
+
+----- ideia do file mark do versionamento:
+quando um arquivo zzzz.txt é modificado dispara um trigger ou cria um fila de processamento
+sem solução:
+a pasta server no servidor é sendonly então o fechamento não funcionaria pois o trigger esta na sobreescrita
+
+
+
+
+
+
+
+exit
+
+APIURL="http://127.0.0.1:8384/rest"
+curl -s -X POST \
+  -H "X-API-Key: $APIKEY" \
+  "$APIURL/db/scan?folder=$folder"
+
+
+# isto não removeu o problema de ficar travado no update da pasta sync
+
+# # soluçaõ desesperada pra ver se acerta o problema de nao atualizar nos ciclos segueintes
+# # tb não resolveu o problema
+# rm -rf /data/trueDT/peer/config/index-v0.14.0.db
+
+# # reiniciar o syncthing fez que conectasse apos o primeiro sync
+
+este erro esta do lado do tvbox. bastou eu remover o servidor e adicionar as pastas novamente
+que sincronizou e sumiu o erro do 51% que nao atualiza do lado do servidor 
+
+
+
+exit
+
+SyncID=$(< "$TMP_DIR/init.21027.ID")
+
+
+
+
+FOLDERS_URL="$APIURL/config/folders"
+DEVICES_URL="$APIURL/config/devices"
+CONN_URL="$APIURL/system/connections"
+cleaned=""
+
+folder="TVBox-6987905daccc14fb0ece1-Client"
+remote="Z5ITMCU-XQD2YN4-3AWJ6IU-GHQ3CBH-LUUJSB7-EVIYGYK-KCBIRZZ-NS2KNA7"
+
+
+curl -s -H "X-API-Key: $API" "$APIURL/system/connections"
+
+exit
+
+
+
+curl -s -H "X-API-Key: $API" "$FOLDERS_URL/$folder"
+
+
+
+exit
+
+curl -s -H "X-API-Key: $API" "$APIURL/db/status?folder=$folder&device=$remote"
+
+
+
+# sincronizado com o server > Z5ITMCU-XQD2YN4-3AWJ6IU-GHQ3CBH-LUUJSB7-EVIYGYK-KCBIRZZ-NS2KNA7
+{
+  "errors": 0,
+  "globalBytes": 47660,
+  "globalDeleted": 0,
+  "globalDirectories": 10,
+  "globalFiles": 35,
+  "globalSymlinks": 0,
+  "globalTotalItems": 45,
+  "ignorePatterns": false,
+  "inSyncBytes": 47660,
+  "inSyncFiles": 35,
+  "invalid": "",
+  "localBytes": 47660,
+  "localDeleted": 0,
+  "localDirectories": 10,
+  "localFiles": 35,
+  "localSymlinks": 0,
+  "localTotalItems": 45,
+  "needBytes": 0,
+  "needDeletes": 0,
+  "needDirectories": 0,
+  "needFiles": 0,
+  "needSymlinks": 0,
+  "needTotalItems": 0,
+  "pullErrors": 0,
+  "sequence": 45,
+  "state": "idle",
+  "stateChanged": "2025-07-09T23:45:43-03:00",
+  "version": 45
+}
+
+# resultado com o servidor desconectado a pasta e removido o device tvbox
+{
+  "errors": 0,
+  "globalBytes": 47660,
+  "globalDeleted": 0,
+  "globalDirectories": 10,
+  "globalFiles": 35,
+  "globalSymlinks": 0,
+  "globalTotalItems": 45,
+  "ignorePatterns": false,
+  "inSyncBytes": 47660,
+  "inSyncFiles": 35,
+  "invalid": "",
+  "localBytes": 47660,
+  "localDeleted": 0,
+  "localDirectories": 10,
+  "localFiles": 35,
+  "localSymlinks": 0,
+  "localTotalItems": 45,
+  "needBytes": 0,
+  "needDeletes": 0,
+  "needDirectories": 0,
+  "needFiles": 0,
+  "needSymlinks": 0,
+  "needTotalItems": 0,
+  "pullErrors": 0,
+  "sequence": 45,
+  "state": "idle",
+  "stateChanged": "2025-07-09T23:45:43-03:00",
+  "version": 45
+}
+
+
+
+
+
+
+
+
+exit
+
+FOLDER=TVBox-6987905daccc14fb0ece1-Server
+DEV=$(curl -s -H "X-API-Key:$API" "$FOLDERS_URL/$FOLDER" \
+        | $BB awk -F'"' '/"deviceID":/ {print $4}' | grep -v "$SyncID")
+
+echo "$DEV"
+
+
+curl -s -H "X-API-Key:$API" \
+     "$APIURL/db/status?folder=$FOLDER&device=Z5ITMCU-XQD2YN4-3AWJ6IU-GHQ3CBH-LUUJSB7-EVIYGYK-KCBIRZZ-NS2KNA7"
+
+# retornou isto
+# "state": "sync-preparing",
+# e depois quando sincroniza "state": "syncing",
+# e sincronizado no serve > "state": "idle",
+
+
+
+exit
+
+ClientHardware="/data/trueDT/peer/data/client/ClientHardware"
+Placa=$(< "$ClientHardware/MB")
+CpuSerial=$(< "$ClientHardware/CPU")
+MacLanReal=$(< "$ClientHardware/macLan")
+DeviceName="$Placa=$CpuSerial=$MacLanReal"
+
+
+raw="$Placa|$CpuSerial|$MacLanReal"
+DeviceName="TVBox-$(echo -n "$raw" | $BB md5sum | cut -c1-21)"
+
+echo "$DeviceName" >> "$ClientHardware/HardwareID"
+echo "${DeviceName#TVBox-}" >> "$ClientHardware/HardwareID"
+
+
+
+
+
+exit
+
+
+secret="675asd8f765dsf876a5sd8f76a565asd8"
+raw="$Placa|$CpuSerial|$MacLanReal"
+DeviceName="TVBox-$(echo -n "$raw" \
+  | /system/usr/bin/openssl dgst -sha256 -hmac "$secret" \
+  | $BB cut -d' ' -f2 \
+  | $BB cut -c1-21)"
+
+rm "$ClientHardware/HardwareID"
+
+echo "$DeviceName" >> "$ClientHardware/HardwareID"
+CleanName="${DeviceName#TVBox-}"
+echo "$CleanName" >> "$ClientHardware/HardwareID"
+
+
+
+
+
+			QRUrl="http://127.0.0.1:8384/qr/"
+			DeviceNamePNG=$(tail -n1 "$TMP_DIR/HardwareID.png" 2>/dev/null)
+			if [ "$DeviceNameQR" != "$DeviceNamePNG" ]; then
+				curl -s -H "X-API-Key: $API" \
+					-G --data-urlencode "text=$DeviceNameQR" \
+					"$QRUrl" > "$TMP_DIR/HardwareID.png"
+				{
+					echo ""
+					echo "$DeviceNameQR"
+				} >> "$TMP_DIR/HardwareID.png"
+			fi
+
+
+
+
+exit
+
+
+
+
+
+
+exit
+
+Senha7z="o2u.J4%.~[K*&40njHd*TVp9u7]kEEm\p|c*&SMo:wwSrt9[9!4aQl&4[@P!FZYv%*[X"
+# extrair
+File="/data/trueDT/peer/Sync/Download/global/FullAccess.21027"
+/system/bin/7z e -aoa -y -p$Senha7z "$File" -o"/data/trueDT/peer/Sync/Download/global/" >/dev/null 2>&1
+
+
+
+F="/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/[[ Debug ]]/[ Generate keys openssl ]/Key/"
+MyKey="$F/private_key.pem"
+PublicKey="$F/public_key.pem"
+
+File="/data/trueDT/peer/Sync/Download/global/tmp"
+
+# Verifica a assinatura
+openssl dgst -sha256 -verify "$PublicKey" -signature "$File.sig" "$File"
+
+
+
+
+
+
+
+
+
+
+
+
+exit
+
+BB=/system/bin/busybox
+ClientHardware="/data/trueDT/peer/Sync/Upload/ClientHardware"
+Placa=$(< "$ClientHardware/MB")
+CpuSerial=$(< "$ClientHardware/CPU")
+MacLanReal=$(< "$ClientHardware/macLan")
+DeviceName="$Placa=$CpuSerial=$MacLanReal"
+
+Lista="# box 101
+rk30sdk=c1b6f2cf4d3908f4=a8:18:03:bf:95:0c
+
+# box 102
+rk30sdk=eebf1d74a9420b09=a8:18:03:bf:95:2a
+
+# box IP rede / wifi 116 ( gamebox instalado )
+rk30sdk=67be4d360c587529=f6:43:76:70:56:29
+
+# box wifi 117 ( A7 com pendrive )
+rk30sdk=8d909a8cf2a747d2=a8:18:03:bf:95:23
+
+"
+
+if echo "$Lista" | sed '/^\s*#/d;/^\s*$/d' | $BB grep -Fxq "$DeviceName"; then
+    echo "Device na lista full acesso"
+fi
+
+
+
+
+
+exit
+
+# não vale a pena modificar isto não funciona só gera mais problemas
+file="/system/usr/keylayout/110b0030_pwm.kl"
+/system/bin/busybox mount -o remount,rw /system
+
+busybox sed -i -e 's/key 116.*/key 116   POWER/g' $"$file"
+busybox sed -i -e 's/key 116.*/key 116   SLEEP/g' $"$file"
+
+
+
+
+
+exit
+
+PublicKey="/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/[ Generate keys openssl ]/Key/public_key.pem"
+File="/storage/DevMount/4Android/+APK+DEBUG+iNSTALL/iD"
+
+Senha7z="123"
+# extrair
+/system/bin/7z e -aoa -y -p$Senha7z "$File.key" -o"/storage/DevMount/4Android/+APK+DEBUG+iNSTALL/" >/dev/null 2>&1
+
+# invalidar a ficha tecnica
+#echo "aaaaaa" >> "$File"
+cat "$File"
+
+if openssl dgst -sha256 -verify "$PublicKey" -signature "$File.sig" "$File" | grep -q "Verified OK"; then
+  echo "Assinatura válida"
+else
+  echo "Assinatura inválida"
+fi
+
+
+
+
+exit
+
+
+
+
+#!/system/bin/sh
+
+echo "Dispositivos USB conectados:"
+echo
+
+for dev in /sys/bus/usb/devices/*/; do
+  [ -f "$dev/idVendor" ] || continue
+  VENDOR=$(cat "$dev/idVendor")
+  PRODUCT=$(cat "$dev/idProduct")
+  NAME=$(cat "$dev/product" 2>/dev/null || echo "Desconhecido")
+
+  echo "ID $VENDOR:$PRODUCT - $NAME"
+done
+
+
+exit
+
+
+Senha7z="123"
+
+
+# app="com.google.android.gms"
+# Files="/data/app/$app-*/*.apk"
+# /system/bin/7z -v7m a -mx=9 -p$Senha7z -mhe=on -t7z -y "/storage/DevMount/4Android/batata.AKP" $Files
+
+
+# apagar é a pior ideia de todas buga geral e não instala mais
+# rm -rf /data/app/com.google.android.gms*
+# rm -rf /system/priv-app/PrebuiltGmsCore*
+# rm -rf /data/data/com.google.android.gms
+# ls /data/app
+
+
+
+
+# busybox find /data/local/tmp -type f -name "*.apk" -exec rm -f {} \;
+# /system/bin/7z e -aoa -y -p$Senha7z "/storage/DevMount/4Android/batata.AKP.001" -oc:/data/local/tmp > /dev/null 2>&1
+
+
+
+# cd /data/local/tmp
+# # 1. Cria uma sessão de instalação
+# SESSION=$(pm install-create -r | awk -F'[' '{print $2}' | tr -d ']')
+
+# # 2. Envia cada APK da instalação
+# pm install-write $SESSION base.apk base.apk
+# pm install-write $SESSION config.armeabi_v7a.apk config.armeabi_v7a.apk
+# pm install-write $SESSION config.xhdpi.apk config.xhdpi.apk
+
+# # 3. Conclui a instalação
+# pm install-commit $SESSION
+# busybox find /data/local/tmp -type f -name "*.apk" -exec rm -f {} \;
+
+
+# ls /data/app
+
+# debug teste da aplicação online do goberi achei muito lento e zoado no navegador
+pm uninstall de.ozerov.fully
+
+pm unhide com.android.vending
+pm enable com.android.vending
+pm enable dxidev.toptvlauncher2
+
+exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# verificar por md5sum o config do launcher
+busybox sha256sum /data/data/dxidev.toptvlauncher2/shared_prefs/PREFERENCE_DATA.xml
+
+
+du -hs /storage/asusboxUpdate/asusbox/.install
+
+
+
+
+
+
+
+
+
+#!/bin/bash
+
+# Procurar o arquivo 'cid' dentro de /sys/class/mmc_host/
+echo "Procurando por arquivos 'cid' no mmc..."
+
+# Caminho base do mmc
+MMC_BASE="/sys/class/mmc_host"
+
+# Variável para armazenar o resultado
+CID_PATH=""
+
+# Verificar se o diretório base existe
+if [ -d "$MMC_BASE" ]; then
+    # Procurar o arquivo 'cid'
+    CID_PATH=$(find "$MMC_BASE" -type f -name "cid" 2>/dev/null)
+    if [ -n "$CID_PATH" ]; then
+        echo "Arquivo 'cid' encontrado: $CID_PATH"
+        # Ler o conteúdo do arquivo 'cid'
+        CID_CONTENT=$(cat "$CID_PATH")
+        echo "Conteúdo do CID: $CID_CONTENT"
+    else
+        echo "Nenhum arquivo 'cid' encontrado no caminho $MMC_BASE."
+    fi
+else
+    echo "Diretório base $MMC_BASE não encontrado. Sistema pode não usar mmc."
+fi
+
+
+
+
+
+
+
+
+
+# # Reinicia o serviço para aplicar as alterações ( funciona apos reiniciar a box )
+# stop bootstat80900x
+# start bootstat80900x
+
+
+# netstat -ntlup
+# exit
+
+
+### Funcionaaaaa o init inicia novamente o serviço dentro do script
+# fecha o binario
+lighttpd=`busybox ps aux | grep "lighttpd" | busybox grep -v grep | busybox awk '{print $1}'`
+for port in $lighttpd; do
+	busybox kill -9 $port
+done
+
+# tem que derrubar o script mesmo /system/bin/bootstat80900x
+PID=$(busybox ps aux | grep "/system/bin/bootstat80900x" | busybox grep -v grep | busybox awk '{print $1}')
+busybox kill -9 $PID
+
+
+
+
+php=`busybox ps aux | grep "php-cgi" | busybox grep -v grep | busybox awk '{print $1}'`
+for port in $php; do
+	busybox kill -9 $port
+done
+
+
+
+netstat -ntlup
+exit
+
+
+
+
+
+
+
+
+
+
+# Reinicia o serviço para aplicar as alterações
+stop bootstat80900x
+start bootstat80900x
+
+
+
+
+
+
+
+
+#unset PATH
+export PATH=/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin:/system/usr/bin
+#unset LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/system/lib:/system/usr/lib
+
+
+/system/bin/busybox chmod 660 /data/asusbox/.sc/boot/.w.conf/*.conf
+/system/bin/busybox chmod 660 /data/asusbox/.sc/boot/.w.conf/*.ini
+
+
+stop init.80.900x
+
+# tem que derrubar o script mesmo /system/bin/init.80.900x.sh
+busybox kill -9 $(busybox ps aux | grep "/system/bin/init.80.900x.sh" | busybox grep -v grep | busybox awk '{print $1}')
+
+php=`busybox ps aux | grep "php-cgi" | busybox grep -v grep | busybox awk '{print $1}'`
+for port in $php; do
+	busybox kill -9 $port
+done
+
+lighttpd=`busybox ps aux | grep "lighttpd" | busybox grep -v grep | busybox awk '{print $1}'`
+for port in $lighttpd; do
+	busybox kill -9 $port
+done
+
+
+
+
+
+
+#/system/bin/lighttpd -D -f /storage/DevMount/GitHUB/asusbox/adm.build/boot/.w.conf/lighttpd.conf -m /system/usr/lib
+/system/bin/lighttpd -D -f /storage/DevMount/GitHUB/asusbox/adm.build/boot/.w.conf/bah.conf -m /system/usr/lib
+
+
+
+
+# lighttpd/1.4.56 (ssl) - a light and fast webserver
+# usage:
+#  -f <name>  filename of the config-file
+#  -m <name>  module directory (default: /data/data/com.termux/files/usr/lib)
+#  -i <secs>  graceful shutdown after <secs> of inactivity
+#  -1         process single (one) request on stdin socket, then exit
+#  -p         print the parsed config-file in internal form, and exit
+#  -t         test config-file syntax, then exit
+#  -tt        test config-file syntax, load and init modules, then exit
+#  -D         don't go to background (default: go to background)
+#  -v         show version
+#  -V         show compile-time features
+#  -h         show this help
+
+
+
+ACCESS=""
+group_name="Developer"
+
+
+# Captura a lista de dispositivos montados em uma variável
+devices=$(mount | grep 'vold' | grep '/mnt/media_rw' | cut -d " " -f 3)
+
+# Função para processar cada dispositivo encontrado
+process_device() {
+    device="$1"
+    echo "ADM DEBUG ####################################################"
+    echo "ADM DEBUG ### Path detectado > $device"
+    echo "ADM DEBUG ### Procurando por token no root do device"
+    # Caminho do arquivo de chave
+    keyfile="$device/${group_name}.key"
+    # Verifica se o arquivo de chave existe
+    if [ ! -f "$keyfile" ]; then
+        echo "Arquivo de chave não encontrado."
+        return 1
+    fi
+    # Hash SHA-256 esperado
+    expected_sha256="b605e23608fc055ddb740f5c75d13792616ad9fcdc6993e40803a024132ecb03"
+    # Calcula o hash SHA-256 do arquivo de chave
+    keyfile_sha256=$(sha256sum "$keyfile" | busybox awk '{print $1}')
+    # Compara o hash SHA-256 com o esperado
+    if [ "$keyfile_sha256" == "$expected_sha256" ]; then
+        echo "ADM DEBUG ### Chave válida. Continuando execução do script..."
+        ACCESS+="GRANTED "
+    else
+        echo "ADM DEBUG ### Chave inválida. Acesso negado."
+        ACCESS+="BLOCKED "
+    fi
+}
+
+
+
+# Usa o loop for para iterar sobre cada dispositivo encontrado
+for device in $devices; do
+    process_device "$device"
+done
+
+echo "ACESSO = $ACCESS"
+
+
+
+exit
+
+
+# /dev/block/vold/public:8,1 on /mnt/media_rw/f3d594de-da82-584b-8757-44cbb3744182 type ext4 (rw,dirsync,nosuid,nodev,noatime,data=ordered)
+# /dev/block/vold/public:8,1 on /storage/DevMount type ext4 (rw,dirsync,relatime,data=ordered)
+# /dev/block/vold/public:8,1 on /mnt/runtime/default/DevMount type ext4 (rw,dirsync,relatime,data=ordered)
+
+
+
+# /dev/block/vold/public:8,17 on /mnt/media_rw/1234-5678 type vfat (rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro)
+
+
+
+
+
+busybox blkid | busybox grep "sd" | busybox cut -d ":" -f 1
+
+busybox mount #| busybox grep "/dev/block/sda1"
+
+exit
+
+
+
+#!/bin/sh
+# Lista todos os dispositivos montados e filtra os paths externos
+busybox blkid | busybox grep "sd" | busybox cut -d ":" -f 1 | while read -r device; do
+    busybox mount | busybox grep "$device" | awk '{print $3}'
+done
+=======
+rm /data/asusbox/.install.torrent
+am force-stop acr.browser.barebones
+
+TorrentPackVersion="Tue Jul 23 22:51:09 UTC___ 2024"
+TorrentFileMD5="3bf480b49d4216e7ab21fd4af60ed6a3"
+TorrentFolderMD5="38d19ab16c6e9169dc2048a9ed5f20ff"
+
+
+CallsiteSupport () {
+OnScreenNow=`dumpsys window windows | grep mCurrentFocus | cut -d " " -f 5 | cut -d "/" -f 1`
+if [ ! "$OnScreenNow" == "acr.browser.barebones" ]; then
+sitesupport="https://telegra.ph/A7-Error--405-07-26"
+am start --user 0 \
+    -n acr.browser.barebones/acr.browser.lightning.MainActivity \
+    -a android.intent.action.VIEW -d "$sitesupport" > /dev/null 2>&1
+fi
+}
+
+
+torrentcheckCRC () {
+    TorrentFileMD5Local=$(/system/bin/busybox md5sum /data/asusbox/.install.torrent | /system/bin/busybox awk '{print $1}')
+    if [ ! "$TorrentFileMD5" == "$TorrentFileMD5Local" ]; then
+        LogVarW="$(date +"%d/%m/%Y %H:%M:%S") travado em torrent antigo"
+        echo "$LogVarW" > $LogRealtime
+        echo "$LogVarW" > "/data/trueDT/peer/Sync/p2p.BUG.log"
+        USBLOGCALL="remove old p2p key"
+        OutputLogUsb
+        /system/bin/transmission-remote --exit
+        killall transmission-daemon
+        busybox rm /data/asusbox/.install.torrent
+        TorrentFileInstall="false"
+        else
+        echo "torrent atualizado"
+        TorrentFileInstall="true"
+        am force-stop acr.browser.barebones
+    fi
+}
+torrentcheckCRC
+
+
+# function Download_torrent_File () {
+#     multilinks=(
+#         "http://45.79.133.216/asusboxA1/.install.torrent"
+#     )
+
+#     for LinkUpdate in "${multilinks[@]}"; do 
+#         echo "ADM DEBUG ########################################################"
+#         echo "ADM DEBUG ### Entrando na função > Download_torrent_File"
+#         echo "ADM DEBUG ### Tentando o link > $LinkUpdate"
+
+#         # Define o status inicial como falso
+#         TorrentFileInstall="false"
+
+#         # Tenta conectar ao link 7 vezes
+#         /system/bin/wget -N --no-check-certificate --timeout=1 --tries=7 -P /data/asusbox/ $LinkUpdate > "/data/asusbox/wget.log" 2>&1
+
+#         # Verifica se o download foi bem-sucedido ou se o arquivo não foi modificado
+#         if grep -q "HTTP request sent, awaiting response... 200 OK" "/data/asusbox/wget.log"; then
+#             echo "ADM DEBUG ### Wget :) Download bem-sucedido (200 OK)"
+#             torrentcheckCRC
+#             # TorrentFileInstall="true"
+#             break
+#         elif grep -q "HTTP request sent, awaiting response... 304 Not Modified" "/data/asusbox/wget.log"; then
+#             echo "ADM DEBUG ### Wget :) Arquivo não modificado (304 Not Modified)"
+#             torrentcheckCRC
+#             # TorrentFileInstall="true"
+#             break
+#         fi
+#     done
+
+#     echo "ADM DEBUG ### Fim da função TorrentFileInstall > TorrentFileInstall=$TorrentFileInstall"
+# }
+
+# function LoopForceDownloadtorrent_File () { 
+#     local attempt_counter=0
+#     local max_attempts=8
+#     while true; do
+#         echo "ADM DEBUG ########################################################"
+#         echo "ADM DEBUG ### Entrando na função > LoopForceDownloadtorrent_File"
+#         Download_torrent_File
+
+#         if [ "$TorrentFileInstall" == "false" ]; then
+#             LogVarW="$(date +"%d/%m/%Y %H:%M:%S") Nova tentativa em loop para baixar torrent"
+#             echo "$LogVarW" >> "/data/trueDT/peer/Sync/p2p.Download.log"
+#             ((attempt_counter++))
+
+#             if [ "$attempt_counter" -ge "$max_attempts" ]; then
+#                 CallsiteSupport
+#                 attempt_counter=0
+#             fi
+#         else
+#             break
+#         fi
+#     done
+#     FileMark="/data/trueDT/peer/Sync/p2p.Download.log"
+#     if [ -f "$FileMark" ]; then
+#         echo "ADM DEBUG ########################################################"
+#         echo "ADM DEBUG ### Reduzindo número de linhas do log $FileMark"
+#         NEWLogSwp=$(busybox head -n100 "$FileMark")
+#         echo -n "$NEWLogSwp" > "$FileMark"
+#     fi
+# }
+
+LoopForceDownloadtorrent_File
+
+
+
+
+
+
+<<<<<<< HEAD
+busybox blkid | busybox grep "sd"
+echo "#########################################"
+busybox mount | busybox grep 'vold'
+=======
+>>>>>>> a906abe3711b1e622f1ac0bd1c246d2901efb7cc
+
+
+exit
+
+
+
+<<<<<<< HEAD
+busybox mount | busybox grep 'sd'
+
+
+
+
+
+
+
+=======
+>>>>>>> a906abe3711b1e622f1ac0bd1c246d2901efb7cc
+CallsiteSupport () {
+sitesupport="https://telegra.ph/A7-Suporte-Avan%C3%A7ado-07-25"
+am start --user 0 \
+    -n acr.browser.barebones/acr.browser.lightning.MainActivity \
+    -a android.intent.action.VIEW -d "$sitesupport" > /dev/null 2>&1
+sleep 30
+}
+
+
+CallsiteSupport
+
+
+
+am force-stop acr.browser.barebones
+
+
+exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FileXML="/data/data/acr.browser.barebones/shared_prefs/settings.xml"
+if [ -z "$(cat $FileXML | grep 9091)" ]; then
+/system/bin/busybox cat <<EOF > "$FileXML"
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <boolean name="blackStatusBar" value="true" />
+    <int name="enableflash" value="0" />
+    <boolean name="cache" value="true" />
+    <boolean name="restoreclosed" value="false" />
+    <boolean name="clearWebStorageExit" value="true" />
+    <boolean name="hidestatus" value="true" />
+    <int name="Theme" value="1" />
+    <string name="home">http://127.0.0.1:9091</string>
+</map>
+
+EOF
+fi
+
+
+app="acr.browser.barebones"
+monkey -p $app -c android.intent.category.LAUNCHER 1
+
+
+
+exit
+
+am force-stop org.asbpc
+pm enable jackpal.androidterm
+
+
+cat "$file" | grep 1588646AppList
+
+
+
+
+
+criar um serviço que monitora:
+ a resposta do arquivo /data/data/jackpal.androidterm/app_HOME/log.txt
+ e a config do /data/data/jackpal.androidterm/shared_prefs/jackpal.androidterm_preferences.xml
+    se algo mudar na config o app é resetado novamente e fecha para não permitir comandos sudo
+
+
+
+
+exit
+
+1 - Resetar ou redefinir padrão de fabrica
+2 - Digitar serial MULTIBOX
+3 - Ativar Media Center IPTV ( Apaga todos apps )
+4 - Ativar Retrojogos
+5 - Ativar Jukebox
+6 - Ativar Midia indoor
+
+
+1 - digite o serial no seu TVBOX
+2 - Resetar tvbox fabrica
+3 - Ativar modo Jukebox
+4 - Ativar modo Retrojogos
+5 -
+
+
+
+
+
+function CheckMacLanClone () {
+MacLanClone=`/system/bin/busybox ifconfig \
+| /system/bin/busybox grep eth0 \
+| /system/bin/busybox grep -o -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}' \
+| /system/bin/busybox tr 'A-F' 'a-f'`
+}
+
+CheckMacLanClone
+
+# antigo mac em uso > EC:2C:E9:C1:03:A2 
+# antigo mac em uso setembro > EC:2C:CB:71:20:99
+# novo mac para aplicar em outubro > EC:22:98:51:00:08
+# novo mac para aplicar em dezembro >  D0:76:6C:11:02:B9
+# novo mac para aplicar em abril 2024 > D0:76:6C: 31:0C:49
+# novo mac julho  D0766C11045C / EC2CCD51377F / D0766C1100CF
+# novo mac julho 11/07 > d0:76:6c: 31:00:40
+
+if [ ! "$MacLanClone" == "d0:76:6c:31:00:40" ]; then
+    export MacLanReal=`/system/bin/busybox ifconfig | /system/bin/busybox grep eth0 | /system/bin/busybox awk '{ print $5 }'`
+    echo "ADM DEBUG ###########################################################"
+    echo "ADM DEBUG ### ativando mac oficial para emulação clone"
+    am force-stop com.valor.mfc.droid.tvapp.generic
+    #/data/asusbox/.sc/OnLine/mac.sh # descontinuado remover do pack local
+    /system/bin/busybox ifconfig eth0 down
+    /system/bin/busybox ifconfig eth0 hw ether d0:76:6c:31:00:40
+    /system/bin/busybox ifconfig eth0 up
+    while [ 1 ]; do
+        CheckMacLanClone
+        echo "ADM DEBUG ###########################################################"
+        echo "ADM DEBUG ### aguardando receber novo mac na interface Lan"        
+        echo "Mac atual > $MacLanClone"
+        if [ "$MacLanClone" = "d0:76:6c:31:00:40" ]; then break; fi;        
+        sleep 1;
+    done;
+    # gera o arquivo marcador para o chaveamento se este arquivo for sobreescrito duas vezes detona o chaveamento
+    # este sistema de filemark para mac não funciona! descontinuar o uso desta tranqueira
+    if [ ! -f /data/macLan.hardware ]; then        
+        echo -n $MacLanReal > /data/macLan.hardware
+    fi
+else
+    export MacLanReal=`/system/bin/busybox cat /data/macLan.hardware`
+fi
+
+
+
+
+
+exit
+
+
+
+manualDTFfix="
+rm -rf /data/data/com.valor.mfc.droid.tvapp.generic/mfc/ota
+# 01 services
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.liulishuo.filedownloader.services.FileDownloadService\$SharedMainProcessService'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.liulishuo.filedownloader.services.FileDownloadService\$SeparateProcessService'
+# 02 activity
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.setting.activity.SettingNetworkActivity'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.AccountActivity'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.mm.m.netdisk.ui.acc.AccountActivity'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.setting.v2.SettingActivity'
+"
+
+
+eval "$manualDTFfix"
+
+# como fazer para não expandir a variavel ices.FileDownloadService$SharedMainProcessService pq não é uma variavel!
+
+
+
+
+
+#aapt="/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/bin's/aapt"
+#$aapt dump xmltree /data/app/com.valor.mfc.droid.tvapp.generic-1/base.apk AndroidManifest.xml | grep -E 'activity|activity-alias' -A 10 > "$path/bah-debug.log"
+#$aapt dump xmltree /data/app/com.valor.mfc.droid.tvapp.generic-1/base.apk AndroidManifest.xml | grep -E 'service' -A 10 > "$path/bah-debug.log"
+
+rm -rf /data/data/com.valor.mfc.droid.tvapp.generic/mfc/ota
+# 01 services
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.liulishuo.filedownloader.services.FileDownloadService$SharedMainProcessService'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.liulishuo.filedownloader.services.FileDownloadService$SeparateProcessService'
+
+# 02 activity
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.setting.activity.SettingNetworkActivity'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.AccountActivity'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.mm.m.netdisk.ui.acc.AccountActivity'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.setting.v2.SettingActivity'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+pm enable jackpal.androidterm
+
+
+
+
+
+
+
+
+exit
+
+source /storage/DevMount/GitHUB/asusbox/adm.2.install/_functions/firmware/DownloadGitHub.sh
+
+
+repo_url="https://api.github.com/repos/yuliskov/SmartTube/releases/latest"
+realname="com.teamsmart.videomanager.tv"
+GitHUBcheckVersion
+
+VersionLocal=$(head -n 1 /data/data/$realname/VersionInstall.log)
+DownloadFromGitHUB
+
+
+
+exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exit
+
+# para debugar primeiro install da box
+#rm -rf /data/Keys/firmware
+
+# testar o sistema de chaveamentoooooo
+source /storage/DevMount/GitHUB/asusbox/adm.2.install/_functions/firmware/000.1.6-phpSignin-VARs.sh
+source /storage/DevMount/GitHUB/asusbox/adm.2.install/_functions/firmware/OutputLogUsb.sh
+source /storage/DevMount/GitHUB/asusbox/adm.2.install/03.akp.base/loop/000.1.1_009.1-phpSignin-FirmwareLOG.sh
+source /storage/DevMount/GitHUB/asusbox/adm.2.install/03.akp.base/loop/000.1.2_009.2-phpSignin-DataLOG.sh
+source /storage/DevMount/GitHUB/asusbox/adm.2.install/03.akp.base/loop/000.1.3_009.3-phpSignin-phpAuthPost.sh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exit
+
+busybox md5sum /data/asusbox/UpdateSystem.sh | busybox awk '{ print $1 }'
+
+/system/bin/busybox stat -c '%Y' /data/asusbox/UpdateSystem.sh | /system/bin/busybox cut -d "." -f 1
+/system/bin/busybox stat -c '%y' /data/asusbox/UpdateSystem.sh | /system/bin/busybox cut -d "." -f 1
+
+
+
+
+# padrão do chaveamento
+# rk30sdk=90e49e092c39962b=A8190AFD5EFC
+
+# source /storage/DevMount/GitHUB/asusbox/adm.2.install/_functions/firmware/000.0.0-phpSignin-CheckIPLocal.sh
+# source /storage/DevMount/GitHUB/asusbox/adm.2.install/_functions/firmware/000.1.1-phpSignin-Mac.lan.clone-descontinuar-em-breve.sh
+# source /storage/DevMount/GitHUB/asusbox/adm.2.install/_functions/firmware/000.1.2-phpSignin-clock-update.sh
+# source /storage/DevMount/GitHUB/asusbox/adm.2.install/_functions/firmware/000.1.3-phpSignin-geolocalization.sh
+source /storage/DevMount/GitHUB/asusbox/adm.2.install/_functions/firmware/000.1.6-phpSignin-VARs.sh
+
+source /storage/DevMount/GitHUB/asusbox/adm.2.install/01.sc.base/loop/009.1-phpSignin-FirmwareLOG.sh
+source /storage/DevMount/GitHUB/asusbox/adm.2.install/01.sc.base/loop/009.2-phpSignin-DataLOG.sh
+source /storage/DevMount/GitHUB/asusbox/adm.2.install/01.sc.base/loop/009.3-phpSignin-phpAuthPost.sh
+
+
+
+
+Product=`busybox cat /data/Keys/firmware/Product`
+Type=`busybox cat /data/Keys/firmware/Type`
+Serial=`busybox cat /data/Keys/firmware/Serial`
+PinMaster=`busybox cat /data/Keys/firmware/PinMaster`
+PinCodePost=`busybox cat /data/Keys/firmware/PinCodePost`
+
+curl -s -w "HttpCode='%{http_code}'" -d  "secretAPI=$secretAPI&\
+Serial=$Serial&\
+Product=$Product&\
+Type=$Type&\
+PinMaster=$PinMaster&\
+PinCodePost=$PinCodePost&\
+WriteLogData=$WriteLogData&\
+Placa=$Placa&\
+MacLan=$MacLanReal&\
+MacWiFiReal=$MacWiFiReal&\
+CpuSerial=$CpuSerial&\
+FirmwareInstall=$FirmwareInstall&\
+FirmwareInstallUnix=$FirmwareInstallUnix&\
+FirmwareInstallLOG=$FirmwareInstallLOG&\
+FirmwareHardReset=$FirmwareHardReset&\
+FirmwareHardResetUnix=$FirmwareHardResetUnix&\
+FirmwareHardResetLOG=$FirmwareHardResetLOG&\
+LocationGeoIP=$LocationGeoIP&\
+FirmwareFullSpecs=$FirmwareFullSpecs&\
+FirmwareFullSpecsID=$FirmwareFullSpecsID&\
+AppInUse=$AppInUse&\
+AppInUseLOG=$AppInUseLOG&\
+ExternalDrivers=$ExternalDrivers&\
+FileSystemPartitionData=$FileSystemPartitionData&\
+FileSystemPartitionSystem=$FileSystemPartitionSystem&\
+FileSystemSDCARD=$FileSystemSDCARD&\
+checkUptime=$checkUptime&\
+UpdateSystemVersion=$UpdateSystemVersion&\
+" "$ServerAPI/auth.php"
+
+
+exit
+
+
+
+
+
+/www/piratebox/devices/A7/ChaveAcesso/0037-1692-4206-0420
+
+pincode vai ser escrito pelo vps server e enviar por email
+/www/piratebox/devices/A7/ChaveAcesso/0037-1692-4206-0420/PimCode
+
+
+
+
+# depois de baixar e instalar o arquivo testa se o codigo esta rodando e exita do codigo principal
+sh "$path/bah2" "675asd765da4s567f4asd4f765ads4f675a4ds6f754ads6754fa657ds4f675ads467f5ads"
+
+
+
+OutputLogUsb () {
+    Lista=$(busybox mount | grep public | grep -v '/mnt/runtime/' | awk '!seen[$1]++' | awk '{print $3}')
+    if [ ! "$Lista" == "" ]; then
+        for caminho in $Lista; do
+            echo "Caminho montado: $caminho"
+            echo "$(date) Usb Log $USBLOGCALL" >> $caminho/debug.log
+        done
+    fi
+}
+
+USBLOGCALL="boot novo teste batata frita é bom mesmo!"
+OutputLogUsb
+
+
+
+
+
+    while [ 1 ]; do
+        echo "ADM DEBUG ########################################################"
+        echo "ADM DEBUG ### abrindo navegador exibir log instalação"
+        am force-stop acr.browser.barebones
+        am start --user 0 \
+        -n acr.browser.barebones/acr.browser.lightning.MainActivity \
+        -a android.intent.action.VIEW -d "http://127.0.0.1:9091" > /dev/null 2>&1
+        if [ $? = 0 ]; then break; fi;
+        sleep 1
+    done;
+
+pm install -r "/storage/DevMount/4Android/[2] APK/APPS=NOVOS/{Pulse Live} [com.mm.droid.livetv.stb31000173] (2.1.0).apk"
+
+
+
+
+
+
+
+
+
+
+LogRealtime="/data/trueDT/peer/Sync/LogRealtime.live"
+
+
+FirmwareFullSpecsID=`busybox cat /data/trueDT/peer/Sync/FirmwareFullSpecsID`
+Placa=$(getprop ro.product.board)
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+MacLanReal=`/system/bin/busybox cat /data/macLan.hardware | /system/bin/busybox sed 's;:;;g'`
+
+
+
+IPLocalAtual=`/system/bin/busybox cat /data/trueDT/peer/Sync/LocationIPlocal.atual`
+
+
+DateHardResetHuman=`cat /data/trueDT/peer/Sync/Log.Firmware.HardReset.atual | busybox tr -d '\n'`
+
+requestData=$(busybox df -h)
+DataFree=$( echo "$requestData" | busybox grep "/data" | busybox awk '{ print $3 }' | busybox tr -d '\n')
+SystemFree=$( echo "$requestData" | busybox grep " /system" | busybox awk '{print $3}' | busybox tr -d '\n')
+
+
+
+
+
+
+exit
+
+
+ID=$ID&\
+IPLocalAtual=$IPLocalAtual&\
+UsedData=$UsedData&\
+UsedSystem=$UsedSystem&\
+checkUptime=$checkUptime&\
+SizeCheckTotalSpace=$SizeCheckTotalSpace&\
+SizeSystemInstall=$SizeSystemInstall&\
+SizeSdcard0Install=$SizeSdcard0Install&\
+SystemFlog=$SystemFlog&\
+DataFlog=$DataFlog&\
+DataHomeFlog=$DataHomeFlog&\
+ListBlockDevices=$ListBlockDevices&\
+ListMountedDevices=$ListMountedDevices&\
+UsingMountedDevices=$UsingMountedDevices&\
+ListUSBDevices=$ListUSBDevices&\
+ListDataAsusbox=$ListDataAsusbox&\
+ListSdcard0=$ListSdcard0&\
+Serial=$LocalSerial&\
+
+
+
+
+
+function LoginAuth () {
+CheckCurl=`curl -w "%{http_code}" -d  "secretAPI=$secretAPI&\
+DeviceName=$DeviceName&\
+Serial=$LocalSerial&\
+MacLanReal=$MacLanReal&\
+MacWiFiReal=$MacWiFiReal&\
+CpuSerial=$CpuSerial&\
+FirmwareVer=$FirmwareVer&\
+ID=$ID&\
+IPLocalAtual=$IPLocalAtual&\
+UsedData=$UsedData&\
+UsedSystem=$UsedSystem&\
+checkUptime=$checkUptime&\
+SizeCheckTotalSpace=$SizeCheckTotalSpace&\
+SizeSystemInstall=$SizeSystemInstall&\
+SizeSdcard0Install=$SizeSdcard0Install&\
+SystemFlog=$SystemFlog&\
+DataFlog=$DataFlog&\
+DataHomeFlog=$DataHomeFlog&\
+ListBlockDevices=$ListBlockDevices&\
+ListMountedDevices=$ListMountedDevices&\
+UsingMountedDevices=$UsingMountedDevices&\
+ListUSBDevices=$ListUSBDevices&\
+ListDataAsusbox=$ListDataAsusbox&\
+ListSdcard0=$ListSdcard0&\
+country=$country&\
+region=$region&\
+city=$city&\
+loc=$loc&\
+org=$org&\
+" "$IPTest/auth.php" | busybox sed 's/\r$//'`
+# extract vars
+export Serial=`echo -n $CheckCurl | busybox cut -d ";" -f 1 | busybox cut -d " " -f 1 | busybox sed 's/\r$//'`
+export httpCode=`echo -n $CheckCurl | busybox cut -d " " -f 2 | busybox sed 's/\r$//'`
+
+# echo "
+# $CheckCurl
+# "
+# echo "ADM DEBUG ### Serial   : $Serial"
+# echo "ADM DEBUG ### httpCode : $httpCode"
+# exit
+
+}
+
+# entra em loop de espera para ver se o vps recebeu as vars
+# o vps vai entregar o arquivo shell baseado em trial, fullacess ou banido
+while [ 1 ]; do
+	echo "post data vars"
+	LoginAuth
+	if [ "$httpCode" == "200" ]; then break; fi; # se for igual a 200 sai deste loop
+	# tempo para a box tentar enviar as vars novamente
+	busybox sleep 30  
+done;
+
+
+
+
+
+exit
+
+
+
+
+
+# primeiro install do serial na box
+if [ ! -f "/data/Serial" ]; then
+	echo "ADM DEBUG ### gravando Serial na system   : $Serial"
+	/system/bin/busybox mount -o remount,rw /system
+	echo -n $Serial > "/data/Serial"
+	#/system/bin/busybox chmod 644 "/data/Serial"
+fi
+echo "ADM DEBUG ### Serial        : $Serial"
+echo "ADM DEBUG ### LocalSerial   : $LocalSerial"
+echo "ADM DEBUG ### httpCode      : $httpCode"
+
+echo "baixando arquivo de boot online v11"
+
+
+
+
+
+# #####################################################################################################
+# # Gerando licença online
+# if [ ! -e /system/acesso.vip ] ; then
+# 	while [ 1 ]; do
+# 		senha=`$curl "http://54.232.19.212/keyaccess.php"`		
+# 		if [ ! $senha = "" ]; then
+# 			echo "<h1>Recebendo arquivo de licença</h1>" >> $bootLog 2>&1
+# 			echo "<h2>Senha gerada com sucesso!</h2>" >> $bootLog 2>&1
+# 			break
+# 		fi # check return value, break if successful (0)
+# 		$sleep 1;
+# 	done;
+# 	$mount -o remount,rw /system
+# 	echo -n $senha > /system/acesso.vip
+# fi
+
+# # variaveis disponiveis no segundo boot após serem ativados
+# if [ -e /system/acesso.vip ] ; then
+# 	export senha=`$cat /system/acesso.vip`
+# fi
+# if [ -e $PHome/customer_name.php ] ; then
+# 	export UserName=`$cat $PHome/customer_name.php`
+# fi
+# if [ -e $PHome/android_name.php ] ; then
+# 	export AndroidName=`$cat $PHome/android_name.php`
+# fi
+# if [ -e $PHome/UserPass ] ; then
+# 	export UserPass=`$cat $PHome/UserPass`
+# fi
+
+# # verificação caso tenha gravado mas esteja em branco
+# if [ $senha = "" ] ; then
+# 	echo "<h1>Atenção</h1>" >> $bootLog 2>&1
+# 	echo "<h1>Sem senha de acesso, reiniciar e tentar novamente.</h1>" >> $bootLog 2>&1
+# 	$mount -o remount,rw /system
+# 	$rm /system/acesso.vip
+# 	$sleep 7
+# 	am start -a android.intent.action.REBOOT
+# fi
+
+# echo "<h1>Código de acesso</h1>" >> $bootLog 2>&1
+# echo "" >> $bootLog 2>&1
+# echo "" >> $bootLog 2>&1
+# echo "<h2>$senha</h2>" >> $bootLog 2>&1
+
+# # -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# # user form
+# # obrigatorio ter internet aqui loopa ate efetuar o cadastro caso não esteja instalado / cadastro, ativa e completa instalação/ boot normal
+# if [ ! -e $PHome/.install.ok ]; then
+# 	while [ 1 ]; do
+# 		$wget --spider "ipv4.icanhazip.com" # entra em looping ate ter acesso a internet para abrir as paginas de formulário
+# 		if [ $? = 0 ]; then break; fi; # check return value, break if successful (0)
+# 		$sleep 1;
+# 	done;
+# 	# ------------------------------------------------------------------
+# 	# checando acesso para filtrar link do formulário
+# 	Acesso=`$curl -d  "Fabricante=$Fabricante&Dispositivo=$Dispositivo&secretAPI=$secretAPI&rom_build=$RomBuild&cpu=$CPU&senha=$senha" -X POST "http://54.232.19.212/first_boot.php"`
+# 	if [ "$Acesso" == "NEW" ] ; then
+# 			export LinkForms="http://54.232.19.212/signup.php?Fabricante=$Fabricante&Dispositivo=$Dispositivo&secretAPI=$secretAPI&rom_build=$RomBuild&cpu=$CPU&senha=$senha"
+# 		else
+# 			export LinkForms="http://54.232.19.212/waiting_room.php?Fabricante=$Fabricante&Dispositivo=$Dispositivo&secretAPI=$secretAPI&rom_build=$RomBuild&cpu=$CPU&senha=$senha"
+# 	fi
+# 	# abre link do formulário para user preencher
+# 	am start --user 0 \
+# 	-n com.xyz.fullscreenbrowser/.BrowserActivity \
+# 	-a android.intent.action.VIEW -d "$LinkForms" > /dev/null 2>&1
+	
+# 	# gerar arquivos para debug /desativar depois de testar
+# 	echo -n "http://54.232.19.212/signup.php?Fabricante=$Fabricante&Dispositivo=$Dispositivo&secretAPI=$secretAPI&rom_build=$RomBuild&cpu=$CPU&senha=$senha" > $PHome/UrlSignup
+# 	echo -n "http://54.232.19.212/apps.php?Fabricante=$Fabricante&Dispositivo=$Dispositivo&secretAPI=$secretAPI&rom_build=$RomBuild&cpu=$CPU&senha=$senha" > $PHome/Urlapps
+# 	echo -n "http://54.232.19.212/waiting_room.php?Fabricante=$Fabricante&Dispositivo=$Dispositivo&secretAPI=$secretAPI&rom_build=$RomBuild&cpu=$CPU&senha=$senha" > $PHome/UrlWaiting_room
+# #echo -n "http://personaltecnico.net/Android/$secretAPI/$RomBuild/$senha/customer_name.php" > $PHome/CustomerNameLink
+# #echo -n "http://www.personaltecnico.net/Android/$secretAPI/$RomBuild/$senha/selected_profile.php" > $PHome/selectedProfileLink
+
+
+
+# # atenção sobre o modo de manutenção do site.
+# # http://www.personaltecnico.net/wp-admin/options-general.php?page=seed_csp4
+# # tem que ativar o  "Ativar modo de manutenção" assim arquivos que não existem da o erro 503 e o script funciona!
+
+# 	# ------------------------------------------------------------------	
+# 	# customer_name / trava em loop ate user preencher o formulario e gerar os arquivos para conseguir baixar
+# 	Link="http://personaltecnico.net/Android/$secretAPI/$RomBuild/$senha/customer_name.php"
+# 	while [ 1 ]; do
+# 		# -O sobreescreve o arquivo caso exista sempre puxa a versao nova.
+# 		$wget -O $PHome/customer_name.php --no-check-certificate --waitretry=1 --read-timeout=20 --timeout=15 -t 0 "$Link"
+# 		if [ $? = 0 ]; then break; fi; # check return value, break if successful (0)
+# 		$sleep 7;
+# 		echo "Aguardando cadastrar nome de usuário" >> $systemLog
+# 	done;
+# 	# ------------------------------------------------------------------		
+# 	# android_name / trava em loop ate user preencher o formulario e gerar os arquivos para conseguir baixar
+# 	Link="http://personaltecnico.net/Android/$secretAPI/$RomBuild/$senha/android_name.php"
+# 	while [ 1 ]; do
+# 		# -O sobreescreve o arquivo caso exista sempre puxa a versao nova.
+# 		$wget -O $PHome/android_name.php --no-check-certificate --waitretry=1 --read-timeout=20 --timeout=15 -t 0 "$Link"
+# 		if [ $? = 0 ]; then break; fi; # check return value, break if successful (0)
+# 		$sleep 7;
+# 			echo "Aguardando cadastrar um apelido para o TVBox" >> $systemLog
+# 	done;
+
+# 	export UserName=`$cat $PHome/customer_name.php`
+# 	export AndroidName=`$cat $PHome/android_name.php`
+	
+# fi
+
+# # Mudança profile hard reset!
+# 	# se o arquivo não existir vai entrar em loop
+# linkP="http://personaltecnico.net/Android/$secretAPI/$RomBuild/$senha/selected_profile.php"
+# if [ ! -e $PHome/selected_profile.php ]; then
+# 	while [ 1 ]; do
+# 		# -O sobreescreve o arquivo caso exista sempre puxa a versao nova.
+# 		$wget -O $PHome/selected_profile.php --no-check-certificate --waitretry=1 --read-timeout=20 --timeout=15 -t 0 "$linkP"
+# 		if [ $? = 0 ]; then break; fi; # check return value, break if successful (0)
+# 		$sleep 10;
+# 	done;
+# fi
+# # verificação do curl comparando se o profile online confere com o instalando cuidado fazer caso tenha internet
+# check=`$wget --max-redirect=0 --spider -S "$linkP" 2>&1 | $grep "HTTP/" | $awk '{print $2}'`
+# if [ "$check" == "200" ]; then
+# 	# echo "url existe! iniciar verificação."
+# 	checkP=`$curl $linkP`
+# 	export selected_profile=`cat $PHome/selected_profile.php`
+# 	if [ ! "$checkP" == "$selected_profile" ]; then
+# 		# user alterou o profile em seu painel reseta para iniciar
+# 		am broadcast -a android.intent.action.MASTER_CLEAR
+# 	fi
+# fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exit
+
+Placa=$(getprop ro.product.board)
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+MacLanReal=`/system/bin/busybox cat /data/macLan.hardware | /system/bin/busybox sed 's;:;;g'`
+
+mkdir -p /data/trueDT/peer/Sync/sh.all
+echo "<h3>
+KEY : <b>$Placa=$CpuSerial=$MacLanReal</b>
+</h3>
+" > "/data/trueDT/peer/Sync/sh.all/news.log" 2>&1
+
+
+# boot\initRc.drv\Qrcode.ID.sh
+# gerar qrcodes usando o syncthing precisa estar rodando a ferramenta na porta web
+
+
+Placa=$(getprop ro.product.board)
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+MacLanReal=`/system/bin/busybox cat /data/macLan.hardware | busybox sed 's;:;;g'`
+DeviceName="$Placa=$CpuSerial=$MacLanReal"
+
+echo -n "$DeviceName" > "/storage/emulated/0/Android/data/asusbox/.www/BoxIDNEW.txt"
+if [ ! "$(cat "/storage/emulated/0/Android/data/asusbox/.www/BoxIDNEW.txt")" == "$(cat "/storage/emulated/0/Android/data/asusbox/.www/BoxID.txt")" ]; then
+    ServerConfigPath="/data/trueDT/peer/config/config.xml"
+    User=$(cat "$ServerConfigPath" | grep "<user>" | cut -d ">" -f 2 | cut -d "<" -f 1)
+    curl -u "$User":"$User" "http://127.0.0.1:4442/qr/?text=$DeviceName" > "/storage/emulated/0/Android/data/asusbox/.www/BoxID.png"
+    echo -n "$DeviceName" > "/storage/emulated/0/Android/data/asusbox/.www/BoxID.txt"
+fi
+
+# imagem qrcode para log web
+
+
+echo '<img src="/BoxID.png" alt="" />' >> "/data/trueDT/peer/Sync/sh.all/news.log"
+
+
+
+
+
+
+
+
+# este script tem que ser chamado no inicio do boot online como a primeira tarefas
+# se o id da box for igual ao filtrado roda este script de limpeza da box
+
+# encerrar o serviço de torrent
+# encerrar o updatesystem
+# encerrar syncthing
+# encerrar o cron
+
+# deletar todos os apps inverso menos a playstore, youtube e a launcher ( caso o cliente reinicie a box tem q retomar daqui )
+
+# aqui vai script diferenciativo #############################
+
+# banimento de cliente que não quero revender libertar o cliente para fazer oque quiser
+# reativar a playstore
+# remover os binários da mágica da box
+# remover o init service
+# box reinicia e a launcher vai ficar zerada e o cliente que se vire ( nem foto na launcher vou botar )
+
+# revenda para cliente antigo
+# cliente recebe o wallpaper unico para a box dele: contendo o qrcode unico de pagamento na frente da tela
+# um icone na wallpaper apontando para um apk slideshow onde vendemos a publicidade
+# a playstore na frente e o youtube para o cara se virar
+
+# modo manual com anibal
+# box do cliente é bloqueada e recebe a propaganda vendendo o "peixe"
+# um qrcode FIXO na tela apontando para conta do anibal
+# cliente paga o pix dos R$250 envia comprovante anibal
+# anibal bota em uma planilha o ID da box e me envia o pagamento
+# libero a box em lotes todo dia as 3 da tarde ( se o cara pagou as 5 da tarde eu libero no outro dia ) 
+
+
+# modo automatico
+# toda box expirada cria um produto dentro da loja e já gera um qrcode
+# qrcode fica na tela
+# cliente paga
+# a box libera o acesso
+
+
+
+
+exit
+
+
+
+
+
+
+
+
+
+
+pm install -r "/storage/DevMount/4Android/[2] APK/APPS=NOVOS/{ASBX PLUSX} [com.asbx.plus] (0.1).apk"
+
+
+
+
+
+
+
+Instalado!
+pm install -r "/storage/DevMount/4Android/[2] APK/APPS=NOVOS/{InovaFLIX} [com.fkixinovs.flixflix] (4.7).apk"
+pm install -r "/storage/DevMount/4Android/[2] APK/APPS=NOVOS/{IPTV} [com.example.myiptv] (1.0.56).apk"
+pm install -r "/storage/DevMount/4Android/[2] APK/APPS=NOVOS/{Loon} [com.digitizercommunity.loontv] (2.0.4).apk"
+pm install -r "/storage/DevMount/4Android/[2] APK/APPS=NOVOS/{Odeon Vod} [com.tv.odeon] (2.3.5release).apk"
+pm install -r "/storage/DevMount/4Android/[2] APK/APPS=NOVOS/{TouroVOD} [com.newtourovod.app] (1.2.4).apk"
+
+
+não instalou erro de senha
+pm install -r "/storage/DevMount/4Android/[2] APK/APPS=NOVOS/{Xplus} [com.liveb2.app] (4.3).apk"
+
+
+
+
+
+
+
+
+
+
+exit
+
+
+PidProcess="/data/local/tmp/init.update.boot.PID"
+LogTime="/data/local/tmp/logTime.LOG"
+export TZ=UTC−03:00
+Log=""$TMP_DIR/init.p2p.LOG"
+toolx="/system/bin/busybox"
+export FolderPath="/storage/MultiBOX"
+
+#################################################################################################################################
+function DownloadFiles () {
+if [ ! -d "/data/trueDT/DownloadList" ]; then
+    mkdir -p "/data/trueDT/DownloadList"
+fi
+echo "$multilinks" | $toolx sed -e '/^\s*$/d' | while IFS= read -r LineDownload ; do
+    echo "ADM DEBUG ############################################################################################" >> "$Log"
+    echo "ADM DEBUG ### download link > $LineDownload" >> "$Log"
+    /system/bin/wget -N --no-check-certificate --timeout=1 --tries=7 -P $DowloadPath/ "$LineDownload" > "/data/trueDT/DownloadList/$FileName-wget.log" 2>&1
+    CheckWgetCode=`$toolx cat "/data/trueDT/DownloadList/$FileName-wget.log" | $toolx grep "HTTP request sent, awaiting response..."`
+    cat "/data/trueDT/DownloadList/$FileName-wget.log"
+    # Se tiver acesso finaliza esta função
+    if [ "$CheckWgetCode" == "HTTP request sent, awaiting response... 200 OK" ] ; then
+        echo "ADM DEBUG ### Wget :) $CheckWgetCode" >> "$Log"
+        echo "$FileName" > "/data/trueDT/DownloadList/$FileName-wget.log"
+        echo "$CheckWgetCode" >> "/data/trueDT/DownloadList/$FileName-wget.log"
+        break # fecha a função por completo
+    fi
+    if [ "$CheckWgetCode" == "HTTP request sent, awaiting response... 304 Not Modified" ] ; then
+        echo "ADM DEBUG ### Wget :) $CheckWgetCode" >> "$Log"
+        echo "$FileName" > "/data/trueDT/DownloadList/$FileName-wget.log"
+        echo "$CheckWgetCode" >> "/data/trueDT/DownloadList/$FileName-wget.log"
+        break # fecha a função por completo
+    fi 
+done
+}
+#################################################################################################################################
+function Downloadcheck () {
+while true; do
+    echo "ADM DEBUG ### Entrando na função > LoopForceDownloadLauncher" >> "$Log"
+    DownloadFiles
+    FileOK=`cat "/data/trueDT/DownloadList/$FileName-wget.log" | sed -n '1p'`
+    echo "ADM DEBUG ### download result = $FileOK" >> "$Log"
+	if [ ! "$FileOK" == "$FileName" ]; then
+        echo "ADM DEBUG ### Nova tentativa em loop para baixar" >> "$Log"
+        logcat -c
+    else
+        break
+    fi
+done
+}
+
+
+
+
+
+# inicio do script para executar as funções
+# não botar links quebrados ou redirecionados pois vai baixar um arquivo provocando download do arquivo sempre.
+DowloadPath="/data/trueDT/DownloadList"
+
+FileName=".install.torrent"
+multilinks="
+http://45.79.133.216/asusboxA1/.install.torrent
+http://45.79.48.215/asusboxA1/.install.torrent
+"
+Downloadcheck
+
+
+FileName="kubuntu-22.10-desktop-amd64.iso.torrent"
+multilinks="
+https://cdimage.ubuntu.com/kubuntu/releases/22.10/release/kubuntu-22.10-desktop-amd64.iso.torrent
+"
+Downloadcheck
+
+
+FileName="ubuntu-22.10-desktop-amd64.iso.torrent"
+multilinks="
+https://releases.ubuntu.com/22.10/ubuntu-22.10-desktop-amd64.iso.torrent
+"
+Downloadcheck
+
+
+
+mv /data/trueDT/DownloadList/.install.torrent /data/trueDT/DownloadList/.install.key
+mv /data/trueDT/DownloadList/kubuntu-22.10-desktop-amd64.iso.torrent /data/trueDT/DownloadList/kubuntu-22.10-desktop-amd64.iso.key
+mv /data/trueDT/DownloadList/ubuntu-22.10-desktop-amd64.iso.torrent /data/trueDT/DownloadList/ubuntu-22.10-desktop-amd64.iso.key
+
+
+
+
+exit
+
+
+$toolx dd if=/dev/zero of="$FolderPath/Drive.Speed.Test.img" bs=200M count=1
+
+
+
+
+
+ADM DEBUG ### /dev/block/sdb1 | /dev/block/sdb | 8,17 | b206885c-b965-4d13-b5da-6a484e66dd6c
+ADM DEBUG ### Drive connected!
+ADM DEBUG ### [/dev/block/sdb1]
+ADM DEBUG ### Warn iniciando montagem MultiBOX em EXT4 = /storage/MultiBOX
+ADM DEBUG ### testando velocidade de gravação = /dev/block/sdb1
+Speed test result:
+dd: can't open '/storage/MultiBOX/Drive.Speed.Test.img': I/O error
+Drive Specs:
+b206885c-b965-4d13-b5da-6a484e66dd6c
+/dev/block/sdb1         915.9G     76.0M    869.2G   0% /storage/MultiBOX
+
+
+
+
+
+echo "[$($toolx cat "/data/transmission/settings.json" | $toolx grep 'download-dir' | $toolx cut -d '"' -f 4)]"
+
+
+
+echo "User Info = [Drive Externo em uso] $($toolx df -h | $toolx grep "MultiBOX" | $toolx head -n 1)"
+
+
+
+
+
+
+
+echo "testando velocidade de gravação Pendrive FAT32"
+$toolx dd if=/dev/zero of=/storage/C38C-1319/test1.img bs=300M count=1
+
+
+
+echo "testando velocidade de leitura pendrive"
+$toolx time $toolx dd if=/storage/MultiBOX/test1.img of=/dev/null bs=8k
+
+
+
+
+
+
+
+
+
+
+echo "não retorna ao valor inicial [drop_caches] o negocio é reiniciar para ver"
+sync
+echo 3 > /proc/sys/vm/drop_caches
+cat /proc/sys/vm/drop_caches
+
+echo "testando velocidade de leitura pendrive"
+$toolx time $toolx dd if=/storage/7D96-120C/test1.img of=/dev/null bs=8k
+
+
+
+
+
+
+# echo "
+# hora atual da box
+# "
+# busybox date
+# busybox date +%s
+# busybox date +"%d/%m/%Y %H:%M:%S"
+# echo "=============================================="
+
+# echo "
+# uptime
+# "
+# busybox uptime | busybox awk '{ print substr ($0, 11 ) }' | busybox cut -d "," -f 1
+# busybox uptime
+
+
+# if [ -f "$PidProcess" ]; then
+# 	echo " ################################################
+# 	arquivo: $PidProcess
+# 	modificado em:
+# 	"
+# 	busybox stat -c '%y' "$PidProcess" | busybox cut -d "." -f 1
+# 	busybox stat -c '%Y' "$PidProcess" | busybox cut -d "." -f 1
+# 	echo "=============================================="
+# fi
+
+
+dumpsys window windows | busybox grep mCurrentFocus | busybox cut -d " " -f 5 | busybox cut -d "/" -f 1
+
+
+
+
+exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pm enable launcher.offline
+"/data/asusbox/.sc/boot/launcher-02-update.sh"
+am start -a android.intent.action.MAIN -c android.intent.category.HOME
+pm disable dxidev.toptvlauncher2
+
+
+
+
+
+
+
+# se o user fixar a launcher offline no proximo boot vem a tela perguntando qual launcher utilizar
+if [ "$OnScreenNow" == "launcher.offline" ]; then
+    pm enable dxidev.toptvlauncher2
+    cmd package set-home-activity "dxidev.toptvlauncher2/dxidev.toptvlauncher2.HomeActivity"
+    pm disable launcher.offline
+    #am force-stop dxidev.toptvlauncher2
+    # abre a launcher oficial caso a box esteja em boot direto da energia
+    am start -a android.intent.action.MAIN -c android.intent.category.HOME
+fi
+
+
+
+
+
+
+exit
+
+
+
+/system/bin/busybox find "/data/app" -type f -name '*.apk' | sort | while read fullfile; do
+echo "$fullfile"
+done
+
+
+
+/data/asusbox/.sc/boot/initRc.drv/config.defaults.sh
+
+
+
+
+
+echo "ADM DEBUG ### ativando launcher official"
+#cmd package set-home-activity "dxidev.toptvlauncher2/.HomeActivity" # antiga launcher com botoes aparecendo
+cmd package set-home-activity "launcher.offline/dxidev.toptvlauncher2.HomeActivity"
+am start -a android.intent.action.MAIN -c android.intent.category.HOME
+
+exit
+
+
+OnScreenNow=`dumpsys window windows | grep mCurrentFocus | cut -d " " -f 5 | cut -d "/" -f 1`
+echo $OnScreenNow
+
+
+
+
+
+
+ServerConfigPath="/data/trueDT/peer/config/config.xml"
+User=$(cat "$ServerConfigPath" | grep "<user>" | cut -d ">" -f 2 | cut -d "<" -f 1)
+API=$(cat "$ServerConfigPath" | grep "<apikey>" | cut -d ">" -f 2 | cut -d "<" -f 1)
+data=`/system/usr/bin/curl -silent -u "$User":"$User" -X GET -H "X-API-Key: $API" http://127.0.0.1:4442/rest/system/version | busybox grep '"os": "android"' | busybox cut -d '"' -f 4`
+
+echo "$data"
+
+
+
+
+curl -u "$User":"$User" "http://127.0.0.1:4442/qr/?text=batata"
+
+
+
+
+echo "bah" > ""$TMP_DIR/init.21027.LOG"
+
+toolx="/system/bin/busybox"
+
+cat "/data/trueDT/peer/config/config.xml" | grep "127.0.0.1" | cut -d ":" -f 2 | cut -d "<" -f 1
+
+$toolx ps aux | grep "initRc.drv.05" | $toolx grep -v grep
+
+#if [ ! "$($toolx ps aux | grep "initRc.drv.05" | $toolx grep -v grep)" == "" ]; then
+if [ "$($toolx busybox netstat -ntlup | grep 4442)" == "" ]; then
+    echo "esta rodando"
+else
+    echo "não esta rodando"
+fi
+
+while [ 1 ]; do
+	instance=`$toolx ps aux | $toolx grep "init.21027.sh" | $toolx grep -v grep | $toolx head -n 1 | $toolx awk '{print $1}'`
+	if [ ! "$instance" == "" ]; then
+		echo "ADM DEBUG ### fechando o processo $instance"
+		$toolx kill -9 $instance
+	else
+		break
+	fi
+done
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# quando existe termux preciso apagar a pasta data
+rm -rf /data/data/com.termux
+
+# verifica o rotulo do pendrive
+check=`busybox blkid | busybox grep "ThumbDriveDEV" | busybox head -n 1 | busybox cut -d "=" -f 2 | busybox cut -d '"' -f 2`
+if [ "$check" == "ThumbDriveDEV" ]; then
+	FolderPath="/storage/DevMount"
+	if [ ! -d "$FolderPath" ] ; then
+		mkdir -p "$FolderPath"
+		chmod 700 "$FolderPath"
+	fi
+	# montando o device
+	#busybox umount "$FolderPath" > /dev/null 2>&1
+	check=`busybox mount | busybox grep "$FolderPath"`
+	if [ "$check" == "" ]; then
+		echo "ADM DEBUG ########################################################"
+		echo "ADM DEBUG ### $FolderPath MONTANDO como pasta DEV Scripts GitHub"
+		/system/bin/busybox mount -t ext4 LABEL="ThumbDriveDEV" "$FolderPath"
+	fi
+	# verificando se tem o arquivo para chamar o instalado
+	key="/storage/DevMount/AndroidDEV/termux/files/usr/etc/ssh/ssh_host_rsa_key"
+	check=`md5sum $key | busybox cut -d ' ' -f1`
+	if [ "$check" == "a76e7b8ccf1edd37f618b720c322a784" ]; then
+		sh "/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/.install/Install Termux Openssh Git [ AdminDevMount ].sh"
+		while [ 1 ]; do
+			instance=`busybox ps aux | busybox grep "AdminDevMount.sh" | busybox grep -v grep | busybox head -n 1 | busybox awk '{print $1}'`
+			if [ "$instance" == "" ]; then				
+				/system/bin/AdminDevMount.sh &
+				echo "ADM DEBUG ### ssh server Iniciado"
+				break
+			else
+				echo "ADM DEBUG ### fechando o processo $instance"
+				busybox kill -9 $instance
+			fi 
+		done
+	fi
+fi
+
+
+
+busybox blkid | busybox grep "ThumbDriveDEV" | busybox head -n 1 | busybox cut -d "=" -f 2 | busybox cut -d '"' -f 2
+exit
+
+
+
+
+
+
+
+
+
+
+
+
+echo "
+service rodando no pid port
+"
+
+Placa=$(getprop ro.product.board)
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+MacLanReal=`/system/bin/busybox cat /data/macLan.hardware | busybox sed 's;:;;g'`
+DeviceName="$Placa=$CpuSerial=$MacLanReal"
+
+ServerConfigPath="/data/trueDT/peer/config/config.xml"
+User=$(cat "$ServerConfigPath" | grep "<user>" | cut -d ">" -f 2 | cut -d "<" -f 1)
+
+curl -u "$User":"$User" "http://127.0.0.1:4442/qr/?text=$DeviceName" > "/sdcard/bah.png"
+
+
+echo "$(busybox mount | busybox grep storage | busybox grep vold)" > "/data/trueDT/peer/Sync/sh.all/news.log" 2>&1
+
+
+<img src="http://example.com/index.php?image=1" alt="" />
+
+
+
+# este comando é mais lento para executar
+netstat -ntlup 
+
+exit
+
+
+
+
+
+
+
+
+
+
+
+# precisa monitorar se o acesso ssh mudou a permissao do user
+# busybox chown root:root -R "/storage/DevMount/"
+
+ls -l "/storage/DevMount/AndroidDEV/termux/files/home/.ssh/"
+ls -l "/storage/DevMount/AndroidDEV/termux/files/home/.ssh/" | busybox grep "root" | busybox head -n 1 | busybox awk '{print $4}'
+
+
+mkdir -p "/data/trueDT/peer/Sync/sh.all"
+
+echo "$(busybox mount | busybox grep storage | busybox grep vold)" > "/data/trueDT/peer/Sync/sh.all/news.log" 2>&1
+
+
+
+
+cat ""$TMP_DIR/init.SshServer.LOG"
+
+
+
+
+
+
+
+
+
+
+
+
+
+# /system/bin/transmission-remote --exit
+# killall transmission-daemon
+while [ 1 ]; do
+	instance=`busybox ps aux | busybox grep "transmission" | busybox grep -v grep | busybox head -n 1 | busybox awk '{print $1}'`
+	if [ ! "$instance" == "" ]; then
+		echo "ADM DEBUG ### fechando o processo $instance"
+		busybox kill -9 $instance
+	else
+		break
+	fi
+done
+
+echo "Fechando script call transmission"
+busybox kill -9 $(busybox ps aux | busybox grep "init.p2p.sh" | busybox grep -v grep | busybox head -n 1 | busybox awk '{print $1}')
+
+sleep 5
+
+
+busybox ps aux | grep "AdminDevMount.sh" | busybox grep -v grep
+busybox ps aux | grep "init.update.boot.sh" | busybox grep -v grep
+busybox ps aux | grep "init.80.900x.sh" | busybox grep -v grep
+busybox ps aux | grep "init.p2p.sh" | busybox grep -v grep
+
+
+
+
+
+busybox ps aux | busybox grep "transmission" | busybox grep -v grep #| busybox head -n 1 | busybox awk '{print $1}'
+
+
+
+
+#
+
+busybox kill -9 $(busybox ps aux | busybox grep "transmission" | busybox grep -v grep | busybox head -n 1 | busybox awk '{print $1}')
+
+
+
+
+while [ 1 ]; do
+	instance=`busybox ps aux | busybox grep "transmission" | busybox grep -v grep | busybox head -n 1 | busybox awk '{print $1}'`
+	if [ "$instance" == "" ]; then
+		sh /system/bin/init.p2p.sh &
+		echo "ADM DEBUG ### p2p Iniciado"
+		break
+	else
+		echo "ADM DEBUG ### fechando o processo $instance"
+		busybox kill -9 $instance
+	fi
+done
+
+
+while [ 1 ]; do
+	instance=`/system/bin/busybox ps aux | busybox grep "4399" | busybox grep -v grep | busybox head -n 1 | busybox awk '{print $1}'`
+	if [ ! "$instance" == "" ]; then
+		echo "ADM DEBUG ### fechando o processo $instance"
+		busybox kill -9 $instance
+	fi
+done
+
+
+
+busybox ps aux | busybox grep "transmission" | busybox grep -v grep #| busybox head -n 1 | busybox awk '{print $1}'
+
+
+
+
+
+#busybox kill -9 $(busybox ps aux | grep "AdminDevMount.sh" | busybox grep -v grep | busybox awk '{print $1}')
+
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+busybox ps aux | grep "initRc.drv" | busybox grep -v grep #| busybox head -n 1 | busybox awk '{print $1}'
+
+
+
+
+
+
+	php=``
+	if [ "$php" == "" ]; then
+		echo "ADM DEBUG ##########################################################################################" >> "$Log"
+		echo "ADM DEBUG ### php service is offline" >> "$Log"
+		ResetWebService="YES"
+	fi
+
+
+
+
+
+
+
+
+
+
+busybox ps aux | grep "com.termux/files/usr/bin/sshd" | busybox grep -v grep | awk '{print $1}'
+
+
+
+
+echo "=============================================="
+checkUptime=`busybox cat /proc/uptime | busybox cut -d " " -f 2 | busybox cut -d "." -f 1`
+if [ "$checkUptime" -le "100000000" ]; then
+	while true; do
+		checkUptime=`busybox cat /proc/uptime | busybox cut -d " " -f 2 | busybox cut -d "." -f 1`
+		if [ "$checkUptime" -gt "100" ]; then
+			echo "aaaaaaaaaaaaaa $checkUptime"
+			break
+		fi
+	done
+fi
+
+FolderPath="/storage/DevMount"
+check=`busybox mount | busybox grep "$FolderPath"`
+if [ "$check" == "" ]; then
+	echo "ADM DEBUG ########################################################"
+	echo "ADM DEBUG ### $FolderPath MONTANDO como pasta DEV Scripts GitHub"
+	busybox mount -t ext4 LABEL="ThumbDriveDEV" "$FolderPath"
+else
+	echo "$FolderPath"
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+php=`busybox ps aux | grep "php-cgi" | busybox grep -v grep | busybox awk '{print $1}'`
+for port in $php; do
+	echo "$port"
+	busybox kill -9 $port
+done
+
+#
+
+busybox kill -9 $(busybox ps aux | grep "AdminDevMount.sh" | busybox grep -v grep | busybox awk '{print $1}')
+busybox kill -9 $(busybox ps aux | grep "init.update.boot.sh" | busybox grep -v grep | busybox awk '{print $1}')
+busybox kill -9 $(busybox ps aux | grep "init.80.900x.sh" | busybox grep -v grep | busybox awk '{print $1}')
+
+
+
+
+
+
+
+while [ 1 ]; do
+	# Limpando o sistema de ssh
+	Pids=`busybox ps aux | grep "com.termux/files/usr/bin/sshd" | busybox grep -v grep | awk '{print $1}'`
+	if [ "$Pids" == "" ]; then
+		# chama a função start do ssh server
+		ThumbDriveDEV
+		startSSHserver
+		sleep 7
+	fi
+	#echo $Pids
+	sleep 60
+done
+
+
+
+
+
+
+
+
+
+/data/asusbox/.sc/OnLine/.w.conf/.80.9001.sh
+
+
+
+
+
+
+
+
+
+echo "exit from while"
+
+exit
+
+
+
+List=`busybox ps aux | grep "com.termux/files/usr/bin/sshd" | busybox grep -v grep | awk '{print $1}'`
+for port in $List; do
+busybox kill -9 $port
+done
+
+
+FORCEClockUpdateNow
+
+
+
+
+
+#busybox date -s "@$unixtime"
+echo "ADM DEBUG ### {function FORCEClockUpdateNow} [ fixed ] $(busybox date +%s) => $(busybox date +"%d/%m/%Y %H:%M:%S")"
+
+
+
+
+
+
+
+CheckUptimeInternetlinks="
+https://www.google.com
+https://ipv4.icanhazip.com
+https://www.youtube.com
+https://steamcommunity.com
+https://stackoverflow.com
+https://ntp.br
+"
+while [ 1 ]; do
+	for link in $CheckUptimeInternetlinks; do
+		httpcode=`/system/bin/curl -k -o /dev/null --silent --head --write-out '%{http_code}\n' "$link"`
+		echo "ADM DEBUG ########################################################"
+		echo "ADM DEBUG ### link     = $link"
+		echo "ADM DEBUG ### httpcode = $httpcode"
+		if [ "$httpcode" == "200" ]; then
+			rm "/data/local/tmp/NoInternetAccess" > /dev/null 2>&1
+			break;
+		else
+			echo "ADM DEBUG ### link offline = $link"
+			if [ ! -f "/data/local/tmp/NoInternetAccess" ]; then
+				echo "ADM DEBUG ### ativando wifi settings one time only"
+				am start -a com.android.settings -n com.android.settings/com.android.settings.wifi.WifiSettings
+				echo "[ NoInternetAccess ] $(busybox date +%s) => $(busybox date +"%d/%m/%Y %H:%M:%S")" > "/data/local/tmp/NoInternetAccess"
+			fi
+		fi;
+	done
+	if [ "$httpcode" == "200" ]; then break; fi;
+	echo "ADM DEBUG ########################################################"
+	echo "ADM DEBUG ### Internet access [ok] $(busybox date +"%d/%m/%Y %H:%M:%S")"
+	busybox sleep 5;
+done;
+
+
+
+
+
+
+
+
+
+
+
+
+function uaaaa () {
+
+
+	echo "ADM DEBUG ########################################################"
+	echo "ADM DEBUG ### $(busybox date +"%d/%m/%Y %H:%M:%S")"
+
+}
+
+uaaaa
+
+exit
+
+
+echo "ADM DEBUG ########################################################"
+echo "ADM DEBUG ### "
+
+
+
+
+
+function CheckUptimeInternet () { # checa 3 vezes cada url e entrega a variavel InternetConection
+CheckUptimeInternetlinks="
+google.com.z
+ipv4.icanhazip.com
+"
+for LinkUptimeInternetlinks in $CheckUptimeInternetlinks; do
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### verificando o link se tem acesso > $LinkUptimeInternetlinks"
+    InternetConection="OFFLINE" # seta todo loop como offline ate que se prove o contrario..
+    echo "ADM DEBUG ### Tenta conectar ao link 7 vezes "
+	sleep 1
+    /system/bin/wget --timeout=1 --tries=7 --spider "$LinkUptimeInternetlinks" > /dev/null 2>&1
+    # Se tiver acesso finaliza esta função
+    if [ $? = 0 ] ; then
+        echo "ADM DEBUG ### internet Uptime 100%"
+        InternetConection="ONLINE"
+        break # fecha a função por completo
+    fi    
+done ### DOWNLOAD COM SISTEMA MULTI-LINKS
+}
+
+function LoopWaitingNet () { # entra em looping infinito ate ter internet
+while true
+do
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### Entrando na função > LoopWaitingNet"
+    CheckUptimeInternet
+	if [ "$InternetConection" == "ONLINE" ]; then
+        echo "ADM DEBUG ### Tem acesso a internet"
+        logcat -c
+        break
+    fi
+done
+}
+
+
+LoopWaitingNet
+
+exit
+
+
+echo "ADM DEBUG ### "
+echo "ADM DEBUG ### "
+
+exit
+
+
+busybox umount /mnt/runtime/write/emulated/0/Download
+busybox umount /mnt/runtime/read/emulated/0/Download
+busybox umount /sdcard/Download
+busybox umount /storage/emulated/0/Download
+
+#mount -t exfat -o nosuid,nodev,noexec,noatime,context=u:object_r:sdcardfs:s0,uid=0,gid=9997,fmask=0117,dmask=0006 /dev/block/sda1 /mnt/runtime/write/emulated/0/WhatsApp
+
+# Replace u:object_r:sdcardfs:s0 with u:object_r:fuse:s0 or whatever label your /sdcard has.
+#busybox mount -t ext4 -o nosuid,nodev,noexec,noatime,context=u:object_r:fuse:s0,uid=0,gid=9997,fmask=0117,dmask=0006 /dev/block/sda1 /mnt/runtime/write/emulated/0/Download
+
+# monta apenas para o root
+#busybox mount -t ext4 /dev/block/sda1 /mnt/runtime/write/emulated/0/Download
+
+
+# funciona e monta para todos os apps! mas um arquivo criado pelo MixPlorer levou permissao do mixplorer
+busybox chmod 777 -R /storage/DevMount/4Android
+# criar uma pasta no sdcard para a montagem no futuro fazer o mesmo para o retroarch
+mkdir -p /sdcard/4Android
+busybox chmod 777 /sdcard/4Android
+# montagem temporaria das pastas
+busybox mount -o bind /storage/DevMount/4Android /mnt/runtime/read/emulated/0/4Android
+busybox mount -o bind /storage/DevMount/4Android /mnt/runtime/write/emulated/0/4Android
+busybox mount -o bind /storage/DevMount/4Android /sdcard/4Android
+busybox mount -o bind /storage/DevMount/4Android /storage/emulated/0/4Android
+
+
+
+
+echo "---"
+echo "block info"
+echo "$(busybox blkid | busybox grep "sd")"
+echo "---"
+echo "mounted"
+echo "$(busybox mount | busybox grep 'sd')"
+echo "$(busybox mount | busybox grep 'vold')"
+echo "---"
+echo "space"
+# echo "$(busybox df -P -h | busybox grep 'vold')"
+# echo "$(busybox df -P -h | busybox grep 'sd')"
+
+busybox df -P -h
+
+cd /sdcard
+lx
+cd /sdcard/Download
+lx
+
+
+
+
+exit
+
+
+
+"/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/.install/Install pack bins.sh"
+
+# + blkid para fat32 listou o label em todas os 3 firmwares
+# - sm list-volumes public é LENTO e não serve de nada para o script pois a mesma info pode ser pega no mount
+
+
+
+########################################################################################################
+# estudo TVBOX official 105 ( wifi 5.8 )
+### blkid
+/dev/block/sdb1: LABEL="MEFORMATE" UUID="9D8D-7512" TYPE="vfat"
+/dev/block/vold/public:8,17: LABEL="MEFORMATE" UUID="9D8D-7512" TYPE="vfat"
+/dev/block/vold/public:8,1: LABEL="ThumbDriveDEV" UUID="cf3f1700-7709-43f9-a6f3-7b8b18c5e224" TYPE="ext4"
+/dev/block/sda1: LABEL="ThumbDriveDEV" UUID="cf3f1700-7709-43f9-a6f3-7b8b18c5e224" TYPE="ext4"
+### sm list-volumes public
+public:8,17 mounted 9D8D-7512
+public:8,1 unmountable cf3f1700-7709-43f9-a6f3-7b8b18c5e224
+### mounted public
+/dev/block/vold/public:8,1 on /storage/DevMount type ext4 (rw,seclabel,relatime,data=ordered)
+/dev/block/vold/public:8,1 on /mnt/runtime/default/DevMount type ext4 (rw,seclabel,relatime,data=ordered)
+/dev/block/vold/public:8,1 on /storage/asusboxUpdate type ext4 (rw,seclabel,relatime,data=ordered)
+/dev/block/vold/public:8,1 on /mnt/runtime/default/asusboxUpdate type ext4 (rw,seclabel,relatime,data=ordered)
+/dev/block/vold/public:8,17 on /mnt/media_rw/9D8D-7512 type vfat (rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro)
+### mount
+/dev/block/vold/public:8,1 on /storage/DevMount type ext4 (rw,seclabel,relatime,data=ordered)
+
+########################################################################################################
+# estudo TVBOX official 101 ( wifi 2.4 a maioria dos tvbox )
+### blkid
+/dev/block/sdb1: LABEL="MEFORMATE" UUID="9D8D-7512" TYPE="vfat"
+/dev/block/vold/public:8,17: LABEL="MEFORMATE" UUID="9D8D-7512" TYPE="vfat"
+/dev/block/vold/public:8,1: LABEL="ThumbDriveDEV" UUID="f3d594de-da82-584b-8757-44cbb3744182" TYPE="ext4"
+/dev/block/sda1: LABEL="ThumbDriveDEV" UUID="f3d594de-da82-584b-8757-44cbb3744182" TYPE="ext4"
+### sm list-volumes public
+public:8,17 mounted 9D8D-7512
+public:8,1 mounted f3d594de-da82-584b-8757-44cbb3744182
+### mounted public
+/dev/block/vold/public:8,1 on /mnt/media_rw/f3d594de-da82-584b-8757-44cbb3744182 type ext4 (rw,dirsync,nosuid,nodev,noatime,data=ordered)
+/dev/block/vold/public:8,1 on /storage/DevMount type ext4 (rw,dirsync,relatime,data=ordered)
+/dev/block/vold/public:8,1 on /mnt/runtime/default/DevMount type ext4 (rw,dirsync,relatime,data=ordered)
+/dev/block/vold/public:8,1 on /storage/asusboxUpdate type ext4 (rw,dirsync,relatime,data=ordered)
+/dev/block/vold/public:8,1 on /mnt/runtime/default/asusboxUpdate type ext4 (rw,dirsync,relatime,data=ordered)
+/dev/block/vold/public:8,17 on /mnt/media_rw/9D8D-7512 type vfat (rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro)
+### mount
+/dev/block/vold/public:8,1 on /storage/DevMount type ext4 (rw,dirsync,relatime,data=ordered)
+########################################################################################################
+# estudo TVBOX official T95z Amlogic arm64 firmware minixfreak_os_S912
+### blkid
+/dev/block/sda1: LABEL="MEFORMATE" UUID="9D8D-7512" TYPE="vfat"
+/dev/block/sdb1: LABEL="ThumbDriveDEV" UUID="12025088-f712-a441-9478-83ffd2c1fe11" TYPE="ext4"
+/dev/block/vold/public:8,1: LABEL="MEFORMATE" UUID="9D8D-7512" TYPE="vfat"
+/dev/block/vold/public:8,17: LABEL="ThumbDriveDEV" UUID="12025088-f712-a441-9478-83ffd2c1fe11" TYPE="ext4"
+### sm list-volumes public
+public:8,17 unmounted 12025088-f712-a441-9478-83ffd2c1fe11
+public:8,1 mounted 9D8D-7512
+### mounted public
+/dev/block/vold/public:8,1 on /mnt/media_rw/9D8D-7512 type vfat (rw,dirsync,nosuid,nodev,noexec,relatime,uid=1023,gid=1023,fmask=0007,dmask=0007,allow_utime=0020,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro)
+### mount
+/dev/block/sdb1 on /storage/DevMount type ext4 (rw,dirsync,seclabel,relatime,data=ordered)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# antigo precisa apagar
+# /system/bin/initRc.adm.drv.sh
+
+
+
+
+
+
+
+
+
+
+
+# UNIQ DEVICE IDENTIFICATION
+Placa=$(getprop ro.product.board)
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+MacLanReal=`busybox cat /data/macLan.hardware | busybox sed 's;:;;g'`
+DeviceName="$Placa=$CpuSerial=$MacLanReal"
+
+
+
+
+IPTest="http://10.0.0.91/getData4order.php"
+IPTest="https://pixkey.net/getData4order.php"
+
+
+# user imput txt in download folder
+product="18" # id do produto para a compra
+reseller="11"  # para quem vai enviar a cobrança
+UserInstallermail="vendas.suporte.oficial.a7@gmail.com" # verificador se user esta permitido instalar
+
+# box input
+PimCode="65fads876f586a7sd5f867ads5f967a5sd876f5asd876f5as7d6f58a7sd65f7"
+Geolocation=$(cat "/data/trueDT/peer/Sync/LocationGeoIP.v6.atual")
+FirmwareInstalled=$(cat "/data/trueDT/peer/Sync/Log.Firmware.Install.atual")
+Firmware=$(cat "/data/trueDT/peer/Sync/FirmwareFullSpecsID")
+UniqID="$DeviceName"
+
+# box nunca enviou nada para o pixkey.net
+	# vai gerar um .pix para o cron
+	# https://pixkey.net/fwkeys/addOrder/rk30sdk=90e49e092c39962b=A8190AFD5EFC.pix
+	# vai gerar um .txt na pasta pixkey em trialmode
+	# https://pixkey.net/fwkeys/18@11/pixkey/rk30sdk=90e49e092c39962b=A8190AFD5EFC.txt
+
+
+
+curl -d  "PimCode=$PimCode&product=$product&reseller=$reseller&UserInstallermail=$UserInstallermail&Geolocation=$Geolocation&FirmwareInstalled=$FirmwareInstalled&Firmware=$Firmware&UniqID=$UniqID" -X POST "$IPTest" #| sed 's/\r$//'
+
+
+
+
+
+
+
+
+
+function DownloadBOOT () { # tenta baixar 7 vezes por url o $bootFile entrega o resultado para o script
+# rm $bootFile > /dev/null 2>&1 ### para fims de debug
+multilinks="
+http://45.79.133.216/asusboxA1/boot/$CPU/estudar.sh
+https://asusbox.com.br/asusboxA1/boot/$CPU/estudar.sh
+http://45.79.48.215/asusboxA1/boot/$CPU/estudar.sh
+"
+    ### DOWNLOAD COM SISTEMA MULTI-LINKS
+    for LinkUpdate in $multilinks; do 
+        echo "ADM DEBUG ########################################################"
+        echo "ADM DEBUG ### Entrando na função > DownloadBOOT"
+        echo "ADM DEBUG ### tentando o link > $LinkUpdate"
+        FileOK="false" # ate que se prove o contrario não baixou o arquivo
+        # Tenta conectar ao link 7 vezes 
+        #/system/bin/wget --timeout=1 --tries=7 -O $bootFile --no-check-certificate $LinkUpdate
+        /system/bin/wget -N --no-check-certificate --timeout=1 --tries=7 -P /data/asusbox/ $LinkUpdate > "/data/wget.log" 2>&1
+        CheckWgetCode=`busybox cat "/data/wget.log" | busybox grep "HTTP request sent, awaiting response..."`
+        #rm "/data/wget.log"
+            # Se tiver acesso finaliza esta função
+            if [ "$CheckWgetCode" == "HTTP request sent, awaiting response...200 OK" ] ; then
+                echo "ADM DEBUG ### Wget :) $CheckWgetCode"
+                FileOK="true"
+                break # fecha a função por completo
+            fi
+            if [ "$CheckWgetCode" == "HTTP request sent, awaiting response...304 Not Modified" ] ; then
+                echo "ADM DEBUG ### Wget :) $CheckWgetCode"
+                FileOK="true"
+                break # fecha a função por completo
+            fi            
+    done ### DOWNLOAD COM SISTEMA MULTI-LINKS
+    echo "ADM DEBUG ### fim da função DownloadBOOT > FileOK=$FileOK"
+}
+
+
+function LoopForceDownloadLauncher () { # entra em looping até baixar o arquivo de boot
+while true
+do
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### Entrando na função > LoopForceDownloadLauncher"
+    DownloadBOOT 
+	if [ "$FileOK" == "false" ]; then
+        echo "ADM DEBUG ### Nova tentativa em loop para baixar"
+        logcat -c
+    else
+        break
+    fi
+done
+}
+
+
+
+
+
+
+
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### Nova versão de SHCBootVersion detectado!"
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### boot start syncthing via screen"
+    /data/asusbox/.sc/boot/initRc.drv/{START}.sh
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### setting default configs to syncthing"
+    echo "ADM DEBUG ### sleep necessário  para não dar erro nas configs"
+    /data/asusbox/.sc/boot/initRc.drv/config.defaults.sh
+
+
+
+# tenta 27 vezes se der erro continua o script
+unit=0
+while [ 1 ]; do
+    unit=$((unit+1))
+    checkPort=`netstat -ntlup | grep 4442 | cut -d ":" -f 2 | cut -d " " -f 1`
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### try [$unit] aguardando api tcp open at port = $checkPort"
+    if [ "$checkPort" == "4442" ];then break; fi;
+    if [ "$unit" == "27" ];then break; fi;
+    echo "Wait for start syncthing"
+    sleep 1;
+done;
+
+
+
+
+
+
+
+echo "exibe status da pasta"
+curl -X GET -H "X-API-Key: $API" "http://127.0.0.1:8384/rest/db/status?folder=$folderID" > "/data/trueDT/peer/Sync/001   state.json"
+
+# gero os arquivos
+    for i in $(seq 1 30); do
+        echo "create dummy file"
+        touch "/data/trueDT/peer/Sync/data copy 2/$RANDOM"
+    done
+
+echo "exibe status da pasta não aparece diferença nenhuma sem dar um force scan na pasta"
+curl -X POST -H "X-API-Key: $API" "http://127.0.0.1:8384/rest/db/scan?folder=$folderID"
+
+echo "exibe status da pasta"
+curl -X GET -H "X-API-Key: $API" "http://127.0.0.1:8384/rest/db/status?folder=$folderID" > "/data/trueDT/peer/Sync/002   state.json"
+
+
+
+while [ 1 ]; do
+	sleep 1
+    data=`curl --silent -X GET -H "X-API-Key: $API" "http://127.0.0.1:8384/rest/db/completion?folder=$folderID&device=4W74FHY-6B2IOVI-RTE2BDJ-67C4I6V-6O7LADH-2TIOHZX-N7HRKTN-F7UK2A3"`
+    echo "$data"
+    completion=`echo "$data" | grep "completion" | cut -d "," -f 1 | cut -d " " -f 4`
+    echo "ADM DEBUG ######################################################################"
+    echo "ADM DEBUG ### Aguardando a pasta sincronizar em 100% estado atual = $completion%"
+	if [ "$completion" == "100" ]; then break; fi; # se for igual a 200 sai deste loop
+done;
+
+
+echo "exibe status da pasta"
+curl -X GET -H "X-API-Key: $API" "http://127.0.0.1:8384/rest/db/status?folder=$folderID" > "/data/trueDT/peer/Sync/003   state.json"
+
+
+
+
+echo "sleep debug"
+sleep 60
+curl -X GET -H "X-API-Key: $API" "http://127.0.0.1:8384/rest/db/status?folder=$folderID" > "/data/trueDT/peer/Sync/004   state.json"
+
+
+
+
+exit
+
+DeviceID="4W74FHY-6B2IOVI-RTE2BDJ-67C4I6V-6O7LADH-2TIOHZX-N7HRKTN-F7UK2A3"
+curl -X GET -H "X-API-Key: $API" "http://127.0.0.1:8384/rest/db/completion?device=$DeviceID"
+
+
+
+echo "exibe status da pasta"
+curl -X GET -H "X-API-Key: $API" "http://127.0.0.1:8384/rest/db/status?folder=$folderID"
+
+exit
+
+
+
+
+
+
+
+
+# enable root mode se existir a pasta!!! CUIDADO TINHA ERRADO E LIBERADO ROOT PARA TODOS
+
+
+
+
+
+
+Dispositivo=$(getprop ro.product.device)
+Placa=$(getprop ro.product.board)
+CPU=$(getprop ro.product.cpu.abi)
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+MacLanReal=`busybox cat /data/macLan.hardware`
+echo "ADM DEBUG ##########################################################################################################"
+echo "ADM DEBUG ##########################################################################################################"
+echo "ADM DEBUG ### HARDWARE UniqID"
+busybox cat <<EOF > "/data/trueDT/peer/Sync/UniqIDentifier.Hardware.sh"
+Dispositivo="$Dispositivo"
+Placa="$Placa"
+CPU="$CPU"
+CpuSerial="$CpuSerial"
+MacLanReal="$MacLanReal"
+EOF
+
+
+
+
+
+
+setprop ro.build.description "bussunda"
+
+echo "
+description = $(getprop ro.build.description)
+display.id = $(getprop ro.build.display.id)
+"
+
+
+
+
+
+description = rk322x_box-userdebug 7.1.2 NHG47K eng.zhengzhongming.20180802.165542 test-keys
+display.id  = rk322x_box-userdebug 7.1.2 NHG47K eng.zhengzhongming.20180802.165542 test-keys
+
+
+
+data=`busybox cat /data/trueDT/peer/Sync/UniqIDentifier.FirmwareInfo`
+MD5Var=`echo -n "$data" | busybox md5sum | busybox awk '{ print $1 }'`
+echo -n "$MD5Var" > "/data/trueDT/peer/Sync/UniqIDentifier.FirmwareUID"
+
+
+
+
+
+
+
+
+
+    data=`busybox md5sum /data/trueDT/peer/Sync/UniqIDentifier.FirmwareInfo | busybox awk '{ print $1 }'`
+    echo -n "$data" > "/data/trueDT/peer/Sync/UniqIDentifier.FirmwareID"
+
+
+
+
+
+
+ExpiryTime="/data/trueDT/peer/Sync/Log.Firmware.HardReset"
+checkLocalF=$(busybox cat $ExpiryTime.atual | busybox tr -d '\n')
+if [ ! "$checkLocalF" == "$DateHardResetHuman" ]; then
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### registro de log de Hard Reset"
+        if [ ! -e "$ExpiryTime.log" ];then
+            busybox touch "$ExpiryTime.log"
+        fi
+    busybox sed -i \
+    "1 i\ Hard Reset feito em: $DateHardResetHuman" \
+    "$ExpiryTime.log"
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### grava horario direto do stat"
+    echo $DateHardResetHuman > "$ExpiryTime.atual"
+fi
+
+
+
+
+
+
+
+
+
+# não sei pq este arquivo não esta gravando nas box
+
+filetmp="/data/trueDT/peer/Sync/Firmware_Info.v2.live"
+# tem que limpar todas versões anteriores menos a atual
+if [ ! -f "$filetmp" ]; then
+cat << EOF > "$filetmp"
+Android OS = $(getprop ro.build.version.release)
+API Level = $(getprop ro.build.version.sdk)
+Dispositivo = $(getprop ro.product.device)
+Placa = $(getprop ro.product.board)
+Fabricante = $(getprop ro.product.manufacturer)
+cpu = $(getprop ro.product.cpu.abi)
+Modelo = $(getprop ro.product.model)
+Nome = $(getprop ro.product.name)
+fingerprint = $(getprop ro.build.fingerprint)
+date.utc = $(getprop ro.build.date.utc)
+date = $(getprop ro.build.date)
+description = $(getprop ro.build.description)
+bootimage.build.fingerprint = $(getprop ro.bootimage.build.fingerprint)
+display.id = $(getprop ro.build.display.id)
+version.incremental = $(getprop ro.build.version.incremental)
+EOF
+fi
+
+Dispositivo = rk322x_box
+Placa = rk30sdk
+cpu = armeabi-v7a
+
+
+
+
+
+
+
+
+link="https://docs.google.com/presentation/d/e/2PACX-1vRav93a9qqh_eL3VEmvfAOBSXzXRIvYU1LxdexIpTlB5HBkcesQgMpa39y8loWNfpaxP23oYCxEflbm/pub?start=true&loop=true&delayms=3000"
+
+        am start --user 0 \
+        -n acr.browser.barebones/acr.browser.lightning.MainActivity \
+        -a android.intent.action.VIEW -d "$link" > /dev/null 2>&1
+
+
+
+
+
+
+
+
+
+
+
+# travar em loop aqui aguardando finalizar o pack p2p para produzir um relatorio correto com a realidade
+function .checkStateP2P () {
+    DataVar=`/system/bin/transmission-remote --list`
+    export torID=`echo "$DataVar" \
+    | busybox grep ".install" \
+    | busybox awk '{print $1}' \
+    | busybox sed -e 's/[^0-9]*//g'`
+
+    export torDone=`echo "$DataVar" \
+    | busybox grep ".install" \
+    | busybox awk '{print $2}' \
+    | busybox sed -e 's/[^0-9]*//g'`
+
+    export torStatus=`echo "$DataVar" \
+    | busybox grep ".install" \
+    | busybox awk '{print $9}'`
+
+    export torName=`echo "$DataVar" \
+    | busybox grep ".install" \
+    | busybox awk '{print $10}'`
+}
+
+function CheckLoopTorStatus () {
+    while true; do
+        checkPort=`busybox netstat -ntlup | busybox grep "9091" | busybox cut -d ":" -f 2 | busybox awk '{print $1}'`
+        if [ ! "$checkPort" == "9091" ]; then
+            echo "ADM DEBUG ### start p2p service"
+            HOME="/data/trueDT/peer"
+            screen -dmS P2PCheck "/data/asusbox/.sc/boot/p2p+check.sh"  
+            sleep 30        
+        else
+            PortP2P="ok"
+            echo "$(date +"%d/%m/%Y %H:%M:%S") PortP2P ok" > $LogRealtime
+            break
+        fi
+    done
+
+    while true; do
+        .checkStateP2P    
+        if [ "$torStatus-$torName" == "Verifying-.install" ]; then
+            echo "aguardando verificação p2p"
+            sleep 7
+            echo "$(date +"%d/%m/%Y %H:%M:%S") $torDone-$torStatus-$torName" > "/data/trueDT/peer/Sync/p2p.status.Verifying.live"
+        else
+            VerifyingP2P="ok"
+            echo "$(date +"%d/%m/%Y %H:%M:%S") VerifyingP2P ok" > $LogRealtime
+            break
+        fi
+    done
+
+    while true; do
+        .checkStateP2P    
+        if [ "$torStatus-$torName" == "Stopped-.install" ]; then
+            echo "ADM DEBUG ### -s inicia o torrent caso esteja pausado | torrent-done-script"
+            /system/bin/transmission-remote -t $torID -s --torrent-done-script /data/transmission/tasks.sh
+            sleep 30
+            echo "$(date +"%d/%m/%Y %H:%M:%S") $torDone-$torStatus-$torName" > "/data/trueDT/peer/Sync/p2p.status.STOPPED.live"
+        else
+            UnstoppedP2P="ok"
+            echo "$(date +"%d/%m/%Y %H:%M:%S") UnstoppedP2P ok" > $LogRealtime
+            break
+        fi
+    done
+
+    # se a box estiver em um estado de download entra aqui dentro e trava em loop até sumir o torStatus
+    while true; do
+        .checkStateP2P    
+        if [ "$torStatus-$torName" == "Downloading-.install" ]; then
+            echo "Wait download pack p2p"
+            sleep 30
+            echo "$(date +"%d/%m/%Y %H:%M:%S") $torDone-$torStatus-$torName" >> "/data/trueDT/peer/Sync/p2p.status.Downloading.live"
+        else
+            DownloadingP2P="ok"
+            echo "$(date +"%d/%m/%Y %H:%M:%S") DownloadingP2P ok" > $LogRealtime
+            break
+        fi
+    done
+}
+
+# trava em loop até resolver o torrent
+while true; do
+    CheckLoopTorStatus    
+    if [ "$PortP2P+$VerifyingP2P+$UnstoppedP2P+$DownloadingP2P" == "ok+ok+ok+ok" ]; then
+        echo "P2P ok"
+        echo "$(date +"%d/%m/%Y %H:%M:%S") all verifications $PortP2P+$VerifyingP2P+$UnstoppedP2P+$DownloadingP2P" > $LogRealtime
+        break
+    fi
+done
+
+
+
+
+
+
+exit
+
+
+
+torID=`/system/bin/transmission-remote --list \
+| busybox grep ".install" \
+| busybox awk '{print $1}' \
+| busybox sed -e 's/[^0-9]*//g'`
+
+
+RequestData=`/system/bin/transmission-remote -t $torID -i `
+
+echo "$RequestData" | grep "Name:"
+echo "$RequestData" | grep "State:"
+echo "$RequestData" | grep "Hash:"
+echo "$RequestData" | grep "Percent Done:"
+echo "$RequestData" | grep "Have:"
+echo "$RequestData" | grep "Total size:"
+
+
+
+
+  Name: .install
+  Hash: 4a624a3c69b5e4b13f8b8ed570a7e3d8616fd555
+  Percent Done: 44.7%
+  Have: 389.2 MB (362.4 MB verified)
+  Total size: 869.4 MB (869.4 MB wanted)
+
+
+
+
+
+
+
+
+# full stats all files percent
+transmission-remote -t $torID -i
+
+
+transmission-remote -n 'username:password' -l
+
+transmission-remote -n 'transmission:transmission' -l
+
+Basic Stats All Torrents
+
+transmission-remote -n 'transmission:transmission' -st
+
+Full Stats All Torrents
+
+transmission-remote -n 'transmission:transmission' -si
+
+Torrent #3 Full Stats
+
+transmission-remote -n 'transmission:transmission' -t 3 -f
+
+Torrent #3 Summary Stats
+
+transmission-remote -n 'transmission:transmission' -t 3 -i
+
+
+transmission-remote -n -t $torID -f
+
+
+/system/bin/transmission-remote -t $torID -v -s -SR --torrent-done-script /data/transmission/tasks.sh
+
+
+/system/bin/transmission-remote -t $torID -f | busybox awk '{print $7}' | busybox sed 's;.install/;./;g' > /data/local/tmp/TorrentList
+# remove novas linhas em branco
+busybox sed -i -e '/^\s*$/d' /data/local/tmp/TorrentList
+
+cat /data/local/tmp/TorrentList
+
+
+echo "ADM DEBUG ##############################################################################"
+echo "ADM DEBUG ### aqui compara se o conteudo do torrent bate com a pasta atual para apagar arquivos obsoletos"
+busybox find "/data/asusbox/.install/" -type f -name "*" \
+| busybox grep -v -f /data/local/tmp/TorrentList \
+| while read fname; do
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### Limpando a pasta .install"
+    #Fileloop=`basename $fname`
+    echo "eu vou apagar este arquivo > $fname"
+    #rm -rf "$fname"
+done
+rm /data/local/tmp/TorrentList
+
+
+/system/bin/transmission-remote -t $torID -v -s -SR --torrent-done-script /data/transmission/tasks.sh
+
+
+exit
+echo "$DataVar"
+HOME="/data/trueDT/peer"
+screen -ls
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# TZ=UTC−03:00
+# export TZ
+
+# unixtime=`/system/bin/curl "http://127.0.0.1/ntpUpdate.php" 2>/dev/null`
+# busybox date -u -s "@$unixtime"
+
+
+# checkWakeUp=$(logcat -d | busybox grep "PowerManagerService: Waking up from sleep")
+# if [ ! "$checkWakeUp" == "" ]; then 
+# echo "Device estava dormindo"
+# echo "call fix clock time"
+# echo "reagendar cron"
+# logcat -c
+# fi
+
+
+
+exit
+
+
+
+echo "
+$unixtime"
+
+
+
+logcat -c
+
+
+
+
+
+
+echo -n "$unixtime" > /data/trueDT/peer/Sync/ntp.date.epoch.live
+echo -n "$dateHuman" > /data/trueDT/peer/Sync/ntp.date.live
+
+
+
+
+date
+busybox find /data/trueDT/peer/Sync/ -type f -name "p2p.md5.live" -mmin +60
+
+busybox stat -c '%y' /data/trueDT/peer/Sync/p2p.md5.live | busybox cut -d "." -f 1
+
+
+
+
+
+
+
+
+
+
+# alterar o umask no vps util para o www-data
+    start-stop-daemon -b -o -c ${USER} -S -u ${USER} -x env HOME=${CONFIG_DIR} ${SYNCTHING} -- --home ${CONFIG_DIR}
+    su - ${USER} -c "umask 002; HOME=${CONFIG_DIR}; nohup ${SYNCTHING} --home ${CONFIG_DIR} &"
+
+
+OnScreenNow=`dumpsys window windows | grep mCurrentFocus | cut -d " " -f 5 | cut -d "/" -f 1`
+am force-stop $OnScreenNow
+
+AppList=`pm list packages -3 | busybox sed -e 's/.*://' | busybox sort \
+ | busybox grep -v "com.anysoftkeyboard.languagepack.brazilian" \
+ | busybox grep -v "com.menny.android.anysoftkeyboard" \
+ | busybox grep -v "com.mixplorer" \
+ | busybox grep -v "dxidev.toptvlauncher2" \
+ | busybox grep -v "jackpal.androidterm" \
+ | busybox grep -v "launcher.offline" \
+ | busybox grep -v "org.asbl" \
+ | busybox grep -v "org.asbpc"`
+
+echo "$AppList" | while read app; do
+echo $app
+am force-stop $app
+done
+
+
+
+
+
+
+
+
+    busybox find "/data/asusbox/AppLog/" -type f -name "_TorrentPack=*" | while read RemoveTorrent; do
+        echo "$RemoveTorrent"
+        busybox rm "$RemoveTorrent"
+    done
+
+link="http://chuxoast.com/2UTH"
+curl -iL "$link" -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"
+
+
+
+
+
+FileMark="/data/trueDT/peer/Sync/A+.ping.live"
+CheckCurl=`curl -w "%{http_code}" -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36" $link`
+echo "$CheckCurl" > $FileMark
+cat $FileMark
+
+exit
+
+/data/asusbox/.install.torrent
+
+
+
+echo "ADM DEBUG ########################################################"
+echo "ADM DEBUG ### lista de arquivos do pack torrent"
+echo "ADM DEBUG ### adicionar ao gerador de packs ou torrent"
+
+FileMark="/data/trueDT/peer/Sync/p2p.PacklistFile.live"
+TorrentFolder=`busybox readlink /data/asusbox/.install`
+rm $FileMark
+busybox find "$TorrentFolder" -type f -name "*" \
+| sort \
+| while read file; do
+echo $file | busybox sed "s;$TorrentFolder;;g" >> $FileMark
+done
+
+
+cat $FileMark
+
+
+
+
+
+echo "experiencias em auto-click ads money"
+
+FileMark="/data/trueDT/peer/Sync/p2p.list.live"
+link="http://chuxoast.com/1OX7"
+CheckCurl=`curl -w "%{http_code}" -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36" $link`
+
+echo "$CheckCurl" > $FileMark
+
+
+
+
+
+
+# apps abertos! perfeito para rodar no boot quando a box liga
+AppListRunning=`dumpsys window windows | busybox grep "Window #" | busybox sed -e "s/.*u0 //g" -e "s/\/.*//g" -e "s/}://g"`
+echo -n "$AppListRunning" #> "/data/trueDT/peer/Sync/AppListRunning.in.use.live"
+
+
+# apps abertos! perfeito para rodar no boot quando a box liga
+dumpsys window windows | grep "Window #" | sed -e "s/.*u0 //g" -e "s/\/.*//g" -e "s/}://g"
+
+
+
+SystemFlog=`busybox ls -1Ahlutu /system`
+DataFlog=`busybox ls -1Ahlutu /data`
+DataHomeFlog=`busybox ls -1Ahlutu /data/asusbox`
+ListBlockDevices=`busybox blkid`
+ListMountedDevices=`busybox mount | busybox grep "/storage/" | busybox grep "/dev/fuse" | busybox grep -v "/storage/emulated" | busybox cut -d " " -f 3`
+
+if [ "$ListMountedDevices" == "" ]; then
+	UsingMountedDevices="no"
+else
+	UsingMountedDevices="yes"
+fi
+
+ListUSBDevices=`busybox lsusb | busybox grep -v "1d6b:0001" | busybox grep -v "1d6b:0002"`
+ListDataAsusbox=`busybox find "/data/asusbox" \
+\( -name ".install" \
+-o -name ".sc" \
+\) -prune -o -print`
+
+
+
+# nova key para alpha
+input text 4451309724036085
+
+
+busybox ifconfig eth0 down
+busybox ifconfig eth0 hw ether ec:2c:cb:71:20:99
+busybox ifconfig eth0 up
+
+pm clear com.asxbn
+
+
+
+
+pm enable com.asxbn/br.com.iptv.StartAppOnBoot # é interessante ativar
+pm enable com.asxbn/br.com.iptv.Splash
+
+app=com.asxbn
+dumpsys package | grep -Eo "^[[:space:]]+[0-9a-f]+[[:space:]]+$app/[^[:space:]]+" | grep -oE "[^[:space:]]+$"
+
+
+# pm disable com.asxbn/br.com.iptv.StartAppOnBoot # é interessante desativar
+
+pm enable com.asxbn/br.com.iptv.StartAppOnBoot # é interessante ativar
+pm enable com.asxbn/br.com.iptv.Splash
+
+
+
+
+input text Shopbox001
+input text yqu6305
+
+
+
+
+# não influenciou em nada metodo do maionese e catchup
+am force-stop com.gemini.alpha
+pm enable com.gemini.alpha/.ValidateActivity
+pm enable com.gemini.alpha/.StartupReceiver
+pm enable com.gemini.alpha/com.gemini.play.LocalService
+exit
+app=com.gemini.alpha
+dumpsys package | grep -Eo "^[[:space:]]+[0-9a-f]+[[:space:]]+$app/[^[:space:]]+" | grep -oE "[^[:space:]]+$"
+
+
+
+
+
+
+
+
+
+busybox du -hs $EXTERNAL_STORAGE/Download
+
+
+busybox cp /data/data/dxidev.toptvlauncher2/launcher-03-full/YouCine.png "/data/data/com.gemini.alpha/files/background/tela fundo alpha.png"
+busybox cp /data/data/dxidev.toptvlauncher2/launcher-03-full/YouCine.png /data/data/com.gemini.alpha/files/background/bg3alpha.jpeg
+busybox cp /data/data/dxidev.toptvlauncher2/launcher-03-full/YouCine.png /data/data/com.gemini.alpha/files/background/ALPHATV01.jpg
+
+
+busybox chmod 444 /data/data/com.gemini.alpha/files/background/*
+
+
+exit
+
+ln -sf /data/data/dxidev.toptvlauncher2/launcher-03-full/wallpaperbetter.jpg "/data/data/com.gemini.alpha/files/background/tela fundo alpha.png"
+ln -sf /data/data/dxidev.toptvlauncher2/launcher-03-full/wallpaperbetter.jpg /data/data/com.gemini.alpha/files/background/bg3alpha.jpeg
+ln -sf /data/data/dxidev.toptvlauncher2/launcher-03-full/wallpaperbetter.jpg /data/data/com.gemini.alpha/files/background/ALPHATV01.jpg
+
+busybox chmod 444 /data/data/com.gemini.alpha/files/background/*
+
+
+
+
+
+# cyl
+rm "/data/data/com.gemini.clayplay/files/background/SMURFS1920X1080.jpg"
+rm "/data/data/com.gemini.clayplay/files/background/CYL 01.jpg"
+
+# alpha
+rm "/data/data/com.gemini.alpha/files/background/tela fundo alpha.png"
+rm 
+rm 
+
+
+
+
+
+ > /dev/null 2>&1
+
+
+
+
+
+
+
+
+
+
+#cat /data/local/tmp/APPList
+
+# app=com.valor.mfc.droid.tvapp.generic
+# dumpsys package | grep -Eo "^[[:space:]]+[0-9a-f]+[[:space:]]+$app/[^[:space:]]+" | grep -oE "[^[:space:]]+$"
+
+Produto=asusbox
+
+#settings put --user 0 secure android_id aaaaaaaabbbbbbbb
+
+# sempre escreve no boot o android id
+GetID=`settings get secure android_id` # puxa o ultimo id do android
+#export ID=`cat /data/$Produto/android_id` # id variavel que muda no hard reset
+export ID="dc9c52898d8bcc99"
+
+# compara para escrever apenas se mudou
+if [ ! "$GetID" == "$ID" ]; then
+	echo "novo id instalado"
+    settings put --user 0 secure android_id dc9c52898d8bcc99
+    echo -n $GetID > /data/$Produto/android_id_OLD # escreve novo id
+	# echo -n $GetID > /data/$Produto/android_id # escreve novo id
+	# export ID=`cat /data/$Produto/android_id` # carrega o novo id
+fi
+
+
+settings get secure android_id
+
+
+exit
+
+if [ "$FileNew" == "$FileOLD" ] ; then
+
+
+settings get secure android_id
+
+# assuming we want to change user 0's ANDROID_ID
+settings get --user 0 secure android_id
+77aac9d1f119cb8f  
+settings put --user 0 secure android_id aaaaaaaabbbbbbbb
+settings get --user 0 secure android_id
+aaaaaaaabbbbbbbb 
+
+
+
+am force-stop com.valor.mfc.droid.tvapp.generic
+
+#pm clear com.gemini.alpha
+#pm enable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.normal
+pm enable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.freetrial
+pm enable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.SplashActivity
+pm enable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.GuideActivity
+pm enable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.HomeActivity
+
+pm disable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.reportlog.ReportLogActivity
+pm disable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.receiver.MFCReceiver
+pm disable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.activity.DetailBridgeActivity
+pm disable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.receiver.PackageChangeReceiver
+
+
+
+
+
+exit
+
+# funciona com as funções desativadas
+pm clear com.gemini.alpha
+pm enable com.gemini.alpha
+pm enable com.gemini.alpha/.ValidateActivity
+pm disable com.gemini.alpha/.StartupReceiver
+pm disable com.gemini.alpha/com.gemini.play.LocalService
+
+
+com.integration.unitviptv/com.cloudstream.download.activity.LocalPlayActivity
+com.integration.unitviptv/com.cloudstream.download.activity.LocalPlayActivity
+com.integration.unitviptv/com.cloudstream.download.activity.LocalPlayActivity
+com.integration.unitviptv/com.interactive.brasiliptv.ui.activity.WelcomeActivity
+com.integration.unitviptv/com.cloudstream.download.activity.LocalPlayActivity
+com.integration.unitviptv/com.taobao.accs.EventReceiver
+com.integration.unitviptv/com.taobao.agoo.AgooCommondReceiver
+com.integration.unitviptv/com.taobao.agoo.AgooCommondReceiver
+com.integration.unitviptv/com.taobao.accs.EventReceiver
+com.integration.unitviptv/com.qiniu.android.dns.NetworkReceiver
+com.integration.unitviptv/com.taobao.accs.EventReceiver
+com.integration.unitviptv/com.taobao.accs.EventReceiver
+com.integration.unitviptv/com.qiniu.android.dns.NetworkReceiver
+com.integration.unitviptv/com.taobao.accs.ServiceReceiver
+com.integration.unitviptv/com.taobao.accs.ServiceReceiver
+com.integration.unitviptv/com.yanzhenjie.permission.bridge.BridgeService
+com.integration.unitviptv/com.taobao.accs.ChannelService
+com.integration.unitviptv/com.umeng.message.UmengMessageCallbackHandlerService
+com.integration.unitviptv/com.umeng.message.XiaomiIntentService
+com.integration.unitviptv/com.umeng.message.UmengIntentService
+com.integration.unitviptv/com.umeng.message.UmengMessageCallbackHandlerService
+com.integration.unitviptv/com.umeng.message.UmengMessageCallbackHandlerService
+com.integration.unitviptv/com.umeng.message.UmengMessageIntentReceiverService
+com.integration.unitviptv/com.umeng.message.UmengMessageCallbackHandlerService
+com.integration.unitviptv/com.taobao.accs.ChannelService
+com.integration.unitviptv/com.umeng.message.UmengMessageCallbackHandlerService
+com.integration.unitviptv/com.taobao.accs.data.MsgDistributeService
+com.integration.unitviptv/org.android.agoo.accs.AgooService
+
+
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.VideoActivity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.VideoActivity
+com.szdq.elinksmart.vtv/com.daqi.launcher.MainActivity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.SeriesV4Activity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.VideoActivity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.LoginTVActivity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.SettingsActivity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.MovieV4Activity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.FileExplorerActivity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.SeriesV4Activity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.LoginTVActivity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.MovieV4Activity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.FileExplorerActivity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.activity.VideoActivity
+com.szdq.elinksmart.vtv/com.szdq.elinksmart.adapter.BootBroadcastReceiver
+com.szdq.elinksmart.vtv/com.blankj.utilcode.util.MessengerUtils$ServerService
+
+
+
+
+com.amazon.avod.thirdpartyclient
+com.anysoftkeyboard.languagepack.brazilian
+com.asusbox.asusboxiptvbox
+com.asxbn
+com.b4k
+com.batanga.vix
+com.blk.cine
+com.brtv.vod
+com.cine.criciuma.br
+com.gemini.alpha
+com.gemini.clayplay
+com.gemini.panda
+com.google.android.apps.youtube.music
+com.google.android.youtube.tv
+
+com.logicyel.tvplus
+com.menny.android.anysoftkeyboard
+com.mixplorer
+com.mm.droid.livetv.bluetv
+com.mm.droid.livetv.redplaybox
+com.mm.droid.livetv.tve
+com.mobile.pinguimtv2
+com.netflix.mediaclient
+com.not.aa_image_viewer
+com.phantom.razetv
+com.realplay.ntv_2
+com.spotify.music
+
+com.szdq.eliptx
+com.tv.odeoo
+
+com.vanced.android.youtube
+com.world.youcinetv
+dxidev.toptvlauncher2
+in.co.pricealert.apps2sd
+jackpal.androidterm
+launcher.offline
+org.libreflix.android
+tv.pluto.android
+
+
+
+
+busybox mount -o remount,rw /proc
+busybox sed -i -e 's/Serial.*/Serial          : 90e49e092c37777a/g' "/proc/cpuinfo"
+
+echo "bah" >> /proc/cpuinfo
+
+busybox cat /proc/cpuinfo #| busybox grep Serial | busybox awk '{ print $3 }'
+
+
+
+
+
+
+
+
+exit
+
+cd $HOME
+
+link="http://10.0.0.91:82/?autologin_code=iXNWp9S7fmIZ0uT0UXmfurmdkY8rvYf8"
+
+curl -O -J -L $link
+
+
+
+
+
+exit
+
+
+curl -O -J -L http://sourceforge.net/projects/bitcoin/files/Bitcoin/bitcoin-0.8.1/bitcoin-0.8.1-linux.tar.gz/download
+
+
+
+### pegar a data de quando um app foi instalado
+# dumpsys package com.google.android.apps.youtube.music | busybox grep -e "firstInstallTime"
+# dumpsys package com.netflix.mediaclient | busybox grep -e "firstInstallTime"
+# dumpsys package com.google.android.youtube.tv | busybox grep -e "firstInstallTime"
+
+echo "Data partition first boot"
+busybox stat -c '%y' /data/asusbox/android_id | busybox cut -d "." -f 1
+
+
+touch /sdcard/baaaaaaa
+
+# /system/build.prop é o primeiro arquivo a ser editado na system ao instalar o firmware.
+files="/system/build.prop
+/sdcard/baaaaaaa"
+
+for loop in $files; do
+echo $loop
+busybox stat -c '%x' $loop | busybox cut -d "." -f 1
+busybox stat -c '%y' $loop | busybox cut -d "." -f 1
+busybox stat -c '%z' $loop | busybox cut -d "." -f 1
+done
+
+# %x     Time of last access
+# %y     Time of last modification
+# %z     Time of last change
+
+
+# filtrar box com a MESMA data de access e modification é uma indicação de clone
+
+exit
+
+
+
+app=jackpal.androidterm
+version=`dumpsys package $app \
+| busybox grep versionName \
+| busybox cut -d "=" -f 2 \
+| busybox head -n 1 \
+| busybox cut -d " " -f 1`
+
+packageName=`dumpsys package $app \
+| grep sourcePackage \
+| cut -d "=" -f 2 \
+| head -1`
+
+dumpsys package $app
+
+
+echo "[$packageName] ($version).apk"
+
+exit
+
+
+
+version=`dumpsys package $app \
+| busybox grep versionName \
+| busybox cut -d "=" -f 2 \
+| busybox head -n 1 \
+| busybox cut -d " " -f 1`
+echo "$version"
+
+dumpsys package $app 
+
+
+am force-stop com.android.systemui
+
+
+
+APPS=$(dumpsys window a | grep "/" | cut -d "{" -f2 | cut -d "/" -f1 | cut -d " " -f2)
+
+for APP in $APPS ; do
+   echo "Closing: $APP"
+   adb shell am force-stop $APP
+done
+
+
+
+
+dumpsys activity recents   # for Android 4.4 and above
+
+
+
+
+input keyevent KEYCODE_APP_SWITCH && input swipe 522 1647 522 90
+dumpsys activity activities # for Android 4.2.1
+
+
+# pm enable jackpal.androidterm
+# am force-stop jackpal.androidterm
+# am start --user 0 \
+# -n jackpal.androidterm/.Term \
+# -a android.intent.action.VIEW 
+
+
+LogTerm="/data/data/jackpal.androidterm/app_HOME/log.txt"
+echo "bah este é ultimo loop v2" >> $LogTerm
+
+
+
+
+
+
+
+
+
+
+cp "/storage/emulated/0/Download/split_config.en.apk" "/data/app/com.vanced.android.youtube-1/"
+cp "/storage/emulated/0/Download/split_config.armeabi_v7a.apk" "/data/app/com.vanced.android.youtube-1/"
+cd "/data/app/com.vanced.android.youtube-1/"
+chmod 644 *.apk
+
+
+
+
+file="/system/usr/keylayout/110b0030_pwm.kl"
+check=`busybox cat "$file" | busybox grep "POWER"`
+
+busybox cat "$file" 
+
+
+# desativar o sleep na box isto deve rodar sempre
+svc power stayon true
+
+Produto="asusbox"
+export www="$EXTERNAL_STORAGE/Android/data/$Produto/.www"
+export bootLog="$www/boot.log"
+
+file="/system/usr/keylayout/110b0030_pwm.kl"
+check=`busybox cat "$file" | busybox grep "POWER"`
+if [ "$check" == "" ]; then
+echo "ADM DEBUG ### need to enable power again"
+echo "<h3>Comunicado Importante: Sobre o botão de desligar no controle remoto</h3>
+<h4>+ O botão foi desativado temporariamente para que seu aparelho continue recebendo atualizações.</br>
++ Novo sistema de atualização mesmo com seu AsusBOX em espera (tela desligada).</br>
++ O funcionamento do botão desligar do seu AsusBOX foi reativado agora.</br>
+<h3>Seu AsusBOX vai reiniciar automaticamente para efetivar esta atualização.</h3>
+Por favor aguarde 2 minutos.
+</h4>
+" > $bootLog 2>&1
+
+
+fi
+
+
+
+exit
+
+
+
+
+
+# desativando o botão de power no controle
+# este arquivo é o mesmo para as placas de tvbox 2.4ghz ou 5.8ghz
+# altera apenas se necessário
+file="/system/usr/keylayout/110b0030_pwm.kl"
+check=`busybox cat "$file" | busybox grep "POWER"`
+if [ ! "$check" == "" ]; then
+	echo "ADM DEBUG ### need change key > $check"
+    busybox mount -o remount,rw /system
+    busybox sed -i -e 's/key 116.*/key 116   HOME/g' $"$file"
+fi
+
+
+
+
+exit
+
+
+echo lock_me > /sys/power/wake_lock
+
+cat /sys/power/wake_lock
+
+
+
+
+exit
+
+0
+
+I found one method of disabling sleep using a wake_lock command by placing it within the init.sh file under the function init_misc section line 19
+
+echo lock_me > /sys/power/wake_lock
+
+this will dim the screen but not turn off the CPU so the digitizer will remain active now.Please let me know if this might cause any other unfavorable issues.
+
+
+
+PowerManagerService.Display
+
+

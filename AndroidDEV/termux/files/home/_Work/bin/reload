@@ -1,0 +1,15 @@
+#!/system/bin/sh
+clear
+
+# não funcionou
+# source /storage/DevMount/AndroidDEV/termux/files/home/.bashrc
+# echo "source ~/.bashrc"
+
+echo ""
+echo 'eval "$(cat ~/.bashrc | tail -n +10)"'
+echo ""
+echo "copy and paste code to reload bashrc in terminal"
+
+
+
+

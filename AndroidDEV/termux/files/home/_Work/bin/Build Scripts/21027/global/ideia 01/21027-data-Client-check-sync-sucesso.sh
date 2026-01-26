@@ -1,0 +1,89 @@
+#!/system/bin/sh
+path=$( cd "${0%/*}" && pwd -P )
+clear
+TMP_DIR="/data/trueDT/peer/TMP"
+
+BB=/system/bin/busybox
+
+
+SyncID=$(< "$TMP_DIR/init.21027.ID")
+CfgXML="/data/trueDT/peer/config/config.xml"
+APIKEY=$($BB awk -F '[><]' '/<apikey>/ {print $3}' "$CfgXML")
+APIURL="http://127.0.0.1:8384/rest"
+
+
+FOLDERS_URL="$APIURL/config/folders"
+DEVICES_URL="$APIURL/config/devices"
+CONN_URL="$APIURL/system/connections"
+cleaned=""
+
+
+SearchFolder="Client"
+SearchFolder="Server"
+
+# pasta de log
+LOG="$path/${SearchFolder}.log"
+
+
+date > "$LOG"
+echo "=== $(date) ==="   >>"$LOG"
+
+# loop nas pastas Client
+curl -s -H "X-API-Key: $APIKEY" "$FOLDERS_URL" \
+  | $BB awk -F '"' '/"id":/ {print $4}' \
+  | $BB grep -E "^TVBox-.*$SearchFolder" \
+  | while read -r folder; do
+    # remotes (exclui self)
+    devs=$(curl -s -H "X-API-Key: $APIKEY" "$FOLDERS_URL/$folder" | $BB awk -F '"' '/"deviceID":/ {print $4}')
+    remotes=$(echo "$devs" | $BB grep -v -x "$SyncID")
+    [ -z "$remotes" ] && continue
+    remove_now=0
+    for remote in $remotes; do
+      # valor na box local
+      DBCompletionBox="$(curl -s -H "X-API-Key: $APIKEY" "http://127.0.0.1:8384/rest/db/completion?folder=$folder&device=$SyncID")"
+      # extrai só o número (100)
+      completionTVBOX=$($BB awk -F '[:, ]+' '/"completion"/{print $3}' <<<"$DBCompletionBox")
+      # valores no remoto
+      DBCompletionServer="$(curl -s -H "X-API-Key: $APIKEY" "http://127.0.0.1:8384/rest/db/completion?folder=$folder&device=$remote")"
+      # extrai só o número (100)
+      completionServer=$($BB awk -F '[:, ]+' '/"completion"/{print $3}' <<<"$DBCompletionServer")
+      # extrai só a string (valid)
+      remoteState=$($BB awk -F '[":, ]+' '/"remoteState"/{print $3}' <<<"$DBCompletionServer")
+
+      echo "#########################################################################" >>  "$LOG"
+      echo "DEBUG Folder  = $folder" >> "$LOG"
+      echo "#########################################################################" >>  "$LOG"
+      echo "DEBUG TVBOXID = $SyncID" >> "$LOG"
+      echo "DEBUG sync em $completionTVBOX% " >>  "$LOG"
+      echo "$DBCompletionBox" >>  "$LOG"
+
+
+      echo "#########################################################################" >>  "$LOG"
+      echo "DEBUG remote  = $remote" >> "$LOG"
+      echo "DEBUG sync em $completionServer% remote state = $remoteState" >>  "$LOG"
+      echo "$DBCompletionServer" >>  "$LOG"
+
+
+
+
+      # se qualquer remote sincronizado e conectado, marca remoção
+      if [ "$completionTVBOX" = "100" ] && [ "$completionServer" = "100" ] && [ "$remoteState" = "valid" ]; then
+        echo "DEBUG Pasta sincronizada com server remoto" >> "$LOG"
+        echo "DEBUG remote  = $remote" >> "$LOG"
+        remove_now=1
+        break
+      fi
+    done
+    # remove se marcado
+    if [ "$remove_now" -eq 1 ]; then
+      echo "→ REMOVENDO pasta $folder" >> "$LOG"
+      curl -s -X DELETE -H "X-API-Key: $APIKEY" "$FOLDERS_URL/$folder"
+    fi
+  done
+
+
+
+
+
+echo "done"
+read bah

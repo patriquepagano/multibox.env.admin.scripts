@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="rx4ECaPHA0hXtYsxKSvSuWFJL7b1mmuPiTk6J6IWiT0bXHAF6BaSonYDGIQfcyysEPMyFu"
+# app vars
+app="br.com.iptv"
+fakeName="P2Mais v4.9.4 (4.9.4)"
+apkSection="clones"
+apkName="ac.163"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {P2Mais v4.9.4} [br.com.iptv] (4.9.4)

@@ -1,0 +1,38 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="8E09BIUPhggDkMQldVlwLXhoelNroAe2CjOxa5HG4jAWYpIyzCZim6dGdMz0XD69qvuWWh"
+# app vars
+app="com.tva.vod"
+fakeName="My Cine (1.0.0)"
+apkSection="clones"
+apkName="ac.186"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {My Cine} [com.tva.vod] (1.0.0)
+
+
+
+

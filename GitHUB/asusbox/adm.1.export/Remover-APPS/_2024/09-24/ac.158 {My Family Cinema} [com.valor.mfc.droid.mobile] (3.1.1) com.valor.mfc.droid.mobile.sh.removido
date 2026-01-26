@@ -1,0 +1,37 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="h8FaGt9gDT2fwzmBXSl84bMW16QX7D0fbleUi7goDrdMs6UFIf7WkKOJ1a5U1sWbTve14i"
+# app vars
+app="com.valor.mfc.droid.mobile"
+fakeName="My Family Cinema (3.1.1)"
+apkSection="clones"
+apkName="ac.158"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+#
+
+#
+
+
+
+
+# mfc_web_mobile_PROD_3.1.1_20240223.apk = {My Family Cinema} [com.valor.mfc.droid.mobile] (3.1.1)
+# app para clientes usarem a versao paga premium
+
+

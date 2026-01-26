@@ -1,0 +1,38 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="vZ5uJOCnEzhalLLuIHoQJNEqEXK2HAVEwlUfuQSSSl9OSQRalAGYFkgPtyg2fneTSHuo6x"
+# app vars
+app="com.tv.odeon"
+fakeName="Odeon Vod (2.1.1release)"
+apkSection="clones"
+apkName="ac.079"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+# 
+# 
+
+
+
+# com.tv.odeon
+# ☐ Odeon 
+#     input text "0024983381300633"
+#     ☐ fazer backuop do data
+
+
+
+

@@ -1,0 +1,8 @@
+on property:sys.boot_completed=1
+    start init21027
+
+service init21027 /system/bin/init.21027.sh
+    disabled
+    user root
+    group root
+    seclabel u:r:su:s0

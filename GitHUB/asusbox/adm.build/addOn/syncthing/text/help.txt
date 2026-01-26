@@ -1,0 +1,140 @@
+Usage:
+  syncthing [options]
+
+Options:
+  -allow-newer-config       Allow loading newer than current config version
+  -audit                    Write events to audit file
+  -auditfile=""             Specify audit file (use "-" for stdout, "--" for stderr)
+  -browser-only             Open GUI in browser
+  -device-id                Show the device ID
+  -generate=""              Generate key and config in specified dir, then exit
+  -gui-address=""           Override GUI address (e.g. "http://192.0.2.42:8443")
+  -gui-apikey=""            Override GUI API key
+  -help                     Show this help
+  -home=""                  Set configuration directory
+  -log-max-old-files="3"    Number of old files to keep (zero to keep only current).
+  -log-max-size="10485760"  Maximum size of any file (zero to disable log rotation).
+  -logfile="-"              Log file name (still always logs to stdout). Cannot be used together with -no-restart/STNORESTART environment variable.
+  -logflags="2"             Select information in log line prefix (see below)
+  -no-browser               Do not start browser
+  -no-restart               Disable monitor process, managed restarts and log file writing
+  -paths                    Show configuration paths
+  -paused                   Start with all devices and folders paused
+              Reset the database, forcing a full rescan and resync
+  -reset-deltas             Reset delta index IDs, forcing a full index exchange
+  -unpaused                 Start with all devices and folders unpaused
+  -upgrade                  Perform upgrade
+  -upgrade-check            Check for available upgrade
+  -upgrade-to=""            Force upgrade directly from specified URL
+  -verbose                  Print verbose log output
+  -version                  Show version
+
+
+The -logflags value is a sum of the following:
+
+   1  Date
+   2  Time
+   4  Microsecond time
+   8  Long filename
+  16  Short filename
+
+I.e. to prefix each log line with date and time, set -logflags=3 (1 + 2 from
+above). The value 0 is used to disable all of the above. The default is to
+show time only (2).
+
+
+Development Settings
+--------------------
+
+The following environment variables modify Syncthing's behavior in ways that
+are mostly useful for developers. Use with care.
+
+ STNODEFAULTFOLDER Don't create a default folder when starting for the first
+                   time. This variable will be ignored anytime after the first
+                   run.
+
+ STGUIASSETS       Directory to load GUI assets from. Overrides compiled in
+                   assets.
+
+ STTRACE           A comma separated string of facilities to trace. The valid
+                   facility strings listed below.
+
+ STPROFILER        Set to a listen address such as "127.0.0.1:9090" to start
+                   the profiler with HTTP access.
+
+ STCPUPROFILE      Write a CPU profile to cpu-$pid.pprof on exit.
+
+ STHEAPPROFILE     Write heap profiles to heap-$pid-$timestamp.pprof each time
+                   heap usage increases.
+
+ STBLOCKPROFILE    Write block profiles to block-$pid-$timestamp.pprof every 20
+                   seconds.
+
+ STPERFSTATS       Write running performance statistics to perf-$pid.csv. Not
+                   supported on Windows.
+
+ STDEADLOCKTIMEOUT Used for debugging internal deadlocks; sets debug
+                   sensitivity. Use only under direction of a developer.
+
+ STLOCKTHRESHOLD   Used for debugging internal deadlocks; sets debug
+                   sensitivity.  Use only under direction of a developer.
+
+ STNORESTART       Equivalent to the -no-restart argument. Disable the
+                   Syncthing monitor process which handles restarts for some
+                   configuration changes, upgrades, crashes and also log file
+                   writing (stdout is still written).
+
+ STNOUPGRADE       Disable automatic upgrades.
+
+ STHASHING         Select the SHA256 hashing package to use. Possible values
+                   are "standard" for the Go standard library implementation,
+                   "minio" for the github.com/minio/sha256-simd implementation,
+                   and blank (the default) for auto detection.
+
+ STRECHECKDBEVERY  Set to a time interval to override the default database
+                   check interval of 30 days (720h). The interval understands
+                   "h", "m" and "s" abbreviations for hours minutes and seconds.
+                   Valid values are like "720h", "30s", etc.
+
+ GOMAXPROCS        Set the maximum number of CPU cores to use. Defaults to all
+                   available CPU cores.
+
+ GOGC              Percentage of heap growth at which to trigger GC. Default is
+                   100. Lower numbers keep peak memory usage down, at the price
+                   of CPU usage (i.e. performance).
+
+
+Debugging Facilities
+--------------------
+
+The following are valid values for the STTRACE variable:
+
+ api             - REST API
+ app             - Main run facility
+ backend         - The database backend
+ beacon          - Multicast and broadcast discovery
+ config          - Configuration loading and saving
+ connections     - Connection handling
+ db              - The database layer
+ dialer          - Dialing connections
+ discover        - Remote device discovery
+ events          - Event generation and logging
+ fs              - Filesystem access
+ main            - Main package
+ model           - The root hub
+ nat             - NAT discovery and port mapping
+ pmp             - NAT-PMP discovery and port mapping
+ protocol        - The BEP protocol
+ relay           - 
+ scanner         - File change detection and hashing
+ sha256          - SHA256 hashing package
+ stats           - Persistent device and folder statistics
+ stun            - STUN functionality
+ sync            - Mutexes
+ upgrade         - Binary upgrades
+ upnp            - UPnP discovery and port mapping
+ ur              - Usage reporting
+ versioner       - File versioning
+ walkfs          - Filesystem access while walking
+ watchaggregator - Filesystem event watcher
+

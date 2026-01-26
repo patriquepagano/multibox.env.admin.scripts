@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="Hi54gArgBwBA7Qmm6VRgtgnTYCJTAYI0w2JjULu0Kp0ebYudEVOiph00TqsOfYkiAYstZo"
+# app vars
+app="io.wareztv.android.pro"
+fakeName="WPlay Pro (4.0.6)"
+apkSection="clones"
+apkName="ac.231"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# {WPlay Pro} [io.wareztv.android.pro] (4.0.6)

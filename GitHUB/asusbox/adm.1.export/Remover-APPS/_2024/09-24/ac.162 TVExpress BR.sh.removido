@@ -1,0 +1,42 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="jGg7g9yGDHHBKk9Sooc2hqU69gbA8hBWTIBzmYMh8e6JqnDToCMb8KG9JYp083Y3rxzS1v"
+# app vars
+app="com.mm.droid.livetv.tve"
+fakeName="TVExpress BR (3.4.0)"
+apkSection="clones"
+apkName="ac.162"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /data/data/com.mm.droid.livetv.tve/files
+mkdir -p /data/data/com.mm.droid.livetv.tve/files
+chmod 440 /data/data/com.mm.droid.livetv.tve/files
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {TVExpress BR} [com.mm.droid.livetv.tve] (3.4.0)
+
+#pr0burn@hotmail.com 
+#558800py
+

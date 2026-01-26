@@ -1,0 +1,51 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="4XOqO9vi0AuivSP6jGt6a2L6Kyh0z43mXgkvLVeb70ak08oNLFtbqZV94ZZlmG0rwg6TAf"
+# app vars
+app="com.valor.mfc.droid.tvapp.generic"
+fakeName="My Family Cinema (2.2.3)"
+apkSection="clones"
+apkName="ac.153"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /data/data/com.valor.mfc.droid.tvapp.generic/mfc/ota
+# 01 services
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.liulishuo.filedownloader.services.FileDownloadService\$SharedMainProcessService'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.liulishuo.filedownloader.services.FileDownloadService\$SeparateProcessService'
+# 02 activity
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.setting.activity.SettingNetworkActivity'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.AccountActivity'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.mm.m.netdisk.ui.acc.AccountActivity'
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.setting.v2.SettingActivity'
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+# MFC 2.2.3.apk = {My Family Cinema} [com.valor.mfc.droid.tvapp.generic] (2.2.3)
+
+
+
+#aapt="/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/bin's/aapt"
+#$aapt dump xmltree /data/app/com.valor.mfc.droid.tvapp.generic-1/base.apk AndroidManifest.xml | grep -E 'activity|activity-alias' -A 10 > "$path/bah-debug.log"
+#$aapt dump xmltree /data/app/com.valor.mfc.droid.tvapp.generic-1/base.apk AndroidManifest.xml | grep -E 'service' -A 10 > "$path/bah-debug.log"
+
+

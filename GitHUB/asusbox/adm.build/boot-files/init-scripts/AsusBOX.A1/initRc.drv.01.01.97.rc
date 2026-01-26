@@ -1,0 +1,8 @@
+on boot
+start initdDriverCore
+service initdDriverCore /system/bin/initRc.drv.01.01.97
+disabled
+oneshot
+user root
+group root
+seclabel u:r:su:s0

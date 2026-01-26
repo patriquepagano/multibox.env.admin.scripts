@@ -1,0 +1,99 @@
+[x] remover
+[x] {Duo Prime} [com.mm.droid.livetv.duoprime] (2.0.5)
+[x] {Eppi Cinema} [com.valor.mfc.droid.tvapp.generic] (4.0.3)
+[x]  {TV EXPRESS} [com.mm.droid.livetv.tve] (Sr Martins oficial )
+[x]  {MI TV} [com.mm.droid.livetv] (2.1.0)
+
+
+
+---------------------------
+# instalar novos
+
+{Super Tv} [com.mm.droid.livetv.voqx] (5.5.2)
+pede sdcard e roda de boas
+
+{Foreverg} [com.chsz.iptv.foreverg] (v6.6.7-20240320)
+pm clear com.chsz.iptv.foreverg
+input text '2420909305'
+so copiar o apk sem data pois
+a incompetencia da anibalice travou o mac do celular dele
+
+{BlueTv} [com.smalls.Bluetvlive] (1.0.6) = logo blueTV live
+não loga pede senha
+ao tentar sair do app trava a box só fechando via remoto
+os clientes vao ter q desligar da energia e reiniciar 
+para sair. quem liga ´é uma bosta o trabalho do anibal mesmo
+
+{BlueTV} [com.mm.droid.livetv.bluetv] (3.2.0)
+pede sdcard
+pede senha que o anibal n~ão tem
+mais um que ele diz que testou.. 
+e eu perdi meu tempo
+
+{Pulse Live} [com.mm.droid.livetv] (2.2.0)
+copiado o arquivo
+cp /storage/DevMount/4Android/+APK+DEBUG+iNSTAL/31000173 /storage/emulated/0/
+apagado a pasta
+rm -rf /sdcard/.Rxst
+ai com isto sabota os super tv q estava funcionando e sabe mais la oque
+o app pede por senha apos isto
+
+
+pm uninstall com.chsz.iptv.foreverg
+pm uninstall com.mm.droid.livetv
+pm uninstall com.mm.droid.livetv.bluetv
+pm uninstall com.smalls.Bluetvlive
+
+
+
+
+/ debug / app / [Remove APP] (b) remove app from torrent pack
+--------- atualizar existentes ---------
+[x] atualizar dados
+
+[x] /05.akp.cl/ac.144 SmartTube (29.13) com.teamsmart.videomanager.tv.sh
+
+
+
+{RedPlay Live} [com.mm.droid.livetv.redplaybox] (4.0.0)
+{Duna TV} [com.mm.droid.livetv.duna] (1.0.0)
+
+
+rm -rf /storage/emulated/0/.Rxst
+rm -rf /storage/emulated/0/tve
+
+pm clear com.mm.droid.livetv.duna
+pm clear com.mm.droid.livetv.redplaybox
+
+# email login
+input text 'osnipesci@gmail.com'
+input text '25800852'
+
+
+
+
+
+# --------------- atualizar apps
+enviar via rsync todos os apps
+instalar novos apps em apk ( menu instalar todos )
+instalar os backups via appk ( app2sdk escaneia e espera )
+
+
+
+todos apps instalados gera nova lista e posta no grupo
+
+pega os novos apps e loga aqui abaixo
+
++ gerar ficha tecnica e pack p2p
+
+
+
+ac 0.35 dando erro no install
+
+
+URGENTE UTILIZAR VPN NAS BOXES PEGANDO IP DE SP
+PRIMEIRO LOGIN NAS BOXES TA MARCANDO MEU IP DO RETIRO
+POR SORTE NÃO É FIXO. MAS MUDAR ISTO DUMA VEZ
+
+
+

@@ -1,0 +1,24 @@
+Estrutura do sistema de mídia indoor
+O slideshow será exibido em um monitor com proporção 16:9.
+
+O layout será dividido em 3 frames principais:
+
+Barra lateral direita
+
+Ocupa toda a altura da tela.
+
+Fica posicionada do lado direito, de cima a baixo.
+
+Barra horizontal inferior
+
+Ocupa toda a largura da tela.
+
+Fica posicionada na parte de baixo.
+
+Bloco principal
+
+É a área que sobra após a aplicação das duas barras.
+
+Precisa manter a proporção 16:9.
+
+Será utilizado para exibir os VTs de publicidade indoor.

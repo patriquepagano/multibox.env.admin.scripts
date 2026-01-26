@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="6AJos02VtwSVu2qXyZZiOLZDLC0efKsmHXNq9QbTtBtDXv2P75154Ssp276esFzDiVxeEj"
+# app vars
+app="live.onlyp.glxpdp"
+fakeName="P2P (2.5)"
+apkSection="clones"
+apkName="ac.118"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# live.onlyp.glxpdp
+ # sennha  001218 ou 001252

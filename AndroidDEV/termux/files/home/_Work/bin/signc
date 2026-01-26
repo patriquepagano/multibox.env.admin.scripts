@@ -1,0 +1,19 @@
+#!/system/bin/sh
+path=$( cd "${0%/*}" && pwd -P )
+clear
+
+MyKey="/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/[ Generate keys openssl ]/Key/private_key.pem"
+PublicKey="/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/[ Generate keys openssl ]/Key/public_key.pem"
+
+
+File="$1"
+
+# Verifica a assinatura
+openssl dgst -sha256 -verify "$PublicKey" -signature "$File.sig" "$File"
+
+
+if [ ! "$1" == "skip" ]; then
+	echo "Press enter to continue."
+	read bah
+fi
+

@@ -1,0 +1,61 @@
+
+Priorizando:
+    ☐ organizar todos os meus hostings
+    ☐ definir um mapa de todas as hospedagems e quem é responsavel do que?
+    ☐ asusboxOLD
+    ☐ asusbox.com.br
+    ☐ asusboxAuth
+
+###################################################################################################################:
+
+
+    ☐ reciclar antigo sistema vpsScripts
+    ☐ apagar o repositorio tornando local _recicle
+    ☐ enviar do tvbox para os vps via rsync
+    ☐ melhorar scripts dos tvbox para o envio ao vps
+
+Asusbox
+18.228.168.171
+
+
+
+
+###################################################################################################################:
+Ideias novas a testar :
+
+☐ ip fake unico para todos
+Usar vpn gateway para logar os apps
+Vivo , mf etc..
+E ip cliente para fluxo
+Rotear os ips ns box
+
+
+
+
+
+
+###################################################################################################################:
+TORRENTS:
+✔ remover os trackers que não funciona @done(21-06-03 15:35)
+☐ Criar um Tracker único para o host torrents
+☐ se um arquivo corrompe no meu pendrive e eu crio um novo torrent eu dissemino isto para todos!!!!!!!!!!
+
+
+
+
+☐ pré check antes do update. 
+verificar se alterou o updatesystem ou torrent para depois 
+rodar o loop ( isto tem ligação de como o chaveamento vai funcionar )
+
+☐ remover todos os apps da lista de apps recente
+ ao pressionar botao HOME no boot da box 
+ ( ou os clientes vão abrir o ultimo app em uso no boot da box )
+
+###################################################################################################################:
+DEV MODE:
+☐ adicionar o fsk ao boot para montar o pendrive
+no ubuntu > fsck -y /dev/sdb1
+The program fsck is not installed. Install it by executing:
+    pkg install e2fsprogs
+
+

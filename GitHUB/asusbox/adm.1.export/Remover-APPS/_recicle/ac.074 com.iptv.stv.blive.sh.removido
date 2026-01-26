@@ -1,0 +1,39 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="oFN80KBoCUBg6fFZWkMk437C5pVH9kZ8oyhyP2LacciSmVoGLCrFKaECUdKDjmSk7tuvJy"
+# app vars
+app="com.iptv.stv.blive"
+fakeName="B-Live"
+apkSection="clones"
+apkName="ac.074"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix="
+pm disable com.iptv.stv.blive/com.iptv.stv.live.upgrade.FixPatchServer
+pm disable com.iptv.stv.blive/com.iptv.stv.live.activity.UserCenterActivity
+pm disable com.iptv.stv.blive/com.iptv.stv.live.activity.LoginActivity
+"
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+# 
+# 
+
+
+
+
+
+
+# {B-Live} [com.iptv.stv.blive]
+

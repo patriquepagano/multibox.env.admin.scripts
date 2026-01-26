@@ -1,0 +1,42 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="qgoaeZ7iWj1qG7sTpxORsvIHBkckvnd8TC8xWKNYy6nfYIG6JzBQzD8g7c7Rh7cStxGKqL"
+# app vars
+app="com.integration.unitviptv"
+fakeName="UniTV (4.8.4)"
+apkSection="clones"
+apkName="ac.014"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="yes"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.1"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# ☐ update unitv
+#     input text "68cjk5"
+#     input text "unitv0987654"
+#     ☐ pede acesso rw sdcard
+#     ☐ update de apk fazer bkp data e apk
+
+
+

@@ -1,0 +1,61 @@
+/**
+* @Author: Brendon Pagano <brendon>
+* @Date:   2017-03-08 17:57:18
+* @Email:  brendonpagano@gmail.com
+* @Project: Web Album [ Router ]
+* @Filename: catalogo.css
+* @Last modified by:   brendon
+* @Last modified time: 2017-03-21 20:31:02
+*/
+
+/*
+#catalogo {
+  border: 1px solid #cecece;
+  border-radius: 4px;
+}
+*/
+
+#catalogo-searchbar-input {
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  /*padding-right: 17px;*/
+}
+
+#catalogo-searchbar-submit {
+  position: absolute;
+  right: 13px;
+  top: 0;
+  bottom: 0;
+  height: 34px;
+  width: 34px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  background-color: #f1f1f1;
+}
+
+#catalogo-body {
+  margin-top: 1px;
+}
+
+#catalogo-ul {
+  list-style: none;
+  padding: 0;
+}
+
+.catalogo-item {
+  display: inline-block;
+  position: relative;
+  margin-right: 2px;
+  cursor: pointer;
+}
+
+.catalogo-item-cover {
+  width: 150px; /* largura original do arquivo */
+  height: 165px;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}

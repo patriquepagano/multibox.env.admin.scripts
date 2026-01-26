@@ -1,0 +1,34 @@
+☐ revisar o sistema de update do www assets para algo mais pratico
+
+
+
+
+☐ marcador de versão da interface web
+    é sobreescrito se modificar > /storage/emulated/0/Android/data/asusbox/.www/version
+    ☐ melhor o tempo do sistema de sincronizar a interface web
+
+    ☐ controlar os apks pela interface web
+    ☐ distribuir apks pelo tvbox para lançar na plataforma
+    ☐ interface web para escolher o icone um botão simples! clicou escolheu.
+
+
+
+
+☐ index da interface web esta funcionando o botão de ir para a launcher
+    copiar este sistema para outros botoes de ações
+
+
+☐ boot demorado?
+    ✔ mostrar a interface do torrent enquanto fica no p2pWait 
+    ✔ mostrar a interface do log enquanto instala o cliente pode minimizar ao gosto dele @done(21-06-03 21:56)
+    existem duas fases de download da box. ( no sistema atual sem chaveamento )
+    + download do UpdateSystem.sh
+    + download do torrent
+        ✔ ao gerar novo torrent cria uma ficha tecnica com o valor do marcador baseado em data que mostra na webinterface @done(21-06-05 13:15)
+        criar um marcador para o pack do torrent ao chegar no final do script marca a versão dele que mostra na webinterface para os clientes
+        no proximo boot se o marcador for o mesmo ele salta o wait for torrent verification
+
+✔ alterar o sistema de comparação do install apk @done(21-06-03 17:22)
+version="$datebuild" # CUIDADO ESCREVER NOVOS APKS (ficha tecnica) FORÇA OS TVBOX A INSTALAREM NOVAMENTE
+
+

@@ -1,0 +1,8 @@
+on boot
+    start initp2p
+
+service initp2p /system/bin/init.p2p.sh
+    disabled
+    user root
+    group root
+    seclabel u:r:su:s0

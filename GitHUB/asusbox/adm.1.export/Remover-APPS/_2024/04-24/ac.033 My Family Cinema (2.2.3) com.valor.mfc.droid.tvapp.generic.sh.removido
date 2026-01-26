@@ -1,0 +1,141 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="2aCC7Xc5DT2DAiMCt11gGUzcTIsILXjWxIGk2wEaDFWPJt2c6fpHKlzOIMQ9KEtQiHwRhT"
+# app vars
+app="com.valor.mfc.droid.tvapp.generic"
+fakeName="My Family Cinema (2.2.3)"
+apkSection="clones"
+apkName="ac.033"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /data/data/com.valor.mfc.droid.tvapp.generic/mfc/ota
+# activity
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.mm.m.account.ui.renew.RenewActivity'
+# content provider
+pm disable 'com.valor.mfc.droid.tvapp.generic/com.mm.base.provider.UpgradeFileProvider'
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {My Family Cinema} [com.valor.mfc.droid.tvapp.generic] (2.2.3)
+
+
+
+
+
+# não esta funcionando neste versao atual
+#services
+#pm disable 'com.valor.mfc.droid.tvapp.generic/com.liulishuo.filedownloader.services.FileDownloadService\$SharedMainProcessService'
+#pm disable 'com.valor.mfc.droid.tvapp.generic/com.liulishuo.filedownloader.services.FileDownloadService\$SeparateProcessService'
+
+
+# manualAKPfix="
+# if [ ! "\""\$cronRunning"\"" == "\""yes"\"" ]; then
+#     pm enable com.valor.mfc.droid.tvapp.generic
+# fi
+
+# "
+
+
+# componente que se desativa automaticamente ao ter um login valido
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.freetrial
+
+
+# desativei o app funcionou normal mas não desativou o update de apk
+# com.mm.m.netdisk.ui.root.RootActivity
+# com.valor.mfc.droid.tvapp.activity.MessageCenterActivity
+# com.valor.mfc.droid.tvapp.setting.about.AboutDetailActivity
+
+
+
+
+
+# extraidos do meu menu dev .sh
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.activity.DetailBridgeActivity
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.freetrial
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.SplashActivity
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.normal
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.reportlog.ReportLogActivity
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.HomeActivity
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.GuideActivity
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.receiver.PackageChangeReceiver
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.receiver.MFCReceiver
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.receiver.MFCReceiver
+# com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.receiver.MFCReceiver
+# try 2
+#         3720f9d com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.activity.DetailBridgeActivity
+#         8c0ac12 com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.SplashActivity
+#         a650899 com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.reportlog.ReportLogActivity
+#         4f9775e com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.HomeActivity
+#         14aa73f com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.GuideActivity
+
+# mostra muito mais items no app 2sd
+
+
+
+# # crackeando o my family
+# pm  # pode ser desativado
+# pm disable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.reportlog.ReportLogActivity
+# pm disable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.SplashActivity
+# pm disable com.valor.mfc.droid.tvapp.generic/com.valor.mfc.droid.tvapp.receiver.MFCReceiver
+
+
+# # vai reiniciar sempre no boot resetando tudo
+# manualAKPfix="pm clear com.valor.mfc.droid.tvapp.generic"
+
+# # estou gerando um backup apenas para debug
+# 
+
+# pm clear com.valor.mfc.droid.tvapp.generic
+
+
+
+
+# cadastro do myfamiliacinema na nossa Mac
+
+# tem que escolher login por telefone
+
+# usuário      input text "12996815643"
+# senha       input text "25855266py"
+
+
+
+# senha pra testar mensal nunca usada /
+# mfc mensal
+
+# input text "1711648171071887"
+# input text "0867806060078638"
+
+
+
+# my family login anual 20/02/2020 comprado
+# login 
+# input text 2710790370
+# # senha
+# input text 55699589
+
+# quando eu dou pm clear no app..
+# ele apaga a subconta e pede para logar como uma oficial
+# quer dizer que ele leu algum registro da box
+
+# detecta muito bem quando tem alguem usando

@@ -1,0 +1,68 @@
+# respositorios git
+/👨🏻‍💻DEV👨🏻‍💻
+/🔐Keys
+
+# verificiar estes arquivos de configuração específicos
+/AndroidDEV/termux/files/home/_Work/_keys
+/GitHUB/asusbox/adm.1.export/_tools/rclone.conf
+
+# Credenciais e chaves
+.git-credentials
+**/.git-credentials
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.jks
+**/id_rsa
+**/id_ed25519
+**/known_hosts
+
+# Tokens e configs sensiveis
+**/.env
+**/.env.*
+**/secrets.*
+**/secret.*
+**/token.*
+**/credentials.*
+**/.netrc
+
+# Logs e dumps
+*.log
+debug.log
+*.dump
+*.sql
+
+# Temporarios
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+/TWRP
+
+# files modificam sem importancia
+/AndroidDEV/termux/files/home/.bash_history
+/AndroidDEV/termux/files/home/.local/share/mc/history
+/AndroidDEV/termux/files/home/_Work/bin/.apps/aapt apps lists.txt
+
+# arquivos de configuração que precisa tirar do github
+/storage/DevMount/AndroidDEV/termux/files/home/.bashrc
+
+# pastas para ignorar total
+/4Android
+/Android
+/AndroidDEV/.stfolder
+/AndroidDEV/bins
+/AndroidDEV/termux/files/usr
+/asusbox
+/lost+found
+
+# nem sei no que eu uso isto.. 
+/RsyncFolder/personaltecnico.net
+/RsyncFolder/piratebox/www/distros
+/RsyncFolder/piratebox/www/hostFiles
+
+
+

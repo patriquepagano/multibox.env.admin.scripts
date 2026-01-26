@@ -1,0 +1,42 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="U0JVDO85HGWhr2qjaxi9AAqEx24qB66kFpOJo8z1RR7HrAyVxjFcPg5lLCTmpKTArylfYH"
+# app vars
+app="com.mm.droid.livetv"
+fakeName="BlueTV"
+apkSection="clones"
+apkName="ac.169"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /data/data/com.mm.droid.livetv/files
+mkdir -p /data/data/com.mm.droid.livetv/files
+chmod 440 /data/data/com.mm.droid.livetv/files
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+#   BlueTV_3.4.0 (1).apk = {BlueTV} [com.mm.droid.livetv] (3.4.0)
+#   input text 41991753755
+#   input text 22558800
+
+

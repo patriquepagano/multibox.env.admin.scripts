@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="vExLJN6CcSvmvdGNHr8nTMq8wFKyMUCLEOPQPEWdO3L1qFFCxUfkPjiPLtIWVzcy9By3SZ"
+# app vars
+app="com.smalls.xprime"
+fakeName="Xplus Pro (10.72)"
+apkSection="clones"
+apkName="ac.123"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Xplus Pro} [com.smalls.xprime] (10.72)

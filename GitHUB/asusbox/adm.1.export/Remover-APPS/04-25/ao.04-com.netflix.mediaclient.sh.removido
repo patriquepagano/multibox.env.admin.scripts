@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="fQLAqZ1a2Pgs4hrfWQjQg8ZxoaAUJlalIBsy01vXxw4JiIhDr3A3A1e9A18d6Vm6DQt9pd"
+# app vars
+app="com.netflix.mediaclient"
+fakeName="Netflix"
+apkSection="oem"
+apkName="ao.04"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+# 
+
+
+
+# https://apkcombo.com/netflix/com.netflix.mediaclient/
+
+
+

@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="H7YqQ7TBHmqcjsKwfPomJTzX7w0buzlEl18Kdu8SC3UtXilOEDLOpuTiERYqOflEVT7RmN"
+# app vars
+app="com.mm.droid.livetv.duna"
+fakeName="Duna TV (1.2.0)"
+apkSection="clones"
+apkName="ac.156"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+#
+
+#
+
+
+
+
+# {Duna TV} [com.mm.droid.livetv.duna] (1.2.0)

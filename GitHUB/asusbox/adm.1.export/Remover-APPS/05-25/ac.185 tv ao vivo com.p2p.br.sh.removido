@@ -1,0 +1,38 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="PxS1RoyoVRE39BiQ2dfOOsyT6pFJHdNZcoOBFhQJ2Cusa5q1oWmFPfG5kafrjJAycHfsh9"
+# app vars
+app="com.p2p.br"
+fakeName="TV AO VIVO (69)"
+apkSection="clones"
+apkName="ac.185"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {TV AO VIVO} [com.p2p.br] (69)
+
+
+
+

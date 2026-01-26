@@ -1,0 +1,38 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="4XR41unRGahEI4K5Y9Pfe9zmfU034CKyVlNyG0o7A78CBbi1d65H1mUzt6vzCOCA1nd0bB"
+# app vars
+app="com.lexvision.playoneplus"
+fakeName="PlayOne + (03.5.0824)"
+apkSection="clones"
+apkName="ac.184"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {PlayOne +} [com.lexvision.playoneplus] (03.5.0824)
+
+
+
+

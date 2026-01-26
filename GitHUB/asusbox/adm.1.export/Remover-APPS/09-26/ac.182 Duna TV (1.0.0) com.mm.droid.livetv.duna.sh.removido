@@ -1,0 +1,67 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="w0etZfDVAmGvJIKBT7fnM22bEVXpqdrQ7YJW8VCD5WnTJtmh8XEfHGQzRzdA1pQ97UixN9"
+# app vars
+app="com.mm.droid.livetv.duna"
+fakeName="Duna TV (1.0.0)"
+apkSection="clones"
+apkName="ac.182"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+# fix da key chaveamento externo do app
+# rm -rf /storage/emulated/0/.Rxst/31026931
+# rm -rf /storage/emulated/0/.Rxst/playHis/com.mm.droid.livetv.duna
+
+rm -rf /storage/emulated/0/.Rxst
+rm -rf /storage/emulated/0/duna_stb
+
+rm -rf /data/data/com.mm.droid.livetv.duna/files
+mkdir -p /data/data/com.mm.droid.livetv.duna/files
+chmod 440 /data/data/com.mm.droid.livetv.duna/files
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+#
+
+
+
+#
+
+
+
+# {Duna TV} [com.mm.droid.livetv.duna] (1.0.0)
+
+
+# ## quando for instalar para fazer o backup rode isto
+# pm clear com.mm.droid.livetv.duna
+
+# # fix da key chaveamento externo do app
+# rm -rf /storage/emulated/0/.Rxst/31026931
+# rm -rf /storage/emulated/0/.Rxst/playHis/com.mm.droid.livetv.duna
+# rm -rf /storage/emulated/0/duna_stb
+
+
+# rm -rf /data/data/com.mm.droid.livetv.duna/files
+# mkdir -p /data/data/com.mm.droid.livetv.duna/files
+# chmod 440 /data/data/com.mm.droid.livetv.duna/files
+
+# vai em email
+# input text "meumeu676767@gmail.com"
+# input text "000111241"
+
+
+
+

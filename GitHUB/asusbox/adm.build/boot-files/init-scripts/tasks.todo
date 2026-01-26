@@ -1,0 +1,37 @@
+sobre o init-scripts:
+    * na maioria dos firmwares fica no rootsudaemon.sh
+    * sempre roda com privilégios de root
+    * se este arquivo ficar mal gravado ou erro de permissão esta box não liga mais
+    * arquivo responsavel pelo primeiro boot apontamento para nosso vps mirrors
+    - não posso criar profiles do {$user} tipo dev admin pois a concorrencia pode refazer o firmware escrevendo este arquivo e com isto ganha o exploit
+    - preciso adequar todos os firmwares com busybox etc pra que todos rodem o init-script com mesmo efeito
+    + initscripts seu conteudo são padrões para todo tipo de hardware, software memoria etc.. oque muda nos firmwares é sua localização
+
+conceito init-script:
+
+
+init-script boot via multi-mirrors:
+    criar uma variavel   InitFile=$myselfScript
+    InitFile baixa de uma url
+firmware-center.net/asusbox.A1/init
+
+                     linha       revendedor    serial              senha         boot update :
+firmware-center.net/asusbox.A1/anibalmachado/1234-1234-1234-1234/6563215934523
+
+
+
+
+☐ arquivo rootsudaemon atual em uso
+   o novo sistema vai apontar para multi-dominios o atual sera só mais um deles
+
+
+                            
+
+
+
+
+
+
+
+
+

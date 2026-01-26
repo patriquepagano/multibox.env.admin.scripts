@@ -1,0 +1,33 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="DYNqQ3j9Em8DkjiQzrRtky7alGLgcxjqtZcJmimoXleFkb5UfHbn28tTygcLZQPzAYslsS"
+# app vars
+app="com.spotify.music"
+fakeName="Spotify (8.5.94.839)"
+apkSection="clones"
+apkName="ac.051"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+# {Spotify} [com.spotify.music] (8.5.94.839)
+

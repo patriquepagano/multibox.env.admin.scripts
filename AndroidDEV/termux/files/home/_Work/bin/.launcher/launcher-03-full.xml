@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <int name="489646AppIconBGcolor" value="0" />
+    <string name="64646BigOrSmallTile">Big</string>
+    <int name="199646AppIconBGcolor" value="0" />
+    <int name="PickColorHue" value="230" />
+    <int name="65646AppIconBGcolor" value="0" />
+    <string name="PinToUnlock"></string>
+    <int name="TilesRow6Height" value="80" />
+    <int name="PickColorValue" value="64" />
+    <int name="460646AppIconBGcolor" value="0" />
+    <int name="490646AppIconBGcolor" value="0" />
+    <int name="ScreenHeight" value="1280" />
+    <string name="69646AppList">tv.pluto.android</string>
+    <string name="458646AppIconSize">matchtileheight</string>
+    <string name="489646BigOrSmallTile">Small</string>
+    <string name="459646AppList">com.newone.p2p1</string>
+    <int name="0dcClockSize" value="0" />
+    <int name="EditModeEnabled" value="0" />
+    <string name="458646AppList">com.bx.livf</string>
+    <string name="460646BigOrSmallTile">Small</string>
+    <string name="462646BigOrSmallTile">Small</string>
+    <string name="199646AppList">com.new2tourosat.app</string>
+    <int name="TilesRow4TileHeight" value="110" />
+    <string name="461646AppIconSize">medium</string>
+    <int name="TilesRow1Visible" value="1" />
+    <string name="105646AppIconSize">image</string>
+    <string name="LinearTilesRowGravity_Row3">Center</string>
+    <string name="106646AppList">com.chsz.efile.alphaplay,com.eaigo,com.valor.mfc.droid.tvapp.generic,com.unitp.mago,com.digitizercommunity.loontv,com.android.mgstv,com.ibostore.meplayerib4k,tv.pluto.android,iptv.vivo.player,com.vupurple.player,com.wapp.ibo,com.newvod.app,com.world.youcinetv,io.gh.reisxd.tizentube.fortaleza,com.mm.droid.livetv.duna,com.integration.unitvsiptv,iptvsmart.iboxt,com.interactive.htviptv,com.newone.p2p1</string>
+    <string name="489646ImageOnTile">/data/data/dxidev.toptvlauncher2/launcher-03-full/robotelaV2.png</string>
+    <string name="61646ImageOnTile">/data/data/dxidev.toptvlauncher2/launcher-03-full/XFULL TV CINZA.png</string>
+    <int name="459646AppIconBGcolor" value="0" />
+    <string name="LinearTilesRowGravity_Row1">Center</string>
+    <string name="61646AppList">family.az.tv,com.interactive.htviptv,com.ibostore.meplayerib4k,com.bx.livf,iptv.vivo.player,com.vupurple.player,com.wapp.ibo,com.liveb2.app,br.com.kerhkhd,com.mm.droid.livetv,com.new2tourosat.app,com.exploudapps.maxnettv,com.chsz.efile.alphaplay,com.hd.sport.live</string>
+    <string name="LinearTilesRowGravity_Row4">Center</string>
+    <string name="HiddenAppsList"></string>
+    <string name="491646BigOrSmallTile">Small</string>
+    <string name="199646AppIconSize">medium</string>
+    <string name="69646ImageOnTile">/data/data/dxidev.toptvlauncher2/launcher-03-full/PLUTO.png</string>
+    <int name="458646AppIconBGcolor" value="0" />
+    <string name="460646AppIconSize">matchtileheight</string>
+    <int name="106646AppIconBGcolor" value="0" />
+    <string name="LinearTilesRowGravity_Row5">Center</string>
+    <int name="NumberofAppDrawerColumns" value="3" />
+    <string name="458646BigOrSmallTile">Small</string>
+    <string name="106646BigOrSmallTile">Big</string>
+    <int name="p_LastFocusedItem" value="492646" />
+    <int name="horizontalScrollView_AlignLeft_R4" value="0" />
+    <int name="66646AppIconBGcolor" value="0" />
+    <string name="459646AppIconSize">medium</string>
+    <string name="150646ImageOnTile">com.integration.unitvsiptv</string>
+    <int name="69646AppIconBGcolor" value="0" />
+    <string name="491646ImageOnTile">/data/data/dxidev.toptvlauncher2/launcher-03-full/tvhoje.png</string>
+    <string name="492646AppIconSize">matchtileheight</string>
+    <string name="68646ImageOnTile">com.wapp.ibo</string>
+    <int name="46646dcClockSize" value="50" />
+    <string name="199646BigOrSmallTile">Small</string>
+    <string name="66646AppList">io.gh.reisxd.tizentube.fortaleza,com.teamsmart.videomanager.tv</string>
+    <string name="459646BigOrSmallTile">Small</string>
+    <int name="customTileBorderColorAlpha" value="255" />
+    <string name="490646BigOrSmallTile">Small</string>
+    <string name="460646AppList">io.wareztv.android.pro,com.wapp.ibo</string>
+    <string name="106646ImageOnTile">/data/data/dxidev.toptvlauncher2/launcher-03-full/com logo apple_2.png</string>
+    <int name="TilesRow1Height" value="140" />
+    <string name="66646AppIconSize">image</string>
+    <string name="wallpaper_location">/data/data/dxidev.toptvlauncher2/launcher-03-full/wall.jpg</string>
+    <string name="491646AppIconSize">image</string>
+    <string name="280646BigOrSmallTile">Small</string>
+    <string name="489646AppList">com.vupurple.player</string>
+    <string name="68646BigOrSmallTile">Small</string>
+    <string name="105646AppList">jackpal.androidterm</string>
+    <string name="460646ImageOnTile">com.wapp.ibo</string>
+    <string name="66646ImageOnTile">/data/data/dxidev.toptvlauncher2/launcher-03-full/YOUTUBE.png</string>
+    <int name="customTileBorderColorHue" value="0" />
+    <string name="TilesRow1">46646</string>
+    <string name="199646ImageOnTile">plus7buttonstate</string>
+    <string name="490646ImageOnTile">com.super.tela</string>
+    <string name="46646BigOrSmallTile">IncludedWidget</string>
+    <string name="150646AppList">com.integration.unitvsiptv,com.bnii.app</string>
+    <int name="TilesRow1TileHeight" value="140" />
+    <int name="46646WidgetWidth" value="0" />
+    <int name="280646AppIconBGcolor" value="0" />
+    <int name="462646AppIconBGcolor" value="0" />
+    <int name="461646AppIconBGcolor" value="0" />
+    <string name="461646ImageOnTile">iflixbuttonstate</string>
+    <int name="customTileBorderColorSaturation" value="60" />
+    <string name="mainAppDraw_gridview_textsize">Medium</string>
+    <string name="65646AppList"></string>
+    <int name="491646AppIconBGcolor" value="0" />
+    <int name="TilesRow3Height" value="155" />
+    <string name="150646AppIconSize">matchtileheight</string>
+    <int name="46646WidgetHeight" value="0" />
+    <string name="491646AppList">com.hd.sport.live</string>
+    <string name="280646ImageOnTile">itvplayerbuttonstate</string>
+    <int name="TilesRow5TileHeight" value="140" />
+    <string name="64646AppIconSize">image</string>
+    <int name="TilesRow2Visible" value="1" />
+    <string name="462646AppIconSize">matchtileheight</string>
+    <string name="69646BigOrSmallTile">Small</string>
+    <string name="489646AppIconSize">image</string>
+    <string name="68646AppList">com.wapp.ibo</string>
+    <string name="492646ImageOnTile">com.interactive.htviptv</string>
+    <int name="TilesRow4Visible" value="1" />
+    <int name="PickColorAlpha" value="180" />
+    <int name="PickColorSaturation" value="100" />
+    <string name="46646ImageOnTile">0</string>
+    <int name="TilesRow2Height" value="180" />
+    <string name="dynamic_gridview_textsize">Medium</string>
+    <string name="TilesRow4">491646,280646,150646,199646,458646,459646,460646,461646,489646,492646,490646</string>
+    <int name="horizontalScrollView_AlignLeft_R3" value="0" />
+    <string name="280646AppList">com.chsz.efile.alphaplay</string>
+    <string name="64646ImageOnTile">/data/data/dxidev.toptvlauncher2/launcher-03-full/apps oficiais com borda ajustada_2.png</string>
+    <int name="105646AppIconBGcolor" value="0" />
+    <string name="280646AppIconSize">matchtileheight</string>
+    <string name="492646AppList">com.example.app,com.interactive.htviptv</string>
+    <string name="459646ImageOnTile">plexbuttonstate</string>
+    <string name="462646ImageOnTile">iptvsmart.iboxt</string>
+    <int name="TilesRow2TileHeight" value="180" />
+    <string name="462646AppList">iptvsmart.iboxt</string>
+    <string name="69646AppIconSize">image</string>
+    <int name="61646AppIconBGcolor" value="0" />
+    <string name="458646ImageOnTile">com.bx.livf</string>
+    <int name="TilesRow6TileHeight" value="80" />
+    <string name="105646BigOrSmallTile">Small</string>
+    <string name="150646BigOrSmallTile">Small</string>
+    <int name="TilesRow3TileHeight" value="155" />
+    <int name="RandomInt" value="492" />
+    <string name="461646AppList">com.flextv.livestore</string>
+    <int name="TilesRow4Height" value="110" />
+    <string name="65646BigOrSmallTile">Small</string>
+    <string name="490646AppList">com.super.tela</string>
+    <string name="64646AppList">com.disney.disneyplus,com.interactive.htviptv,com.android.mgstv,com.netflix.mediaclient,com.world.youcinetv,com.google.android.youtube.tv,com.amazon.amazonvideo.livingroom,com.global.latinotv,com.stremio.one</string>
+    <string name="461646BigOrSmallTile">Small</string>
+    <int name="customTileBorderColorValue" value="64" />
+    <string name="68646AppIconSize">matchtileheight</string>
+    <string name="LinearTilesRowGravity_Row2">Center</string>
+    <string name="66646BigOrSmallTile">Small</string>
+    <string name="SetWallpaperMethod">method3</string>
+    <string name="61646AppIconSize">image</string>
+    <string name="TilesRow2">61646,105646,106646</string>
+    <string name="105646ImageOnTile">/data/data/dxidev.toptvlauncher2/launcher-03-full/update.png</string>
+    <string name="490646AppIconSize">matchtileheight</string>
+    <string name="65646ImageOnTile">/data/data/dxidev.toptvlauncher2/launcher-03-full/SPOTIFY.png</string>
+    <int name="TilesRow3Visible" value="1" />
+    <string name="46646dcFont">Rounded</string>
+    <int name="horizontalScrollView_AlignLeft_R2" value="0" />
+    <string name="65646AppIconSize">image</string>
+    <int name="UserHasOpenedEditLayout" value="1" />
+    <int name="150646AppIconBGcolor" value="0" />
+    <string name="SettingsList"></string>
+    <string name="492646BigOrSmallTile">Small</string>
+    <int name="ScreenWidth" value="1280" />
+    <int name="492646AppIconBGcolor" value="0" />
+    <string name="0dcFont">Default</string>
+    <int name="64646AppIconBGcolor" value="0" />
+    <string name="TilesRow3">69646,65646,66646,68646,462646,64646</string>
+    <string name="106646AppIconSize">image</string>
+    <int name="TilesRow5Height" value="140" />
+    <string name="61646BigOrSmallTile">Big</string>
+    <int name="launchStatus" value="16" />
+    <int name="68646AppIconBGcolor" value="0" />
+</map>

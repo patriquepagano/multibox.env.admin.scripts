@@ -1,0 +1,111 @@
+clear
+
+
+listallstorages () {
+# Captura a lista de dispositivos montados em uma variável
+AllStorages=$(mount | grep 'vold' | grep '/mnt/media_rw' | cut -d " " -f 3)
+}
+
+# Função para processar cada dispositivo encontrado
+process_storage() {
+    storage="$1"
+    echo "ADM DEBUG ####################################################"
+    echo "ADM DEBUG ### Path detectado > $storage"
+    echo "ADM DEBUG ### Procurando por token no root do storage"
+    # Caminho do arquivo de chave
+    keyfile="$storage/${group_name}.key"
+    # Verifica se o arquivo de chave existe
+    if [ ! -f "$keyfile" ]; then
+        echo "Arquivo de chave não encontrado."
+        return 1
+    fi
+    # Calcula o hash SHA-256 do arquivo de chave
+    keyfile_sha256=$(sha256sum "$keyfile" | busybox awk '{print $1}')
+    # Compara o hash SHA-256 com o esperado
+    if [ "$keyfile_sha256" == "$expected_sha256" ]; then
+        echo "ADM DEBUG ### Chave válida. Continuando execução do script..."
+        ACCESS="GRANTED"
+    else
+        echo "ADM DEBUG ### Chave inválida. Acesso negado."
+        ACCESS="BLOCKED"
+    fi
+}
+
+scanstorages() {
+# Usa o loop for para iterar sobre cada dispositivo encontrado
+for storage in $AllStorages; do
+    process_storage "$storage"
+done
+}
+
+# add esta função ao boot offline service
+enableROOT () {
+    echo "ADM DEBUG ### Verificando acesso root na box."
+    if [ -f /system/.pin ];then
+        /system/bin/busybox mount -o remount,rw /system
+        busybox rm /system/.pin
+        echo "ADM DEBUG ### Ativado root com sucesso!"
+    fi
+}
+
+disableROOT () {
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### BLOQUEANDO O ACESSO ROOT"
+    checkPin=`/system/bin/busybox cat /system/.pin`
+    if [ ! "$checkPin" = "FSgfdgkjhç8790d5sdf85sd867f5gs876df5g876sdf5g78s6df5g78s6df5gs87df6g576sfd" ];then
+        /system/bin/busybox mount -o remount,rw /system
+        echo -n 'FSgfdgkjhç8790d5sdf85sd867f5gs876df5g876sdf5g78s6df5g78s6df5gs87df6g576sfd' > /system/.pin
+        chmod 644 /system/.pin
+    fi
+}
+
+# ACCESS=""
+# group_name="Dev.Server.SSH"
+# expected_sha256="353ec1f4c1c189ef7aacc91dd472ffeb748dc8df05f01209ae1e416d68e22547"
+# listallstorages
+# scanstorages
+# echo "ADM DEBUG ### ACESSO $group_name = [$ACCESS]"
+
+# ACCESS=""
+# group_name="Dev.Post.APPS"
+# expected_sha256="4c0f5cbe1ccccdfc009a1dbe75466ae6f6630134654261bb08339ef80fd83743"
+# listallstorages
+# scanstorages
+# echo "ADM DEBUG ### ACESSO $group_name = [$ACCESS]"
+
+ACCESS=""
+group_name="Expert.Mode.Ultra.Enable.ROOT"
+expected_sha256="a08c31bce822924541bf475c2d49d6dc5d43d4c0f0e40e14526f04b23bcee052"
+listallstorages
+scanstorages
+echo "ADM DEBUG ### ACESSO $group_name = [$ACCESS]"
+if [ "$ACCESS" == "GRANTED" ]; then
+    enableROOT
+else
+    disableROOT
+fi
+
+
+
+ACCESS=""
+group_name="ExpertMode.Ultra.Enable.Install.ROOT.APPS"
+expected_sha256="d53cd1dbaca84796efa4884f65c8350e65395cd00279aa9adcc27e0389f4178b"
+listallstorages
+scanstorages
+echo "ADM DEBUG ### ACESSO $group_name = [$ACCESS]"
+
+ACCESS=""
+group_name="ExpertMode.Enable.InstallAPPS"
+expected_sha256="ea448f77a3e840774c788c76ff6411e762b38422a3352638c60acd6683e1ac47"
+listallstorages
+scanstorages
+echo "ADM DEBUG ### ACESSO $group_name = [$ACCESS]"
+
+
+
+
+exit
+
+
+
+

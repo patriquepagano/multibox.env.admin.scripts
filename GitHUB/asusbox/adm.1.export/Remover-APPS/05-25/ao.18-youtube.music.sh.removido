@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="zTPi5vmgaGPAtYiy1gVaDuLoOdHlyjtKu6Zloqak3DrzjbIEhdL9qee025kPUV4MunaeLF"
+# app vars
+app="com.google.android.apps.youtube.music"
+fakeName="Techbigs.YouTube Music"
+apkSection="oem"
+apkName="ao.18"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+# {Techbigs.YouTube Music} [com.google.android.apps.youtube.music] (4.44.53)
+
+
+

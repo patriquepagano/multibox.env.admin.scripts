@@ -1,0 +1,43 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="si3K7UPAflmuP2tZjh34VkbhHLsUCzoIAjmTwMoiwW7asbacZVGx1jTRKbaY4vOL0rI1DX"
+# app vars
+app="com.mm.droid.livetv.boto"
+fakeName="Boto TV (1.0.0)"
+apkSection="clones"
+apkName="ac.160"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /data/data/com.mm.droid.livetv.boto/files
+mkdir -p /data/data/com.mm.droid.livetv.boto/files
+chmod 440 /data/data/com.mm.droid.livetv.boto/files
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# BotoTVativado (1).apk = {Boto TV} [com.mm.droid.livetv.boto] (1.0.0)
+
+#   input text '41987115747'
+#   input text '558800py'
+
+

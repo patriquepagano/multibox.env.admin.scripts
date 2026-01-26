@@ -1,0 +1,29 @@
+#!/system/bin/sh
+#
+source /data/.vars
+source "/data/asusbox/adm.1.export/_functions/generate.sh"
+source "/data/asusbox/adm.1.export/_functions/allFunctions.sh"
+
+# comprimir
+Senha7z=a5sd76f54a7s6f4as76d54f675sda4f67sd5a4f67sa5d4f67asd4f76sad4fs6da
+# app vars
+app="com.google.android.gms"
+apkSection="004.akp.oem-"
+apkName="ao.10"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname $0)
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=""
+AppGrantLoop=""
+### Tasks ###############################################################################
+compressAPK
+
+AKPouDTF="AKP"
+rcloneUpload
+

@@ -1,0 +1,12 @@
+-t http://secure.pow7.com/announce \
+-t http://atrack.pow7.com/announce \
+-t http://t1.pow7.com/announce \
+-t http://pow7.com:80/announce \
+-t http://t2.pow7.com/announce \
+-t http://p4p.arenabg.com:1337/announce \
+-t http://open.acgtracker.com:1096/announce \
+-t udp://tracker.openbittorrent.com:80/announce \
+-t udp://tracker.tiny-vps.com:6969/announce \
+-t udp://tracker.opentrackr.org:1337/announce \
+-t udp://explodie.org:6969/announce \
+-t udp://open.stealth.si:80/announce \

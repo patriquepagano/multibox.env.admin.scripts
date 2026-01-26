@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Painel de Controle</title>
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Painel de configuração Android</h2>
+      <hr />
+
+      <div id="error-message" class="row" style="display: none;">
+        <div class="col-xs-12">
+          <h2>Um erro aconteceu! Nome de usuario ou senha em uso!</h2>
+        </div>
+      </div>
+
+      <form method="POST">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+                <label for="android_name">Digite um apelido para este aparelho:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="android_name"
+                  name="android_name"
+                />
+              </div>
+            <div class="form-group">
+              <label for="selected_profile">Instalação desejada:</label>
+              <select
+                class="form-control"
+                id="selected_profile"
+                name="selected_profile"
+              >
+				<!--   botei esta merda > &nbsp; no value para trocar por espaços mas deu bug no rolo dos scripts  --> 
+                <option value="Pacote_completo">Pacote completo</option>
+				<option value="Pacote_completo_BitGamer_e_emuladores">Pacote completo + BitGamer e Emuladores</option>
+			    <option value="Apenas_a_Play_Store_(Escolha_oque_instalar)">Apenas a Play Store (Escolha oque instalar)</option>
+				<!-- <option value="Acesso_Infantil_bloqueio_apps">Acesso Infantil bloqueio apps</option> não gostei da solução com google services. criar um profile via termux para kodi com canais infantil apenas  -->
+				<!-- Ativar quando terminar o pacote do termux -->				
+				<!-- <option value="BitGamer e Emuladores (sem Play Store)">BitGamer e Emuladores (sem Play Store)</option> -->
+				
+				<option value="BitGamer_e_Emuladores_(sem_Play_Store)">BitGamer e Emuladores (sem Play Store)</option>
+				
+				<option value="kodi_18.2_Leia_rc1_(sem_Play_Store)">kodi 18.2 Leia rc1 (sem Play Store)</option>
+				<option value="kodi_17.6_Krypton_(sem_Play_Store)">kodi 17.6 Krypton (sem Play Store)</option>
+				<option value="kodi_16.1_Jarvis_(sem_Play_Store)">kodi 16.1 Jarvis (sem Play Store)</option>
+				<option value="kodi_15.2_Isengard_(sem_Play_Store)">kodi 15.2 Isengard (sem Play Store)</option>
+				<!-- Midia indoor Online -->				
+				<option value="Midia_indoor_Online">Midia indoor Online</option>	
+				<!-- Jukebox Online -->				
+				<!-- <option value="Jukebox Online">Jukebox Online</option> -->				
+              </select>
+            </div>
+            <div style="padding: 10px 0;">
+              <div
+                id="content_BitGamer e Emuladores (sem Play Store)"
+                class="select_content"
+                style="display: none;"
+              >
+               Seleção dos melhores emuladores Retroarch , Nintendo64, Playstation e BitGamer versão básica (sem Play Store)
+              </div>
+              <div
+                id="content_midia_indoor"
+                class="select_content"
+                style="display: none;"
+              >
+                midia indoor
+              </div>
+
+              <div
+                id="content_Pacote_completo" 
+                class="select_content"
+                style="display: none;"
+              >
+                Play Store, Netflix, Youtube, Kodi e Seleção dos melhores apps para seu TVBOX
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <button class="btn btn-primary btn-block">Confirmar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      $(document).ready(function() {
+        var $sProfile = $("#selected_profile");
+        $("#content_" + $sProfile.val()).toggle();
+
+        $sProfile.on("change", function(e) {
+          hideAll();
+          $("#content_" + e.target.value).toggle();
+        });
+      });
+
+      function hideAll() {
+        $(".select_content").each(function(i, elem) {
+          $(elem).hide();
+        });
+      }
+
+      if (parse_query_string(window.location.search.substring(1)).err == 1) {
+        $('#error-message').toggle();
+      }
+
+      function parse_query_string(query) {
+  var vars = query.split("&");
+  var query_string = {};
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    var key = decodeURIComponent(pair[0]);
+    var value = decodeURIComponent(pair[1]);
+    // If first entry with this name
+    if (typeof query_string[key] === "undefined") {
+      query_string[key] = decodeURIComponent(value);
+      // If second entry with this name
+    } else if (typeof query_string[key] === "string") {
+      var arr = [query_string[key], decodeURIComponent(value)];
+      query_string[key] = arr;
+      // If third or later entry with this name
+    } else {
+      query_string[key].push(decodeURIComponent(value));
+    }
+  }
+  return query_string;
+}
+    </script>
+  </body>
+</html>

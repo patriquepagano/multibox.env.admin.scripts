@@ -1,0 +1,32 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="cLMNF3uYz2w2LQWxB91UoPSOZG8389UIzaHkA1lTmxQ0BXt3sOUH1BhFVrZAPYiVrRI17q"
+# app vars
+app="org.asbl"
+fakeName="Login"
+apkSection="oem"
+apkName="ao.15"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+# {Login} [org.asbl] (1.0)
+

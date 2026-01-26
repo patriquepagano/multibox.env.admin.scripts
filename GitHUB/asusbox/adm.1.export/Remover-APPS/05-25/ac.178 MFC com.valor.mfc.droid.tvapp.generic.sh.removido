@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="tWdn5mPLLdZ3HirUKFPpwPh3NpaApBCBn5ajfOv2Fzgo4uHfBgNAE717DnG04Ny8jv1p0u"
+# app vars
+app="com.valor.mfc.droid.tvapp.generic"
+fakeName="My Family Cinema (3.1.1)"
+apkSection="clones"
+apkName="ac.178"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# My Family MOD instalar por cima.apk = {My Family Cinema} [com.valor.mfc.droid.tvapp.generic] (3.1.1)

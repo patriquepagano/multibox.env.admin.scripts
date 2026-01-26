@@ -1,0 +1,58 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="HWayFL5FqBoo4NZ2SXnKxXLQDI3tcc4oqtLKNaGS4eOUrXqLWuANUnh4oBqAq7fk8gJP4A"
+# app vars
+app="com.mm.droid.livetv"
+fakeName="MI TV (2.1.0)"
+apkSection="clones"
+apkName="ac.194"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+# fix da key chaveamento externo do app
+rm -rf /sdcard/.Rxst/10000197
+mkdir -p /sdcard/.Rxst/10000197
+echo -n 'E1xROILeNubaJSZY+5Tt3FmW3to9dBJ4b1kYFI4/DDqETn0dF42uhBbw2QCI1WugZrz37pIh0Z7aMNlYYunudiuLsGzLXGtkKPjRqK+WW3xmDebZDF3ZfRwk3PZ5rdHtKb6HS7aZZynwrZkbCprt4BWujjaoOGJnrJYi8K+BiletjDEhhbpQRTCFA/UJ40z0w+KEzjPeUSJD6TFb2Jee4JNPTVs//g2RygkFUbmQ3VFczQi4yhiruFCzXO6AIHXD' > /sdcard/.Rxst/10000197/10000197
+echo -n '1701517118228
+tBNBL+ZejRELU2TYG8sl0cfNCBCU+x5rQHPKJbZU5q6FRzn4fQ9yAiI3kT3YxGVjV6EdWa0dikJGthZHZ+O5brn4q0J2sR6/ii21Q2xD7d8/aw34gkjzIMNNCJ7exsZ4a7kh+XxFXTsIR8HRrVHW6mC33zKifo1BQsinP/umB8PRmL40bh88yq4Pjr51ubOawwATdXPnkjRPWcv42uKweo+FquuQRjNyt5WwYXrasb52sOnGs2qOIvHfOhjE2h7LBURXb+nUtSdf1PpDPsTebU39WxcgxoryA4tji3w4qlEF2fWEWv3IoaxUnESAx/FhC+TfLLQ61CCk0yd9GKXtQ0ourwvOuKhY4pXSD5aKF6jsyI5gBF7H3OjROvVIdXfsy0lIEYMdKqAwcZXp5yK569Vgb7P/jnBbFmYIU7uISWNijlI0kfiJKsRQZ4K3U6nAf/1lL5gmfKyJum0CDTvOCwgB1Cyn2L3lMTnSWlyYnA/nnIbro2u53W+JCW1kLZeR36hxnZHYXouCI+xqamud2Xd79o9fayK53eTBSR0UHl7nfTeyyLqqlO6KFGLBd0v+M7wbOGe9sFgbKeBcQCaIgaYGuy6T3M8T2k0XMY2p2VU=' > /sdcard/.Rxst/10000197/at2
+
+rm -rf /data/data/com.mm.droid.livetv/files
+mkdir -p /data/data/com.mm.droid.livetv/files
+chmod 440 /data/data/com.mm.droid.livetv/files
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {MI TV} [com.mm.droid.livetv] (2.1.0)
+
+
+# ### primeira instalação usar antes de clonar
+# rm -rf /sdcard/.Rxst/10000197
+# mkdir -p /sdcard/.Rxst/10000197
+# echo -n 'E1xROILeNubaJSZY+5Tt3FmW3to9dBJ4b1kYFI4/DDqETn0dF42uhBbw2QCI1WugZrz37pIh0Z7aMNlYYunudiuLsGzLXGtkKPjRqK+WW3xmDebZDF3ZfRwk3PZ5rdHtKb6HS7aZZynwrZkbCprt4BWujjaoOGJnrJYi8K+BiletjDEhhbpQRTCFA/UJ40z0w+KEzjPeUSJD6TFb2Jee4JNPTVs//g2RygkFUbmQ3VFczQi4yhiruFCzXO6AIHXD' > /sdcard/.Rxst/10000197/10000197
+# echo -n '1701517118228
+# tBNBL+ZejRELU2TYG8sl0cfNCBCU+x5rQHPKJbZU5q6FRzn4fQ9yAiI3kT3YxGVjV6EdWa0dikJGthZHZ+O5brn4q0J2sR6/ii21Q2xD7d8/aw34gkjzIMNNCJ7exsZ4a7kh+XxFXTsIR8HRrVHW6mC33zKifo1BQsinP/umB8PRmL40bh88yq4Pjr51ubOawwATdXPnkjRPWcv42uKweo+FquuQRjNyt5WwYXrasb52sOnGs2qOIvHfOhjE2h7LBURXb+nUtSdf1PpDPsTebU39WxcgxoryA4tji3w4qlEF2fWEWv3IoaxUnESAx/FhC+TfLLQ61CCk0yd9GKXtQ0ourwvOuKhY4pXSD5aKF6jsyI5gBF7H3OjROvVIdXfsy0lIEYMdKqAwcZXp5yK569Vgb7P/jnBbFmYIU7uISWNijlI0kfiJKsRQZ4K3U6nAf/1lL5gmfKyJum0CDTvOCwgB1Cyn2L3lMTnSWlyYnA/nnIbro2u53W+JCW1kLZeR36hxnZHYXouCI+xqamud2Xd79o9fayK53eTBSR0UHl7nfTeyyLqqlO6KFGLBd0v+M7wbOGe9sFgbKeBcQCaIgaYGuy6T3M8T2k0XMY2p2VU=' > /sdcard/.Rxst/10000197/at2
+
+
+
+
+

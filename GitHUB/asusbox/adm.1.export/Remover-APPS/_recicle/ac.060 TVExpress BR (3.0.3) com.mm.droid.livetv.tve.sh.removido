@@ -1,0 +1,42 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="9L1rzlGdac9314KOgU1oMCjNlxuJZv4b59S8dPaLf0QEcLup3tdMAaYSj8GJ18gRhYrVMo"
+# app vars
+app="com.mm.droid.livetv.tve"
+fakeName="TVExpress BR (3.0.3)"
+apkSection="clones"
+apkName="ac.060"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix="
+# se desativar o free trial o app não abre ( expecificamente este tve )
+pm enable com.mm.droid.livetv.tve/com.mm.droid.livetv.freetrial
+pm disable com.mm.droid.livetv.tve/com.mm.droid.livetv.catchup.player.CatchUpPlayerActivity
+pm disable com.mm.droid.livetv.tve/com.mm.droid.livetv.load.LiveLoadActivity
+"
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+# 
+# 
+
+
+
+
+
+
+
+# input text "pr0burn@hotmail.com"
+# input text "22558800"
+

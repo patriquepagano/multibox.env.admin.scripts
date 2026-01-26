@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="DsLmEw7QcTuOmmsJUCrsGySu2x6kaoenl3vQMUOhOt0DCAHyIOGjzfyxUvvmS3EBJ0nl28"
+# app vars
+app="family.az.tv"
+fakeName="AZTV family (3.314.1253)"
+apkSection="clones"
+apkName="ac.211"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {AZTV family} [family.az.tv] (3.310.1165)
+
+

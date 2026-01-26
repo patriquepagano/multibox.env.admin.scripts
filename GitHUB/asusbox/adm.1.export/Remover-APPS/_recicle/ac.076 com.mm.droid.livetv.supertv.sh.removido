@@ -1,0 +1,52 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="RVDxqnAbWv8ePidEYV6TCs63Iotc4QWU4ehj1T0wMt0HuarhrmQiPt0yCuipQDLDGO86aF"
+# app vars
+app="com.mm.droid.livetv.supertv"
+fakeName="Super TV Premium"
+apkSection="clones"
+apkName="ac.076"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix="# neste app precisa desativar o freetrial
+pm enable com.mm.droid.livetv.supertv/com.mm.droid.livetv.freetrial
+pm disable com.mm.droid.livetv.supertv/com.mm.droid.livetv.load.LiveLoadActivity
+pm disable com.mm.droid.livetv.supertv/com.mm.droid.livetv.catchup.player.CatchUpPlayerActivity
+"
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+#
+#
+
+
+
+
+
+
+# input text "pr0burn@hotmail.com"
+# input text "22558800"
+
+# {Super TV Premium} [com.mm.droid.livetv.supertv] (5.5.0)
+
+
+# com.mm.droid.livetv.supertv/com.mm.droid.livetv.normal
+# com.mm.droid.livetv.supertv/com.mm.droid.livetv.load.LiveLoadActivity
+# com.mm.droid.livetv.supertv/com.mm.droid.livetv.freetrial
+# try 2
+#         7328827 com.mm.droid.livetv.supertv/com.mm.droid.livetv.load.LiveLoadActivity
+#         7328827 com.mm.droid.livetv.supertv/com.mm.droid.livetv.load.LiveLoadActivity
+
+
+

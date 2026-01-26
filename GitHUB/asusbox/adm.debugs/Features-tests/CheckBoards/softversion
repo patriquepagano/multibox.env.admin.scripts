@@ -1,0 +1,9 @@
+Dispositivo = rk322x_box
+Placa = rk30sdk
+Fabricante = rockchip
+cpu = armeabi-v7a
+Modelo = AsusBOX.A1
+Nome = rk322x_box
+fingerprint = Android/rk322x_box/rk322x_box:7.1.2/NHG47K/NV3.20171214:userdebug/test-keys
+date.utc = 1513238040
+description = 0001

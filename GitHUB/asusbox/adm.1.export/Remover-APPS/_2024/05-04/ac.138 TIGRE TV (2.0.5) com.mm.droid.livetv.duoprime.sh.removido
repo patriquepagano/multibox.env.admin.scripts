@@ -1,0 +1,31 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="bdUccJf9lNxhMzG5597m1nSV51dGP4Q5lAd0PqUN1vxAZABhfv7u9gP0v1pOyYjkqqXMtp"
+# app vars
+app="com.mm.droid.livetv.duoprime"
+fakeName="TIGRE TV (2.0.5)"
+apkSection="clones"
+apkName="ac.138"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+# DUOPRIME _vazadaTV_2.0.5.apk = {TIGRE TV} [com.mm.droid.livetv.duoprime] (2.0.5)

@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="bHzRrhzPbIoAkhbucDhvfP2gsPJnajtUildmQIuNhwZ16G5X6QuEKJH9kB1FWjkTdwN1CJ"
+# app vars
+app="com.neotv.app"
+fakeName="NEOTV (1.00)"
+apkSection="clones"
+apkName="ac.125"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+# {NEOTV} [com.neotv.app] (1.00)
+
+

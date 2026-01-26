@@ -1,0 +1,37 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="Vzib3rgptmN5comOniK7er91FydAtbj1VrGNaXfa2lcVxI7hEz5JwG0PLWrAGWtJM17maa"
+# app vars
+app="live.onlyp.glxpdp"
+fakeName="P2P (2.5)"
+apkSection="clones"
+apkName="ac.117"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {P2P} [live.onlyp.glxpdp] (2.5)
+# app que pede acesso a vpn
+
+

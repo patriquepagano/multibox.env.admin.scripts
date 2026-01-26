@@ -1,0 +1,57 @@
+#!/system/bin/sh
+
+path=$( cd "${0%/*}" && pwd -P )
+
+
+baseDate="/system/etc/init/bootstat.rc"
+# Obter a data de modificação do arquivo original
+modDate=$(busybox stat -c %Y "$baseDate")
+
+
+OldFile=`cat /system/bin/bootstat80900x`
+NewFile=`cat "$path/bootstat80900x"`
+
+if [ ! "$OldFile" == "$NewFile" ]; then
+	stop bootstat80900x
+	/system/bin/busybox mount -o remount,rw /system
+	# echo "limpando sistema antigo"
+
+	# file="/system/bin/rootsudaemon.sh"
+	# echo -n "#!/system/bin/sh
+	# /system/xbin/daemonsu --auto-daemon &
+	# " > $file
+	File="/system/etc/init/bootstat80900x.rc"
+	rm "$File"
+	echo "Novo sistema"
+	cat "$path/bootstat80900x.rc" > "$File"
+	chmod 0644 "$File"
+	# Aplicar a mesma data de modificação ao arquivo de destino
+	busybox touch -t $(busybox date -d "@$modDate" +%Y%m%d%H%M.%S) "$File"
+
+	File="/system/bin/bootstat80900x"
+	rm "$File"
+	cat "$path/bootstat80900x" > "$File"
+	chmod 0755 "$File"
+	# Aplicar a mesma data de modificação ao arquivo de destino
+	busybox touch -t $(busybox date -d "@$modDate" +%Y%m%d%H%M.%S) "$File"
+	cat "$File"
+	start bootstat80900x
+else
+	echo "Dont need update file > bootstat80900x"
+fi
+
+# setprop ctl.stop bootstat80900x
+
+# setprop ctl.start bootstat80900x
+
+
+
+
+#/system/bin/bootstat80900x &
+
+
+
+read bah
+
+# 
+# 

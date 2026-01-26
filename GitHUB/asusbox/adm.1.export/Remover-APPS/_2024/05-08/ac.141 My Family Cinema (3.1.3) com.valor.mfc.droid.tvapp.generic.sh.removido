@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="qw6BPBQ6fy317VeqOMZ8BauHC97g2xuoSqn6ZRHFVGNHky33zDhudC5Hy23BlRQWuQ3XdG"
+# app vars
+app="com.valor.mfc.droid.tvapp.generic"
+fakeName="My Family Cinema (3.1.3)"
+apkSection="clones"
+apkName="ac.141"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# MFCGOOGLE.apk = {My Family Cinema} [com.valor.mfc.droid.tvapp.generic] (3.1.3)

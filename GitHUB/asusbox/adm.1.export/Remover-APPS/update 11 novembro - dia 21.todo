@@ -1,0 +1,45 @@
+
+
+---------------------------
+# instalar novos
+
+[x] {Max Net TV} [com.exploudapps.maxnettv] (12.3)
+[x] {Vivo Tv} [com.mm.droid.livetv] (3.3.0)
+[x] {Unitv PRO} [com.example.professor] (5.40.0)
+[] {HTV} [com.example.app] (5.40.0)
+
+
+/ debug / app / [Remove APP] (b) remove app from torrent pack
+--------- atualizar existentes ---------
+[x] atualizar dados
+
+[x] /05.akp.cl/ac.144 SmartTube (29.13) com.teamsmart.videomanager.tv.sh
+
+
+
+
+
+# --------------- atualizar apps
+enviar via rsync todos os apps
+instalar novos apps em apk ( menu instalar todos )
+instalar os backups via appk ( app2sdk escaneia e espera )
+
+
+
+todos apps instalados gera nova lista e posta no grupo
+
+pega os novos apps e loga aqui abaixo
+
++ gerar ficha tecnica e pack p2p
+
+
+
+ac 0.35 dando erro no install
+
+
+URGENTE UTILIZAR VPN NAS BOXES PEGANDO IP DE SP
+PRIMEIRO LOGIN NAS BOXES TA MARCANDO MEU IP DO RETIRO
+POR SORTE NÃO É FIXO. MAS MUDAR ISTO DUMA VEZ
+
+
+

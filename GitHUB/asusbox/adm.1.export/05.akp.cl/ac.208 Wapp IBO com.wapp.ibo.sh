@@ -1,0 +1,40 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+source "$DIR/_functions/generate.sh"
+source "$DIR/_functions/allFunctions.sh"
+
+# comprimir
+Senha7z="X0kvFYKuScohlJvDtc9YxesDME9nQkBFcwJZHcYZkhcScFXXELLGiPYUy6YRJjXe6yW19C"
+# app vars
+app="com.wapp.ibo"
+fakeName="Wapp IBO (3.9)"
+apkSection="clones"
+apkName="ac.208"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+SCRIPT=`realpath "$0"`
+### Tasks ###############################################################################
+compressAPK
+compressAPKDataFull
+
+exportDTF
+exportAKP
+
+RenameExportDataFile
+
+# {Wapp IBO} [com.wapp.ibo] (3.9)
+
+# ├●👤Usuario ➤ 
+# ├●🔐Senha ➤ 
+#   input text "97320812"
+#   input text "87531537"
+

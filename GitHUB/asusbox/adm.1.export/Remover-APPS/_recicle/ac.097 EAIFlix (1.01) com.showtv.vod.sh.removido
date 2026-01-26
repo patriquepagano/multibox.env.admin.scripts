@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="EV5r7Ed8Fji3gWrY4sKkk9spxUY243cG3qwuBBYT2Ljf6AS7OLmIdlwwURoVg9Rps55T8M"
+# app vars
+app="com.showtv.vod"
+fakeName="SHOWTV VOD (1.01)"
+apkSection="clones"
+apkName="ac.097"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# {SHOWTV VOD} [com.showtv.vod] (1.01)
+

@@ -1,0 +1,11 @@
+# System V init.d support
+
+on boot
+    start sshdnativo
+
+service sshdnativo /system/bin/sshdnativo.sh
+    disabled
+    oneshot
+    user root
+    group root
+    seclabel u:r:su:s0

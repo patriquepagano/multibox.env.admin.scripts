@@ -1,0 +1,38 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="JNVsqZfAAsALMgYURwOxlpzaR29QFg3bFbJ0aXHIOeWEVx87GVq6ecYCnqS5IG2MRYalaN"
+# app vars
+app="com.newtourovod.app"
+fakeName="TouroVOD"
+apkSection="clones"
+apkName="ac.084"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+# 
+# 
+
+
+
+
+
+
+# ☐ {TouroVOD} [com.newtourovod.app] (1.2.0)
+#     input text "375457910"
+#     ☐ gerar nova ficha tecnica bkp data
+#     ☐ exportar    
+

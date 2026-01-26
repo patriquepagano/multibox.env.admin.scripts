@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="PXyWKPve9lljznUanKlsOOxihjxIZ8QbUIGmV6mP7lDoM6BoLxo6FLULWNYsyHLkM9n5wl"
+# app vars
+app="com.digitizercommunity.loontv"
+fakeName="Loon (2.0.91)"
+apkSection="clones"
+apkName="ac.109"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+# {Loon} [com.digitizercommunity.loontv] (2.0.4)
+# {Loon} [com.digitizercommunity.loontv] (2.0.91)
+

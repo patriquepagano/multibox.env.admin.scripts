@@ -1,0 +1,75 @@
+#!/system/bin/sh
+
+pathSC="/data/local/tmp"
+menu_file="$pathSC/x-menu.items"
+
+BASE_DIR="$PWD"
+DEBUG=0
+FZF_BIN="/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/.bin's/fzf"
+ICON_DIR="📁"
+ICON_SCRIPT="🧠"
+ICON_BACK="↩"
+ICON_EXIT="❌"
+
+while :; do
+  FolderSC=$(basename "$PWD")
+  # lista em fzf: atalhos + scripts + pastas (sem sort para ficar mais rapido)
+  {
+    printf '%s\n' "$ICON_EXIT Sair"
+    printf '%s\n' "$ICON_BACK Voltar"
+
+    set -- "$PWD"/*.sh
+    if [ -f "$1" ]; then
+      for f in "$@"; do
+        [ -f "$f" ] || continue
+        b=${f##*/}; b=${b%.sh}
+        printf '%s\n' "$ICON_SCRIPT $b"
+      done
+    fi
+
+    set -- "$PWD"/*/
+    if [ -d "$1" ]; then
+      for d in "$@"; do
+        [ -d "$d" ] || continue
+        name=${d%/}; name=${name##*/}
+        [ "$name" = "_recicle" ] && continue
+        case "$name" in
+          .* ) continue ;;
+        esac
+        printf '%s\n' "$ICON_DIR $name"
+      done
+    fi
+  } > "$menu_file"
+
+  # tenta mudar título da janela (se suportar)
+  busybox printf '\033]0;%s\007\033]2;%s\007' "$FolderSC" "$FolderSC"
+
+  # exibe menu (somente fzf)
+  FZF_RUN="$FZF_BIN"
+  [ "$DEBUG" -eq 1 ] && { cat "$menu_file" >&2; }
+  escolha=$(
+    "$FZF_RUN" --ansi --border --height=100% --layout=default \
+      --info=inline --prompt='> ' \
+      --header="Menu Principal | Folder $FolderSC" \
+      --no-sort --tiebreak=index < "$menu_file"
+  )
+
+  [ -z "$escolha" ] && break
+  case "$escolha" in
+    "$ICON_EXIT Sair") break ;;
+    "$ICON_BACK Voltar") [ "$PWD" != "$BASE_DIR" ] && cd .. ;;
+    "$ICON_DIR "*)
+      cd "${escolha#"$ICON_DIR "}"
+      ;;
+    "$ICON_SCRIPT "*)
+      script_name="${escolha#"$ICON_SCRIPT "}"
+      if [ -f "./$script_name.sh" ]; then
+        #busybox chmod 755 "./$script_name.sh"
+        #/system/usr/bin/bash "./$script_name.sh"
+        sh "./$script_name.sh"
+      fi
+      ;;
+  esac
+done
+
+clear

@@ -1,0 +1,60 @@
+
+
+/ debug / app / [Remove APP] (b) remove app from torrent pack
+
+ac.182 Duna TV (1.0.0) com.mm.droid.livetv.duna.sh
+ac.219 RedPlay Live (4.0.0) com.mm.droid.livetv.redplaybox.sh
+ac.226 vivo tv com.mm.droid.livetv.sh
+ac.228 HTV 5.4 com.example.app.sh
+ac.227 Unitv pro com.example.professor.sh
+
+---------------------------
+# instalar novos
+
+com.rookiestudio.perfectviewer < sistema de guide e comunicação com cliente
+22) {PLAY-Black} [com.tv.blacktv] (Black TV)
+11) {Hoje TV} [com.hd.sport.live] (2.1.147)
+19) {NEW ONE P2P} [com.newone.p2p1] (1.0.5)
+6) {DUNA XTP} [iptvsmart.iboxt] (1.18)
+34) {VU Player Pro} [com.vupurple.player] (1.6)
+36) {WPlay Pro} [io.wareztv.android.pro] (4.0.6)
+37) {Wapp IBO} [com.wapp.ibo] (3.9)
+33) {UniTV} [com.bnii.app] (4.14.4)
+
+
+
+[] ANIBAL NÃO FALOU QUAIS APPS REMOVER ME CAUSANDO UM PROBLEMA
+[] PRECISO CRIAR UMA LOGICA PARA RESOLVER ISTO E TIRAR DO MEU LOMBO A CRIAÇAO DOS APPS
+
+
+
+
+
+--------- atualizar existentes ---------
+[x] atualizar dados
+
+
+# --------------- atualizar apps
+enviar via rsync todos os apps
+instalar novos apps em apk ( menu instalar todos )
+instalar os backups via appk ( app2sdk escaneia e espera )
+
+
+
+todos apps instalados gera nova lista e posta no grupo
+
+pega os novos apps e loga aqui abaixo
+
++ gerar ficha tecnica e pack p2p
+
+
+
+ac 0.35 dando erro no install
+
+
+URGENTE UTILIZAR VPN NAS BOXES PEGANDO IP DE SP
+PRIMEIRO LOGIN NAS BOXES TA MARCANDO MEU IP DO RETIRO
+POR SORTE NÃO É FIXO. MAS MUDAR ISTO DUMA VEZ
+
+
+

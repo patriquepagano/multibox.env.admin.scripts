@@ -1,0 +1,105 @@
+#!/system/bin/bash
+clear
+path=$( cd "${0%/*}" && pwd -P )
+
+F="/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/[[ Debug ]]/[ Generate keys openssl ]/Key/"
+MyKey="$F/private_key.pem"
+PublicKey="$F/public_key.pem"
+
+BB=/system/bin/busybox
+
+export TZ=UTC−03:00
+
+
+
+FolderSource="/storage/DevMount/AndroidDEV/termux/files/home/_Work/bin/Build Scripts"
+FolderOut="/data/trueDT/peer/data/client/code"
+
+rm -rf "$FolderOut"
+
+find "$FolderSource" -type f -name '*.sh' -print0 | while IFS= read -r -d '' file; do
+    # caminho relativo e destino
+    rel="${file#$FolderSource/}"
+    dest="$FolderOut/$rel"
+    mkdir -p "$(dirname "$dest")"
+    # copia corretamente (sem redirecionamento)
+    cp "$file" "$dest"
+    file="$dest"
+    echo "######################################################################"
+    echo "Limpando comentários e espaços..."
+    # # remove todos echo ADM comentando o mesmo
+    # $BB sed -i -e  's/echo "ADM DEBUG ###.*/#barbaridade/g' "$file"
+    # # remove comentários
+    # $BB sed -i -e 's/\s*#.*$//' "$file"
+    # remova quebras de linha \ no que tiver em um codigo
+    $BB sed -i ':a;/\\$/ { N; s/\\\n/ /; ba }' "$file"
+    # remove comentários, linhas vazias e trims
+    $BB sed -i '/^[[:space:]]*#/d;/^[[:space:]]*$/d' "$file"
+    $BB sed -i -e 's|^[[:blank:]]*||g' -e 's/[[:blank:]]*$//' "$file"
+    # substituir sequências de 2 ou mais espaços por um único
+    $BB sed -i 's/ \{2,\}/ /g' "$file"
+
+    echo "coleta todos os nomes de variáveis definidas no formato VAR=  "
+    vars=$($BB grep -oE '^[[:space:]]*[A-Za-z_][A-Za-z0-9_]*=' "$file" \
+        | $BB sed 's/=.*//;s/[[:space:]]*//')
+    for var in $vars; do
+        # gera nome novo de 8 chars
+        new=$($BB tr -dc 'a-z' </dev/urandom | $BB head -c8)
+        # 1) renomeia a definição (mantém indentação)
+        $BB sed -i "s/^\([[:space:]]*\)$var=/\1${new}=/g" "$file"
+        # 2) renomeia usos simples: $VAR → $new
+        $BB sed -i "s/\\\$$var/\\\$$new/g" "$file"
+        # 3) renomeia usos com chaves: ${VAR} → ${new}
+        $BB sed -i "s/{${var}}/{${new}}/g" "$file"
+    done
+
+    echo "Reposição da lista de variaveis fixas"
+    # carrega a var SearchCreate
+    source "$path/build-var-list"
+    # monta o header com variáveis aleatórias
+    header="# comandos ofuscados\n"
+    while IFS= read -r cmd; do
+        [ -z "$cmd" ] && continue
+        var=$($BB tr -dc 'a-z' </dev/urandom | $BB head -c8)
+        header+="$var=\"$cmd\"\n"
+        # escapa / e &
+        esc=$(printf '%s' "$cmd" | $BB sed 's/[\/&]/\\&/g')
+        # substitui no arquivo
+        $BB sed -i "s|$esc|\$$var|g" "$file"
+    done <<< "$SearchCreate"
+    # injeta o header no topo
+    printf "%b\n" "$header" | $BB cat - "$file" > "$file.tmp" && $BB mv "$file.tmp" "$file"
+
+    echo "força shebang Bash"
+    $BB sed -i '1s|.*|#!/system/bin/bash|' "$file"
+
+    chmod +x "$file"
+
+    sigFile="${file%.sh}.c"
+    echo "Assinando arquivo $file"
+    openssl dgst -sha256 -sign "$MyKey" -out "$sigFile" "$file"
+    echo "verifica arquivo assinado"
+    if openssl dgst -sha256 -verify "$PublicKey" -signature "$sigFile" "$file" >/dev/null; then
+        echo "Signature válida"
+    else
+        echo "Signature inválida algo deu errado"
+        exit 1
+    fi
+
+    KEY_HEX=c715ab1cc1551bd144ffb0e6757af4cfacc441dbd065fbc077a38e29c07efc79
+    IV_HEX=56e993bd4caab953da299d5ff8371a97
+    echo "encripta sem KDF, usando chave e IV fixos"
+    openssl enc -aes-256-cbc \
+    -K "$KEY_HEX" \
+    -iv "$IV_HEX" \
+    -in "$file" \
+    -out "${file%.sh}.c++"
+
+    #rm "$file"
+    du -hs "$file"
+    du -hs "${file%.sh}.c++"
+
+done
+
+
+

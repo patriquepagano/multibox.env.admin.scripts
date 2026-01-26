@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="gDLf3NwUpFPZH2MyIkjBjl7d5jBxqmJ68scdD4sq2y0nf6OhJWuYvH3HUP5pyWENRX8729"
+# app vars
+app="com.fkixinovs.flixflix"
+fakeName="InovaFLIX (4.7)"
+apkSection="clones"
+apkName="ac.107"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {InovaFLIX} [com.fkixinovs.flixflix] (4.7)
+# login e senha é = 1

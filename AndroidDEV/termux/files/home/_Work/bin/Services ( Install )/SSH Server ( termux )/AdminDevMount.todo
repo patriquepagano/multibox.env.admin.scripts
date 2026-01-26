@@ -1,0 +1,54 @@
+
+# carregar estas env libs só vai funcionar em box 32bits
+export PATH=/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin:/system/usr/bin
+#unset LD_LIBRARY_PATH
+
+# /system/bin/busybox tune2fs -L ThumbDriveDEV /dev/block/sda1
+
+## ao setar LD_LIBRARY_PATH se não tiver o lib correspondente não vai funcionar de nenhum jeito
+# export LD_LIBRARY_PATH=/system/lib64:/system/lib:/system/usr/lib
+# # CANNOT LINK EXECUTABLE "/data/data/com.termux/files/usr/bin/sshd": "/system/lib64/libc.so" is 64-bit instead of 32-bit
+# # Aborted
+
+
+
+# processo passa sem precisar &
+
+# botar um check de port no inicio se a porta estiver ativa não roda
+
+# # configura a rede
+# while ! ping -c 1 -W 1 10.0.0.1; do
+#     echo "Waiting for network interface might be down..."
+#     if [ ! -f /data/open-wifi-setup ]; then
+#         # abre o wifi
+#         am start -a com.android.settings -n com.android.settings/com.android.settings.wifi.WifiSettings
+#         touch /data/open-wifi-setup
+#     fi
+#     sleep 1
+# done
+
+# ip address add 10.0.0.101 dev wlan0
+# ip addr show
+
+
+# precisa de mais estudos esta função esta montando varias vezes a pasta sei lá pq?
+# echo "Montando a pasta dos apks"
+
+# busybox umount /mnt/runtime/write/emulated/0/Download
+# busybox umount /mnt/runtime/read/emulated/0/Download
+# busybox umount /sdcard/Download
+# busybox umount /storage/emulated/0/Download
+
+# # funciona e monta para todos os apps! mas um arquivo criado pelo MixPlorer levou permissao do mixplorer
+# busybox chmod 777 -R /storage/DevMount/4Android
+# # criar uma pasta no sdcard para a montagem no futuro fazer o mesmo para o retroarch
+# mkdir -p /sdcard/4Android
+# busybox chmod 777 /sdcard/4Android
+# # montagem temporaria das pastas
+# busybox mount -o bind /storage/DevMount/4Android /mnt/runtime/read/emulated/0/4Android
+# busybox mount -o bind /storage/DevMount/4Android /mnt/runtime/write/emulated/0/4Android
+# busybox mount -o bind /storage/DevMount/4Android /sdcard/4Android
+# busybox mount -o bind /storage/DevMount/4Android /storage/emulated/0/4Android
+
+
+

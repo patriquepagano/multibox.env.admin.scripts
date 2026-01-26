@@ -1,0 +1,32 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="m3EN6A6mbAs00H33nIFl8awrH1J14kZk17NZ19wPS0UopWDt4n4DlfM5oFgj4pkGwnTFt3"
+# app vars
+app="com.example.ultra"
+fakeName="IPTV (1.0.30)"
+apkSection="clones"
+apkName="ac.115"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+# {IPTV} [com.example.ultra] (1.0.30)

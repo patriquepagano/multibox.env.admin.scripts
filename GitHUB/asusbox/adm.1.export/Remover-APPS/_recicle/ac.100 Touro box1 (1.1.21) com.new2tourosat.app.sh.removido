@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="TAulXbjyW5jwGVdgtOLRPWP3o9Dtkfs8bOLNmVoURhbKgrdQzALbFSxDuuck0v1N1AMvYI"
+# app vars
+app="com.new2tourosat.app"
+fakeName="Touro box1 (1.1.21)"
+apkSection="clones"
+apkName="ac.100"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+#
+
+
+
+#
+
+
+
+
+# {Touro box1} [com.new2tourosat.app] (1.1.21)
+

@@ -1,0 +1,5 @@
+#!/system/bin/sh
+
+cd /data/trueDT/peer/Sync/sh.all
+x
+

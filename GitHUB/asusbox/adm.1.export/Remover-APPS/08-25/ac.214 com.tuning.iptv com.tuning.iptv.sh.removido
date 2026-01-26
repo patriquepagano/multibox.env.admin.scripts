@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="asWJiUifKdtypm95XlLnZICbRXOBwyKKtHDpSgzD1AxjajjD25bWL9dKCZAaWi6hvU07S8"
+# app vars
+app="com.tuning.iptv"
+fakeName="tuning iptv (v7.8.1-20250626)"
+apkSection="clones"
+apkName="ac.214"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {tuning iptv} [com.tuning.iptv] (v7.8.1-20250626)
+
+

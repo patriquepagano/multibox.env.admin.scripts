@@ -1,0 +1,7 @@
+#!/system/bin/sh
+echo "Iniciando php"
+Dir=$(dirname $0)
+export PHP_FCGI_CHILDREN=3
+export PHP_FCGI_MAX_REQUESTS=1000
+rm $Dir/fcgiserver.log
+/system/bin/php-cgi -b 127.0.0.1:9001 -c $Dir/php.ini > $Dir/fcgiserver.log 2>&1

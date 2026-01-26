@@ -1,0 +1,15 @@
+LD_LIBRARY_PATH=/data/data/com.termux/files/usr/lib
+_=/data/data/com.termux/files/usr/bin/env
+LANG=en_US.UTF-8
+OLDPWD=/data/data/com.termux/files/home
+PREFIX=/data/data/com.termux/files/usr
+PWD=/sdcard
+HOME=/data/data/com.termux/files/home
+TMPDIR=/data/data/com.termux/files/usr/tmp
+TERM=xterm-256color
+SHLVL=2
+ANDROID_ROOT=/system
+ANDROID_DATA=/data
+EXTERNAL_STORAGE=/sdcard
+PATH=/data/data/com.termux/files/usr/bin:/data/data/com.termux/files/usr/bin/applets
+LD_PRELOAD=/data/data/com.termux/files/usr/lib/libtermux-exec.so

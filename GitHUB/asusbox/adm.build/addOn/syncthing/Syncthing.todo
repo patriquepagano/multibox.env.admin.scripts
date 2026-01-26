@@ -1,0 +1,215 @@
+
+
+tvbox somente envia >>>
+
+receptores somente recebe <<<<<
+    se removerem algo em local vai perguntar se deseja remover as mudanças locais
+    unica maneira de contornar isto é deletar o index na pasta dos receivers
+    ele baixa apenas oque é novo mantendo os arquivo iguais em cache
+
+
+
+
+
+
+
+
+Estudo para utilizar se vale a pena:
+
+        ☐ verifica se syncou e fecha syncthing
+        ☐ listar progresso da sincronia para clientes
+        ☐ remover o root de todos
+        ✔ pasta de share do update seria legivel apenas para root /data/UPDATE
+        ☐ script update fica esperando pelos arquivos menores a serem baixados para iniciar a instalação..
+        ☐ resolver problemas de conflitos de arquivos
+            sync é baseado na data? SIM! se o arquivo for modificado a data ou alterado vai repetir para todos os outros!
+            sync é baseado no crc tb.
+            + precisa remover o root e não dar acesso comum a pasta update
+            + apagar a pasta index-v0.14.0.db no boot dos clientes força a receberem os updates ignorando os deles..
+            + cliente precisa receber a config.xml já com todos as box servidoras ou todos os clientes
+
+        ☐ adição de arquivos de algum cracker
+            se o user conseguir a lista de peers e criar um profile para ele?  precisa ser aceito para enviar
+            se o user conseguir root e injetar aquivo com seu valido key.pem DEPOIS DO BOOT E LIMPEZA PASTA INDEX? TODOS RECEBERAM A MODIFICAÇÃO
+            + PRECISO ter um syncthing send only para sobreescrever alterações a todo momento!
+            + descobrir o id que modificou e excluilo
+            + criar uma lista de box servidoras que ficaria em send/receive e todas as outras em receive only
+            + botar todos os clientes em receive only tendo em sua config apenas as box servidoras
+
+        ☐ clonagems de cert.pem e key.pem
+            duas ou mil boxes com o mesmos certificados não sincronizam entre si mesmo que sejam as unicas na rede.
+            elas sincronizam com ids diferentes ai funciona perfeitamente
+
+
+
+            INFO: Failed to auto-accept folder "UPDATE" (ihdz2-5gkda) from FW5KI6T-FTX5OWK-XGRDL4A-TWD4UCY-ZKH7LLI-7OXS4UJ-ZF76QHK-TVJLTAZ due to path conflict
+            [GXTZG] 13:26:27 INFO: Unexpected folder "UPDATE" (ihdz2-5gkda) sent from dev
+
+
+
+
+
+
+    ✘ Syncthing sistema introducer="true" (NÃO COMPENSA UTILIZAR)
+        + todos os syncIDS (dos clientes) precisam já estar registrados nas box introducer's e com o share da pasta em compartilhamento
+            caso não esteja as box introducer's "servidoras" precisam liberar e compartilhar update para box
+            TODAS AS BOX PRECISAM LIBERAR E COMPARTILHAR para nova box receber delas e pertencer a malha
+            a box liberada só inicia o download após reiniciar o syncthing ai ela recebe todos os ids de todos!
+        + precisa do sistema de chaveamento para entregar os cert.pem e key.pem para cada um
+        ✘ problema no boot de não aceitar pasta com arquivos aproveitar os existentes
+            boot
+            rm -rf $HOME/index-v0.14.0.db
+            rm -rf $HOME/Sync
+            ao sobreescrever a config.xml apagando tudo que tem dentro o introducer envia a config
+           - sistema percebe que tem uma pasta update e não aceita os arquivos antigos! e cria uma pasta nova
+
+
+
+
+
+
+
+
+
+
+
+
+
+    1 - firmware liga, gera syncthing e solicita acesso ao server de autenticação.
+    2 - cliente envia foto da tela do seu syncID
+    3 - libero manualmente a box
+    4 - box começa a sincronizar e baixar arquivos..
+    - precisa mostrar a interface syncthing para clientes vão desregular e zoar tudo
+    - processo demoradissimo em lojas e revendas
+    - espertinho usa a box dele para compartilhar para outras box
+
+
+
++ não existe url dona dos updates central (chaveamento tem ip fixo não tem como fugir disto)
++ não precisa abrir portas para ser servidor
++ sincronia agil e direta nos clientes
+
+- binario gigante 23mega (incluir no firmware)
+- peso consideravel na cpu!!!!!!!!! (diminuir impacto na config)
+- download é mais lento que sistema torrent! 
+- syncIDS podem ser clonados via .tar.gz com limites e bugações (firmware remover o root)
+configurei a boxA e copiei sua config
+
+# criei este teste para clonar o data em outra box e ver se duas box com data iguais sincronizam?
+# as clonadas não syncam ao mesmo tempo.. mas ficam travadas e geram bugs etc..
+
+colei a config na boxB
+sintomas na boxB
+1 - continuou com seu ID antigo mesmo com a config da boxA
+2 - a boxA ficou add como parceira na boxB
+3 - boxA recebeu o convite para adicionar a boxB
+
+- pode-se rotear novamente?
+acho que sim! via twrp ou algum pack que tem aos montes da rockchip
+
+- não é possivel alterar os ids para SyncIDS pré-definidos (gerar os zilhoes de syncIDS)
+    no. You need the old certificate (cert.pem and key.pem located in ~/.config/syncthing) to be able to reuse the old ID. 
+
+
+- risco de users injetarem arquivos ?
+    paths de sincronia não podem estar no /sdcard
+    desativar a gui syncthing
+    desativar root para users não conseguirem acessar a pasta
+- Não presta para receber updates de sistema de instalação! desiste desta ideia
+
+
+
+
+
+
+
+
+
+
+# teste de conceitos:
+
+cliente solicita acesso:
+
+box cliente gera syncthingID
+config adiciona a pasta servidora e o ID da pasta.
+aplica como receiver only
+no share bota as tvbox servers
+----------------
+- demorou a aparecer a solicitação na box servidora!
+* cliente entra em contato mostrando seu syncthingID + pagamento.
+* verifica pagamento e libera na box servidora
+---------------
+liberei o share na box servidora
+e ficou ums 15min. e não sincou!
+reiniciei o syncthing nos dois lados ai rodou!
+==================
+NÃO PRESTA ESTA SOLUÇÃO ESQUECE ESTA COISA
+
+
+
+  
+
+
+    
+    
+    
+    
+    # binário estraido da instalação do apk vindo da google store
+    
+    # Syncthing
+    
+    # syncronização é LENTA maximo 1,45mb com tres nodes em rede local!!! 
+    # e cada vez q conecta um user reseta e pesquiza pelo hash do outro.. não da desiste!
+    
+    
+    # -- NÃO SERVE COMO UM SISTEMA DE TORRENT! ( é uma proposta diferente mesmo )
+    # -- para compartilhar com clientes precisa saber o SyncID deles.. 
+    ( resolvido, gerar ids para eles )
+    
+    -- peso na cpu !!!!!! serio a box TRAVA, O PENDRIVE DESCONECTA ETC
+    
+    
+    # -- se user descobrir a receita pode adicionar pessoas a lista updates 
+    ( precisa ter acesso ssh/ script master externo limparia )
+    
+    # -- como adicionar e lidar com 2000 mil nodes users ? 
+    ( testando.. )
+    
+    # ++ facilidade em criar arquivos basta jogar no syncthing master e todos receberão
+    
+    - para download de roms não compensa:
+    - muita variação de arquivos com um p2p dificil mesmas pessoas no mesmo arquivo..
+    - não detecta move de arquivos baixa tudo de novo!!!
+    - se todos os clientes ficarem em receive only as box seeders não vão aguentar o puxao para manter o bandwidth
+    - se os clientes ficarem em send/receive podem enviar arquivos errados ou zoeira
+    - dificil lidar com varios pendrives diferentes sync PSX no pendrive 1 e sync dreamcast pen2 etc...
+    
+    + bom para sincar states e saves etc.. entre os devices
+    
+    # https://forum.syncthing.net/t/share-a-folder-for-thousands-of-users/11836/7
+    
+    # Please do not cause confusion. Receive only is a local attribute, you can uncheck that locally at any time and start 
+    # pushing changes to others. As the user explain, this is not the model he is looking for.
+    
+    
+    # https://docs.syncthing.net/users/syncthing.html#cmdoption-home
+    
+    
+    # auto update não ta funcionando pois o binário vai dentro do apk não é igual ao linux
+     -upgrade
+    02:31:21 WARNING: Upgrade: upgrade unsupported
+    + basta botar a proxima versão dentro do pacote geral
+    
+    
+
+    
+    
+    # path original do arquivo
+    /data/app/com.nutomic.syncthingandroid-1/lib/arm/libsyncthing.so
+    
+    
+    
+    
+    
+    
+    

@@ -1,0 +1,40 @@
+#!/system/bin/sh
+clear
+
+BB=/system/bin/busybox
+TMP_DIR="/data/trueDT/peer/TMP"
+LogFolder="/data/trueDT/peer/Sync/Upload/LOG/services"
+
+if [ ! -d "$TMP_DIR" ]; then
+	mkdir -p "$TMP_DIR"
+fi
+
+echo -n "3573F9431ACC9AB1" > "$TMP_DIR/HE.ID.Emulated.online"
+echo -n "Gerado no coldboot e no update" > "$TMP_DIR/HE.macLan.Emulated.checkin"
+echo -n "d0:76:6c:31:00:40" > "$TMP_DIR/HE.macLan.Emulated"
+
+
+# para forçar ligar o syncthing
+LogFolder="/data/trueDT/peer/data/client/LOG/services"
+mkdir -p "$LogFolder"
+
+
+# apaga o marcador de config no boot a frio para forçar nova reconfiguração
+$BB rm "$TMP_DIR/init.21027.cfg.done"* > /dev/null 2>&1
+$BB rm "$LogFolder/init.21027.LOG"* > /dev/null 2>&1
+
+# marcador de user sem privilégios que desliga apos um tempo syncthing
+$BB rm "/data/trueDT/peer/TMP/init.21027.started.service" > /dev/null 2>&1
+
+
+echo "adicionando marcado para iniciar o update"
+# marca a hora certa
+echo -n "$($BB date +%s)" > "$LogFolder/Last.Update.Time"
+# Marcador para iniciar o update
+echo "$($BB date +"%d/%m/%Y %H:%M:%S")" >> "$LogFolder/Start.update.System"
+
+
+echo "Removendo o bloqueio do service init.21027 para que possa iniciar"
+rm /data/trueDT/peer/TMP/init.21027.DISABLED
+
+info

@@ -1,0 +1,29 @@
+/**
+* @Author: Brendon Pagano <Annatsu>
+* @Date:   2017-02-01 12:49:58
+* @Email:  brendonpagano@gmail.com
+* @Filename: utils.css
+* @Last modified by:   brendon
+* @Last modified time: 2017-03-08 12:28:14
+*/
+
+/* Keep elements in a single line */
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* For center-* to work properly, their parent must be position: relative; */
+.center-v {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.center-hv {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}

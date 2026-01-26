@@ -1,0 +1,33 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="nvj22L9RTGpCfJxLTyNzTfnd1UFuVdvOjb3TOpsJFUbB0OAT15A30Gw6rkktoDg3sj6l6a"
+# app vars
+app="com.redroid.iptw"
+fakeName="B4_Iptv+ (2.0.11)"
+apkSection="clones"
+apkName="ac.131"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+# {B4_Iptv+} [com.redroid.iptw] (2.0.11)
+

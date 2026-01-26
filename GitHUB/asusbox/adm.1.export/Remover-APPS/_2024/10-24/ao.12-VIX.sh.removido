@@ -1,0 +1,33 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="oPkLffPikB7vS2yCNTnHwG29SCG2Scecjh2WC7wvHGrrESHSfwAs5Q58tD7cTnGjsRDXO8"
+# app vars
+app="com.batanga.vix"
+fakeName="VIX"
+apkSection="oem"
+apkName="ao.12"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+# {VIX} [com.batanga.vix] (5.2.1)
+

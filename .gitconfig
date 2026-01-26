@@ -1,0 +1,7 @@
+[credential]
+	helper = store
+[credential "github.com"]
+	useHttpPath = true
+[user]
+	email = multibox@gmail.com
+	name = Dino

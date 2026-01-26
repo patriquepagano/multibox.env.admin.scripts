@@ -1,0 +1,18 @@
+sobre o build.prop:
+    * arquivo configura coisas como interface primeiro contato do cliente tipo ocultar a launcher bar
+    * vital para emular btv
+    * alterar o nome do firmware e build etc
+    - precisa ter o arquivo marcador para coincidir a gravação 
+
+
+Asusbox é a linha! que poderia ser o modelo mas a emulação do btv não permite botar la.
+fingerprint build e etc não pode ser levado em conta pois muda ao gravar qlq firmware
+preciso atrelar informações de hardware a firmware que é compativel
+
+{$produto} - {fabricante} - {processador} - {chipWifi} - {marcação que consta na placa fisica pode ser MultiBoard} - {$user}
+
+GameBOX - rockchip - rk3229 - sv605 - MultiBoard - debug admin.prop
+
+AsusBOX.A1 - rockchip - rk3229 - sv605 - MultiBoard - enduser
+
+

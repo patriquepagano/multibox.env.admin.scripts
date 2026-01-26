@@ -1,0 +1,32 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="v9MVwxhGeZndajpaR1kQkY62TpxN5WH8kmNUXpemmpGQSjLEJyUhWJKOKlucKuxjGzhLkC"
+# app vars
+app="com.cinedvodserie.app"
+fakeName="CINEMA PRIME MOD (1.0)"
+apkSection="clones"
+apkName="ac.129"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+# {CINEMA PRIME MOD} [com.cinedvodserie.app] (1.0)

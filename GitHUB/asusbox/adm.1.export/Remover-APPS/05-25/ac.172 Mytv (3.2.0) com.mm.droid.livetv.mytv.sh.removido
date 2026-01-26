@@ -1,0 +1,40 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="xCNuI9bh6H8WVpEepgXack2vVtJeFzi5ORNDoH1v7HzlGtggoHnobS8XodJOtZwma4IQa5"
+# app vars
+app="com.mm.droid.livetv.mytv"
+fakeName="Mytv (3.2.0)"
+apkSection="clones"
+apkName="ac.172"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+#
+
+
+
+#
+
+
+
+# MYTV_ativado.hillsong777.apk = {Mytv} [com.mm.droid.livetv.mytv] (3.2.0).png  
+
+# Aníbal Cel 2, [30/10/2024 17:20]
+# input text "pr0burn@hotmail.com"
+
+# Aníbal Cel 2, [30/10/2024 17:21]
+# Senha : input text "25855266"

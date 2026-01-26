@@ -1,0 +1,38 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="WgkzTc1NAEhM2je3Ika7K4ntW0K3yNKCLtJc9O4A4BxYKZ1Gs4CPVC1JstIzusQABCQzYY"
+# app vars
+app="com.mm.droid.livetv.kids"
+fakeName="Mundo Kids (3.1.1)"
+apkSection="clones"
+apkName="ac.085"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+#
+#
+
+#
+
+
+
+
+
+
+# ☐ {Mundo Kids} [com.mm.droid.livetv.kids] (3.1.1)
+# pede acesso ao sdcard
+# funcionou

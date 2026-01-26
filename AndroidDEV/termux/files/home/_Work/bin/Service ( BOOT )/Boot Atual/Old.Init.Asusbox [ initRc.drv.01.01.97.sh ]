@@ -1,0 +1,334 @@
+#!/system/bin/sh
+
+# a launcher.offline tem que ser a ultima a ser desativada aqui
+# as outras launchers desativadas vão carregar da pasta /data/asusbox/LauncherList
+
+# verificar se esta funcionando e atualizado
+if [ "$1" == "675asd765da4s567f4asd4f765ads4f675a4ds6f754ads6754fa657ds4f675ads467f5ads" ]; then
+    echo "Version 1.14"
+    exit
+fi
+
+# LinkUpdate="http://personaltecnico.net/Android/AsusBOX/A1/data/asusbox/UpdateSystem.sh"
+# /system/bin/wget -N --no-check-certificate --timeout=1 --tries=7 -P /data/asusbox/ $LinkUpdate
+# exit
+logcat -c
+
+#unset PATH
+export PATH=/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin:/system/usr/bin
+#unset LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/system/lib:/system/usr/lib
+export bootFile="/data/asusbox/UpdateSystem.sh"
+
+echo "ADM DEBUG ########################################################"
+echo "ADM DEBUG ### muito IMPORTANTE para esperar todo os sistema ficar pronto para continuar"
+while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;
+sleep 3 # so pra garantir
+
+export CPU=`getprop ro.product.cpu.abi`
+# importante pra se auto-atualizar / verificar se o init.rc não declara qual é o primeiro script de boot
+export initBoot=${0}
+
+
+echo "ADM DEBUG ########################################################"
+echo "ADM DEBUG ### BLOQUEANDO O ACESSO ROOT"
+checkPin=`/system/bin/busybox cat /system/.pin`
+if [ ! "$checkPin" = "FSgfdgkjhç8790d5sdf85sd867f5gs876df5g876sdf5g78s6df5g78s6df5gs87df6g576sfd" ];then
+    /system/bin/busybox mount -o remount,rw /system
+    echo -n 'FSgfdgkjhç8790d5sdf85sd867f5gs876df5g876sdf5g78s6df5g78s6df5gs87df6g576sfd' > /system/.pin
+    chmod 644 /system/.pin
+fi
+
+
+echo "ADM DEBUG ########################################################"
+echo "ADM DEBUG ### eu sou o init-script > $initBoot"
+#echo "eu sou o init-script > $initBoot"
+
+###################################################################################################################
+# FUNÇÕES #########################################################################################################
+function CheckUptimeInternet () { # checa 3 vezes cada url e entrega a variavel InternetConection
+CheckUptimeInternetlinks="
+google.com
+ipv4.icanhazip.com
+"
+for LinkUptimeInternetlinks in $CheckUptimeInternetlinks; do
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### verificando o link se tem acesso > $LinkUptimeInternetlinks"
+    InternetConection="OFFLINE" # seta todo loop como offline ate que se prove o contrario..
+    echo "ADM DEBUG ### Tenta conectar ao link 7 vezes "    
+    /system/bin/wget --timeout=1 --tries=7 --spider "$LinkUptimeInternetlinks" > /dev/null 2>&1
+    # Se tiver acesso finaliza esta função
+    if [ $? = 0 ] ; then
+        echo "ADM DEBUG ### internet Uptime 100%"
+        InternetConection="ONLINE"
+        break # fecha a função por completo
+    fi    
+done ### DOWNLOAD COM SISTEMA MULTI-LINKS
+}
+
+function LoopWaitingNet () { # entra em looping infinito ate ter internet
+while true
+do
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### Entrando na função > LoopWaitingNet"
+    CheckUptimeInternet
+	if [ "$InternetConection" == "ONLINE" ]; then
+        echo "ADM DEBUG ### Tem acesso a internet"
+        logcat -c
+        break
+    fi
+done
+}
+
+
+function DownloadBOOT () {
+# multilinks="
+# https://asusbox.com.br/asusboxA1/boot/$CPU/UpdateSystem.sh
+# http://45.79.48.215/asusboxA1/boot/$CPU/UpdateSystem.sh
+# http://45.79.133.216/asusboxA1/boot/$CPU/UpdateSystem.shA
+# "
+
+multilinks=(
+"http://45.79.133.216/asusboxA1/boot/$CPU/UpdateSystem.sh"
+"https://asusbox.com.br/asusboxA1/boot/$CPU/UpdateSystem.sh"
+"http://45.79.48.215/asusboxA1/boot/$CPU/UpdateSystem.sh"
+)
+
+### DOWNLOAD COM SISTEMA MULTI-LINKS
+for LinkUpdate in "${multilinks[@]}"; do 
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### Entrando na função > DownloadBOOT"
+    echo "ADM DEBUG ### tentando o link > $LinkUpdate"
+    export BootFileInstall="false" # até que se prove o contrário não baixou o arquivo
+    # Tenta conectar ao link 7 vezes 
+    /system/bin/wget -N --no-check-certificate --timeout=1 --tries=7 --max-redirect=0 -P /data/asusbox/ "$LinkUpdate"
+
+    # Verifica o código de retorno do wget
+    if [ $? -eq 0 ]; then
+        echo "ADM DEBUG ### Wget :) Download bem-sucedido"
+        /system/bin/busybox chmod 700 "$bootFile"
+        CheckBootScript=$("$bootFile" "675asd765da4s567f4asd4f765ads4f675a4ds6f754ads6754fa657ds4f675ads467f5ads")
+        # Se o script $bootFile enviar a instrução acima e retornar "ScriptCertified",
+        # então seta BootFileInstall="true" e roda o break
+        if [ "$CheckBootScript" == "Certified.BOOT" ]; then
+        # "Certified.BOOT"
+            echo "ADM DEBUG ### ScriptCertified: BootFileInstall set to true"
+            export BootFileInstall="true"
+            break # fecha a função por completo
+        else
+            export BootFileInstall="false"
+            echo "ADM DEBUG ### Falha na execução do script $bootFile"
+        fi
+    else
+        export BootFileInstall="false"
+        echo "ADM DEBUG ### Wget :( Falha no download. Código de retorno: $?"
+    fi
+done ### DOWNLOAD COM SISTEMA MULTI-LINKS
+echo "ADM DEBUG ###--------------------------------------------------------------"
+echo "ADM DEBUG ### fim da função DownloadBOOT > BootFileInstall=$BootFileInstall"
+echo "ADM DEBUG ###--------------------------------------------------------------"
+}
+
+function LoopForceDownloadBoot () { # entra em looping até baixar o arquivo de boot
+while true
+do
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### Entrando na função > LoopForceDownloadBoot"
+    DownloadBOOT 
+	if [ "$BootFileInstall" == "false" ]; then
+        echo "ADM DEBUG ### Nova tentativa em loop para baixar"
+        logcat -c
+    else
+        break
+    fi
+done
+}
+
+
+
+function bootConfigs () {    
+    if [ -d "/data/data/launcher.offline" ];then
+        if [ ! "$cronRunning" == "yes" ]; then
+            echo "ADM DEBUG ### traz a launcher install para a frente"
+            /data/asusbox/.sc/boot/launcher-01-Install-apps.sh
+            ## necessário para chamar a launcher para a frente
+            am start --user 0 -a android.intent.action.MAIN launcher.offline/dxidev.toptvlauncher2.HomeActivity
+        fi
+    fi
+}
+
+function DisableLaunchers () {
+    if [ -d "/data/data/launcher.offline" ];then
+        # ## necessário para chamar a launcher para a frente
+        am start --user 0 -a android.intent.action.MAIN launcher.offline/dxidev.toptvlauncher2.HomeActivity
+        # desativa todas as launchers
+        LauncherList=`/system/bin/busybox cat /data/asusbox/LauncherList \
+        | /system/bin/busybox grep -v "dxidev.toptvlauncher2" \
+        | /system/bin/busybox sort \
+        | /system/bin/busybox uniq`
+        # ativa os apps
+        for loopL in $LauncherList; do
+            if [ ! "$loopL" == "" ]; then
+                echo "ADM DEBUG ########################################################"
+                echo "ADM DEBUG ### Desativando o app com launcher integrado > $loopL"
+                #pm hide $loopL # não é necessário para as launchers atualmente em uso
+                pm disable $loopL
+            fi
+        done
+    else
+        echo "No launchers detected"
+    fi
+}
+
+#######################################################################################################################
+# AQUI COMEÇA O PRIMEIRO ATO DO SCRIPT
+
+if [ ! "$cronRunning" == "yes" ]; then
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### removendo o LauncherLock para alternar as launchers"
+    rm /data/asusbox/LauncherLock > /dev/null 2>&1  
+fi
+
+# DEBUG = Força o primeiro boot inicial
+# rm /data/asusbox/fullInstall 
+
+# DEBUG = cria o marcador no final dos scripts da ultima etapa online
+# touch /data/asusbox/fullInstall # para fims de debugs
+
+if [ ! -e "/data/asusbox/fullInstall" ] ; then
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### primeiro boot da box"
+    mkdir -p /data/asusbox > /dev/null 2>&1
+    echo "ADM DEBUG ### configurando android settings..."
+    settings put global heads_up_notifications_enabled 0
+    settings put global package_verifier_enable 0
+    settings put secure install_non_market_apps 1
+    settings put global install_non_market_apps 1
+    settings put global policy_control immersive.full=*
+    # echo "verificando se tem acesso a internet"
+    CheckUptimeInternet 
+    if [ "$InternetConection" == "OFFLINE" ]; then # se não tiver acesso abre o wifi para configurar
+        echo "ADM DEBUG ########################################################"
+        echo "ADM DEBUG ### VAI PARA TELA DO WIFI"
+        am start -a com.android.settings -n com.android.settings/com.android.settings.wifi.WifiSettings
+        echo "ADM DEBUG ########################################################"
+        echo "ADM DEBUG ### TRAVA AGUARDANDO A INTERNET"
+        LoopWaitingNet
+    fi
+    # Configurações inicias do boot
+    bootConfigs
+    # entra em looping até baixar o arquivo de boot pq é a primeira vez da box ou vai ou racha!
+    LoopForceDownloadBoot
+    # desativando pois o boot já pode ser executado
+    #if [ ! -f /system/etc/init/initRc.adm.drv.rc ]; then
+        # executa o script
+        /system/bin/busybox chmod 700 $bootFile
+        echo "ADM DEBUG ########################################################"
+        echo "ADM DEBUG ### Iniciando boot Online"
+        $bootFile
+    #fi
+    exit
+fi
+
+
+# exit
+
+#########################################################################################################################
+
+# Configurações inicias do boot
+bootConfigs
+
+# sleep 30
+# while ! /system/bin/busybox ping -c 1 -W 1 127.0.0.1; do
+#     echo "Waiting for network interface might be down..."
+#     sleep 1
+# done
+
+#ifconfig > /data/ifconfig.log
+# todas as interfaces aparecem mas ainda não tem ip
+
+# preciso disto para dar um tempo para as interfaces estarem prontas para o wget
+sleep 15
+
+CheckUptimeInternet
+echo "ADM DEBUG ########################################################"
+echo "ADM DEBUG ### internet esta = $InternetConection"
+
+#InternetConection="OFFLINE" # para fims de debugs
+
+if [ "$InternetConection" == "OFFLINE" ]; then # se não tiver acesso abre o wifi para configurar
+    # A box já foi instalada e tem todos os arquivos instalação completa e passou do chaveamento
+    # se o cara entra aqui esta sem Internet nenhuma! pode estar no campo, na praia ou caiu a internet
+    # liberar uma launcher com os apps offline
+                # VAI PARA TELA DO WIFI este comando vai ser chamado pelo php
+                # /data/asusbox/.sc/OffLine/sys/config-wifi.sh
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### ativa o modo Offline da box"
+    if [ -d "/data/data/launcher.offline" ];then
+        # desativa a launcher oficial do asusbox para não aparecer na frente
+        pm disable dxidev.toptvlauncher2
+        # configura os itens da launcher.offline
+        /data/asusbox/.sc/OffLine/launcher-04-offline.sh
+        # Desativa todas as launchers ficando apenas a launcher.offline
+        DisableLaunchers
+        sleep 3
+        am start -a com.android.settings -n com.android.settings/com.android.settings.wifi.WifiSettings
+        # dispara um cron para monitorar o acesso a internet e alterar a launcher
+        /data/asusbox/.sc/OffLine/sys/cron-check-internet.sh
+        # abre o gerenciador de wifi para o cliente
+    fi
+    exit
+fi
+
+# [] boot via pendrive se tiver espetado um drive com marcadores correto, arquivo 7zip com a senha correta entao roda
+
+
+#DownloadBOOT # tenta baixar 7 vezes por url o $bootFile entrega o resultado para o script
+#BootFileInstall="false" # para fims de debugs
+
+# força o download até o infinito muito bom se a box estiver travada ou faltar internet quando ligar
+LoopForceDownloadBoot
+
+
+# [] verificar este lance de launchers ta enchendo o saco isto de launcher offline ????????
+if [ "$BootFileInstall" == "false" ]; then # passou no teste de internet e os vps estão em manutenção
+    if [ -d "/data/data/launcher.offline" ];then
+        # desativa a launcher oficial do asusbox para não aparecer na frente
+        pm disable dxidev.toptvlauncher2
+        # o cliente tem internet! mas não esta acessando os mirrors todos cairam!!! acho dificil isto e estranho
+        /data/asusbox/.sc/OnLine/launcher-05-vps-offline.sh
+        # Desativa todas as launchers ficando apenas a launcher.offline
+        DisableLaunchers
+        # dispara um cron para monitorar o acesso a internet e alterar a launcher
+        /data/asusbox/.sc/OnLine/sys/cron-check-vps.sh
+    fi
+    exit
+else
+    if [ -d "/data/data/launcher.offline" ];then
+        if [ ! "$cronRunning" == "yes" ]; then
+            echo "ADM DEBUG ########################################################"
+            echo "ADM DEBUG ### desativa a launcher oficial do asusbox para não aparecer na frente"
+            pm disable dxidev.toptvlauncher2
+            # ativa a launcher update com os apps oficiais que funcionam
+            /data/asusbox/.sc/boot/launcher-02-update.sh
+            echo "ADM DEBUG ########################################################"
+            echo "ADM DEBUG ### chama a função DisableLaunchers"
+            DisableLaunchers
+            echo "ADM DEBUG ########################################################"
+            echo "ADM DEBUG ### executa o boot de sistema"
+        fi
+    fi
+    # desativando pois o boot já pode ser executado
+    #if [ ! -f /system/etc/init/initRc.adm.drv.rc ]; then
+        # executa o script
+        /system/bin/busybox chmod 700 $bootFile
+        echo "ADM DEBUG ########################################################"
+        echo "ADM DEBUG ### Iniciando boot Online"
+        $bootFile
+    #fi 
+    exit
+fi
+
+
+# descobrir o estado do app
+# pm list packages -d

@@ -1,0 +1,13 @@
+#!/system/bin/sh
+
+
+listApagar="/data/data/com.not.aa_image_viewer/cache"
+for delfolder in $listApagar; do
+    echo $delfolder
+    if [  -d $delfolder ];then
+        rm -rf $delfolder > /dev/null 2>&1
+    fi
+done
+
+
+

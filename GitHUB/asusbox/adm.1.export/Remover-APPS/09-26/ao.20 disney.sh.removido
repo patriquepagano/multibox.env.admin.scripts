@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="eQdtybqPfgaADEtHMmdxYTAOyJoOYPYfrF3x1HWsU4vAZ8Yh6O8YDzdMVG7PcJA0vl16DD"
+# app vars
+app="com.disney.disneyplus"
+fakeName="Disney+ (3.11.2-rc1-2025.01.07)"
+apkSection="oem"
+apkName="ao.20"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+# {Disney+} [com.disney.disneyplus] (3.11.2-rc1-2025.01.07)
+
+
+
+

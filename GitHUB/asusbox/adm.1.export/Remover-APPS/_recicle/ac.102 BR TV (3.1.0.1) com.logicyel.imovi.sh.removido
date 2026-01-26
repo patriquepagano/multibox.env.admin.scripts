@@ -1,0 +1,33 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="uVO4rGl340xgWCA3inbG82ea3W7mQXyqJc7ucWVbekcwLk5czdBFOBVyLBXUcfbz7kH78R"
+# app vars
+app="com.logicyel.imovi"
+fakeName="BR TV (3.1.0.1)"
+apkSection="clones"
+apkName="ac.102"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+# {BR TV} [com.logicyel.imovi] (3.1.0.1)

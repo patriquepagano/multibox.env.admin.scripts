@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="4zFv67ZuGCkVOK1vJjFV7gZmXUF84wmnKdxXfho8X9WPIft8SxQqtLNQouSiaSpRqcdQHX"
+# app vars
+app="com.android.vo_vivo"
+fakeName="Vo Vivo (v1.0.2)"
+apkSection="clones"
+apkName="ac.197"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+#AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Vo Vivo} [com.android.vo_vivo] (v1.0.2)
+

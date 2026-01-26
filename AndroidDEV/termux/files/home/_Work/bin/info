@@ -1,0 +1,101 @@
+#!/system/bin/sh
+clear 
+busybox printf '\033c'
+
+lx
+
+echo "
+
+
+*************************************************************************************"
+
+
+echo "Pid Cron Rodando:"
+/system/bin/busybox ps \
+| /system/bin/busybox grep "/system/bin/busybox crond" \
+| /system/bin/busybox grep -v "grep" \
+| /system/bin/busybox awk '{print $1}' \
+| /system/bin/busybox sed -e 's/[^0-9]*//g'
+echo "update+check.sh cron rodando?"
+/system/bin/busybox ps aux | grep update+check.sh | /system/bin/busybox grep -v grep | awk '{print $1}'
+echo "#####################################################################################"
+
+echo "Processo UpdateSystem.sh esta rodando?"
+/system/bin/busybox ps aux | grep UpdateSystem.sh | /system/bin/busybox grep -v grep
+echo "#####################################################################################"
+
+echo "WebServer rodando?"
+busybox ps aux | grep "php-cgi" | busybox grep -v grep | busybox awk '{print $1}'
+busybox ps aux | grep "lighttpd" | busybox grep -v grep | busybox awk '{print $1}'
+echo "#####################################################################################"
+
+echo "
+MAC Disponivel neste momento script
+$(/system/bin/busybox ifconfig \
+| /system/bin/busybox grep eth0 \
+| /system/bin/busybox grep -o -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}' \
+| /system/bin/busybox tr 'A-F' 'a-f')
+"
+
+echo "
+MAC Real em File swap
+$(cat /data/trueDT/peer/TMP/HE.macLan.hardware)
+"
+
+
+bootLog="/data/data/jackpal.androidterm/app_HOME/log.txt"
+if [ -f "$bootLog" ]; then
+cat "$bootLog"
+fi
+
+echo "#####################################################################################"
+echo "Network interfaces"
+ip -o addr show | awk '/inet/ {print $2, $4}' && ip -o link show | awk '/link/ {print $2, $17}' | sort
+echo "#####################################################################################"
+
+
+netstat -ntlup
+
+
+echo "init.update.boot.sh boot process"
+busybox ps | busybox grep init.update.boot.sh \
+    | busybox grep -v grep \
+    | busybox awk '{print $1}'
+
+
+
+updateCheckUptime() {
+  set -- $(</proc/uptime)
+  checkUptime=${1%%.*}
+}
+
+# aí no seu código, onde precisar:
+updateCheckUptime
+
+TMP_DIR="/data/trueDT/peer/TMP"
+BB="/system/bin/busybox"
+
+$BB ip -o -4 addr show scope global #| $BB awk '{print $2}'
+
+
+
+dumpsys power | $BB awk -F'[= ]+' '/mLastSleepTime/ {print $3; exit}'
+
+
+du -hs /data/trueDT/BKP/pemCerts.7z
+
+
+
+
+echo "
+Uptime var = $checkUptime
+cat uptime = $(cat /proc/uptime)
+
+"
+
+
+
+
+
+
+

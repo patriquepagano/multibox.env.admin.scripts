@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="AItzbdaAnL9pAOtDOz3YOcYjRvWZDo5BlPaDRpDaHQXMk1iXLdGlu5RDgKx4lbdrC4z04p"
+# app vars
+app="com.example.appiptv2"
+fakeName="NeoRed (1.1.7)"
+apkSection="clones"
+apkName="ac.215"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {NeoRed} [com.example.appiptv2] (1.1.7)

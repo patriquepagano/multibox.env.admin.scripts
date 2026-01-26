@@ -1,0 +1,40 @@
+
+# configura o launcher para modo offline
+# pm disable jackpal.androidterm
+
+if [ ! -f /data/asusbox/crontab/LOCK_cron.updates ]; then
+    # inicia o navegador www full install
+    /data/asusbox/.sc/OnLine/.w.conf/.80.9001.sh
+
+
+
+    echo "<h1>$(date)</h1>" > $bootLog 2>&1
+    echo "<h2>Instalando atualizações, por favor aguarde.</h2>" >> $bootLog 2>&1
+
+    CheckIPLocal
+    ACRURL="http://$IPLocal/log.php"
+    # reconfigura a config caso seja necessario
+    acr.browser.barebones.set.config
+    # altera a home url do navegador
+    z_acr.browser.barebones.change.URL
+    # abre o navegador no link setado acima
+
+    if [ ! -f /data/asusbox/fullInstall ]; then 
+        # temporario para testar os clientes tem que entender oque esta acontecendo
+        acr.browser.barebones.launch
+    fi
+    # if [ ! -f /data/asusbox/fullInstall ]; then
+    #     acr.browser.barebones.launch
+    # fi
+fi
+
+
+
+USBLOGCALL="webservice started"
+OutputLogUsb
+
+
+
+
+
+

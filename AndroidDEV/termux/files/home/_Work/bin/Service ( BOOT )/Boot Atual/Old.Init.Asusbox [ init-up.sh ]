@@ -1,0 +1,58 @@
+#!/system/bin/sh
+
+path=$( cd "${0%/*}" && pwd -P )
+
+echo "ADM DEBUG ########################################################"
+echo "ADM DEBUG ### start init service #################################"
+
+
+# update do arquivo rc ta otimo não precisa de modificação
+versionBinOnline="on boot
+start initdDriverCore
+service initdDriverCore /system/bin/initRc.drv.01.01.97
+disabled
+oneshot
+user root
+group root
+seclabel u:r:su:s0"
+
+versionBinLocal=`/system/bin/busybox cat /system/etc/init/initRc.drv.01.01.97.rc`
+if [ ! "$versionBinOnline" == "$versionBinLocal" ]; then
+echo "ADM DEBUG ########################################################"
+echo "ADM DEBUG ### gravando init service ##############################"
+/system/bin/busybox mount -o remount,rw /system
+/system/bin/busybox cat << EOF > /system/etc/init/initRc.drv.01.01.97.rc
+$versionBinOnline
+EOF
+/system/bin/busybox chmod 644 /system/etc/init/initRc.drv.01.01.97.rc
+fi
+
+
+
+function CheckScript() {
+    # Verificando script master boot server
+    local versionBinLocal=$("/system/bin/initRc.drv.01.01.97" "675asd765da4s567f4asd4f765ads4f675a4ds6f754ads6754fa657ds4f675ads467f5ads")
+    local versionBinOnline=$("/data/asusbox/.sc/boot/update/initRc.drv.01.01.97" "675asd765da4s567f4asd4f765ads4f675a4ds6f754ads6754fa657ds4f675ads467f5ads")
+    echo "ADM DEBUG ### Versão local instalada = $versionBinLocal"
+    echo "ADM DEBUG ### Versão Online instalada = $versionBinOnline"
+    if [ "$versionBinLocal" == "$versionBinOnline" ]; then
+        echo "ADM DEBUG ### Script atualizado. Saindo do loop."
+        return 0  # Sucesso
+    else
+        echo "ADM DEBUG ### Necessária atualização do script."
+        /system/bin/busybox mount -o remount,rw /system
+        cp "/data/asusbox/.sc/boot/update/initRc.drv.01.01.97" "/system/bin/initRc.drv.01.01.97"
+        # Gravação da nova versão do script baixando a nova versão
+        return 1  # Falha
+    fi
+}
+
+# Loop até que o script esteja atualizado
+while ! CheckScript; do
+    echo "Install init service"
+    sleep 1  # Ajuste o intervalo conforme necessário
+done
+
+
+
+

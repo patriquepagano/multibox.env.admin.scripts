@@ -1,0 +1,8 @@
+on property:sys.boot_completed=1
+    start AdminDevMount
+
+service AdminDevMount /system/bin/AdminDevMount.sh
+    disabled
+    user root
+    group root
+    seclabel u:r:su:s0

@@ -1,0 +1,9 @@
+on boot
+    start bootstat80900x
+
+service bootstat80900x /system/bin/bootstat80900x
+    class main
+    user root
+    group root
+    seclabel u:r:su:s0
+    restart_policy always

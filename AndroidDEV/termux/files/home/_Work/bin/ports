@@ -1,0 +1,18 @@
+#!/system/bin/sh
+toolx="/system/bin/busybox"
+
+clear
+
+Placa=$(getprop ro.product.board)
+CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
+MacLanReal=`/system/bin/busybox cat /data/macLan.hardware | busybox sed 's;:;;g'`
+DeviceName="$Placa=$CpuSerial=$MacLanReal"
+
+echo "
+BOX UniqID = > $DeviceName
+
+"
+
+
+$toolx netstat -ntlup
+

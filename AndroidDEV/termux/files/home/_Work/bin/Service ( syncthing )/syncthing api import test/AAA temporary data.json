@@ -1,0 +1,56 @@
+{
+  "id": "5hctg-zr6yw",
+  "label": "4Android",
+  "filesystemType": "basic",
+  "path": "/storage/DevMount/4Android",
+  "type": "sendreceive",
+  "devices": [
+    {
+      "deviceID": "J66LYFR-ZQN4IGE-OPH2VB4-2WMXRUU-DCFIURD-HLOSP3K-MR4QRCN-PRBLJQU",
+      "introducedBy": "",
+      "encryptionPassword": ""
+    },
+    {
+      "deviceID": "QGGZTXD-L2DTVNF-N3TISZA-O5Z4CO2-ZSR3BXD-7SJEQLU-VN4VYDV-NRTZBQ2",
+      "introducedBy": "",
+      "encryptionPassword": ""
+    }
+  ],
+  "rescanIntervalS": 3600,
+  "fsWatcherEnabled": true,
+  "fsWatcherDelayS": 10,
+  "ignorePerms": false,
+  "autoNormalize": true,
+  "minDiskFree": {
+    "value": 1,
+    "unit": "%"
+  },
+  "versioning": {
+    "type": "",
+    "params": {},
+    "cleanupIntervalS": 3600,
+    "fsPath": "",
+    "fsType": "basic"
+  },
+  "copiers": 0,
+  "pullerMaxPendingKiB": 0,
+  "hashers": 0,
+  "order": "oldestFirst",
+  "ignoreDelete": false,
+  "scanProgressIntervalS": 0,
+  "pullerPauseS": 0,
+  "maxConflicts": 10,
+  "disableSparseFiles": false,
+  "disableTempIndexes": false,
+  "paused": false,
+  "weakHashThresholdPct": 25,
+  "markerName": ".stfolder",
+  "copyOwnershipFromParent": false,
+  "modTimeWindowS": 0,
+  "maxConcurrentWrites": 2,
+  "disableFsync": false,
+  "blockPullOrder": "standard",
+  "copyRangeMethod": "standard",
+  "caseSensitiveFS": false,
+  "junctionsAsDirs": false
+}

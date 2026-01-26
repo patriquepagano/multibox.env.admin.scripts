@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="E67m8mDgWQvEpN4kQK39ux8rp8FU9lSEsd7aN96dG9DJ7DT6WiGkWhvCnzexUDq6DMGJuN"
+# app vars
+app="com.eai.tvsimple"
+fakeName="EAI TV (2.0.0)"
+apkSection="clones"
+apkName="ac.146"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+#
+
+#
+
+
+
+
+# {EAI TV} [com.eai.tvsimple] (2.0.0)
+
+

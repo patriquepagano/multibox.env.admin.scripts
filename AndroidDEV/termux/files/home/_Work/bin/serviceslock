@@ -1,0 +1,19 @@
+#!/system/bin/sh
+clear
+
+BB=/system/bin/busybox
+TMP_DIR="/data/trueDT/peer/TMP"
+LogFolder="/data/trueDT/peer/Sync/Upload/LOG/services"
+
+if [ ! -d "$TMP_DIR" ]; then
+	mkdir -p "$TMP_DIR"
+fi
+
+
+# marcadores do serviço syncthing
+$BB rm "$LogFolder/Last.Update.Time" > /dev/null 2>&1
+$BB rm "$LogFolder/Start.update.System" > /dev/null 2>&1
+
+
+echo "Bloqueando service init.21027"
+: > /data/trueDT/peer/TMP/init.21027.DISABLED

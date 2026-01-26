@@ -1,0 +1,35 @@
+#!/system/bin/sh
+
+export DIR=`dirname $(dirname $0)`
+source "$DIR/_functions/generate.sh"
+source "$DIR/_functions/allFunctions.sh"
+
+# comprimir
+Senha7z="rQHg012odOGBaWBbYWgCjXSuS6JrQkCfRT7YdXjasaMwkJSRdAUByK8S9ZGRbmdFSn0bcJ"
+# Scripts
+app="sc-offline"
+apkSection="007.0-#######-sc-offline-mode-"
+FileName="007.0"
+FileExtension="SC"
+path="/data/asusbox/.install/02.files"
+pathToInstall="/data/asusbox/.sc/OffLine"
+DevFolder="/storage/DevMount/GitHUB/asusbox/adm.build/OffLine"
+admExport=$(dirname $0)
+
+cmdCheck='versionBinLocal=`/data/asusbox/.sc/OffLine/hash-check.sh`'
+versionBinOnline="5832cd09963f8385678f061005f18c4c"
+
+SCRIPT=`realpath $0`
+# gera novo pack sem comentarios novo hash versionBinOnline
+obfuscateFolder 
+
+# ### Tasks ###############################################################################
+# Atenção sempre quando comprimir novo pack sera feito upload
+# o novo pack tem o crc diferente sempre a cada versão
+# renomear arquivos ou comentar não altera o crc do pack
+# o update do arquivo no google drive é IMEDIATO! POIS O GOOGLEID NÃO MUDA
+compressScripts
+rm -rf /data/local/tmp/GenPack
+
+exportVarsScripts
+

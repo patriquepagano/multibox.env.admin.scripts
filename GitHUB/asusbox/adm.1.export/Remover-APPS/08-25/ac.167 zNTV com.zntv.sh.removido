@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="vDG5TaNk7egZpoKxPHOwrrw2d90n0Fx8IZchCWtn2DADeGEJ30mAlU1NAfxpEYIDgrLVM5"
+# app vars
+app="com.zntv"
+fakeName=" ()"
+apkSection="clones"
+apkName="ac.167"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+#
+
+#
+
+
+
+
+# com.zntv_signed.apk = {zNTV} [com.zntv] (2.4)

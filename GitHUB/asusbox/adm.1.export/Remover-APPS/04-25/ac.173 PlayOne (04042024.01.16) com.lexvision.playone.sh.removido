@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="e0sRlo0adExMwE4GZKIgWCTEtnL3oUAmwy9V8ckqCC4LK3KM99Ab0ZYQeMNNeHAsXaRh0m"
+# app vars
+app="com.lexvision.playone"
+fakeName="PlayOne (04042024.01.16)"
+apkSection="clones"
+apkName="ac.173"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# PlayOne_04042024.01.16.apk = {PlayOne} [com.lexvision.playone] (04042024.01.16).png
+# com codigo de ativação    input text "373878865114"

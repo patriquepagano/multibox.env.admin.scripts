@@ -1,0 +1,140 @@
+#!/system/bin/sh
+
+#eval "$(cat ~/.bashrc | tail -n +10)"
+#pathSC=$( cd "${0%/*}" && pwd -P )
+
+FolderSC=`basename "$PWD"`
+
+pathSC="/data/local/tmp/"
+scriptMenu="$pathSC/x-menu"
+
+HOME="/storage/DevMount/AndroidDEV/termux/files/home"
+
+increment_letter() {
+    local c="$1"
+    local ascii_val
+    ascii_val=$(busybox printf '%d' "'$c")
+    if [ "$c" = "Z" ]; then
+        busybox printf "A"
+    elif [ "$c" = "z" ]; then
+        busybox printf "a"
+    elif [ "$c" = " " ]; then
+        busybox printf " "
+    else
+        ascii_val=$((ascii_val + 1))
+        busybox printf "$(busybox printf '\\x%x' "$ascii_val")"
+    fi
+}
+
+
+# grava o arquivo preferencia do dialog
+x.dialogrc
+
+export IP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1`
+
+cat <<EOF > $scriptMenu
+#!/system/bin/sh
+busybox printf '\e]2;%s\a' "$FolderSC"
+
+exibir_menu() {
+    dialog --clear --title "Menu Principal do $IP" \\
+    --menu "Folder $FolderSC:" 0 0 0 \\
+EOF
+
+folder_icon="[DIR]"
+# Letra inicial
+letter="a"
+# lista dos diretorios
+busybox find "$PWD" -maxdepth 1 -type d -not -name '.*' -not -name '_recicle' | sort | while read fname; do
+item="$(basename "$fname" | sed 's/.submenu//g')"
+cat <<EOF >> $scriptMenu
+         $letter "$folder_icon $item" \\
+EOF
+letter=$(increment_letter "$letter")
+done
+
+
+script_icon="[Script]"
+# loop da lista dos scripts
+busybox find "$PWD" -maxdepth 1 -name "*.sh" | sort | while read fname; do
+#chmod 755 "$fname" # deixa os scripts lento
+i=$((i+1))
+item="$(basename "$fname" | sed 's/.sh//g')"
+cat <<EOF >> $scriptMenu
+         $i "$script_icon $item" \\
+EOF
+done
+
+cat <<EOF >> $scriptMenu
+         x "Sair" 2> "$pathSC/x-menu.choice"
+ }
+
+# Loop principal
+while true; do
+    exibir_menu
+
+    # Lê o resultado da seleção do usuário
+    escolha=\$(cat "$pathSC/x-menu.choice")
+
+    # Verifica a escolha do usuário e executa o script correspondente
+    case \$escolha in
+EOF
+
+
+# Letra inicial
+letter="a"
+# lista dos diretorios
+busybox find "$PWD" -maxdepth 1 -type d -not -name '.*' -not -name '_recicle' | sort | while read fname; do
+item="$(basename "$fname" | sed 's/.submenu//g')"
+cat <<EOF >> $scriptMenu
+        $letter) cd "$PWD/$item" && x ;;
+EOF
+letter=$(increment_letter "$letter")
+done
+
+# loop da lista dos scripts
+busybox find "$PWD" -maxdepth 1 -name "*.sh" | sort | while read fname; do
+i=$((i+1))
+cat <<EOF >> $scriptMenu
+        $i) sc="$fname" && chmod 755 "\$sc" && "\$sc";;
+EOF
+
+
+done
+cat <<EOF >> $scriptMenu
+        x) echo "Saindo..."; break;;
+        *) echo "Opção inválida";;
+    esac
+done
+clear
+EOF
+
+
+LoadScript=`cat "$scriptMenu"`
+eval "$LoadScript"
+
+
+
+
+
+
+
+
+# $i) chmod 755 "$fname" && "$fname";;
+
+# item="$(basename "$fname" | sed 's/.sh//g')"
+
+# # Verifica se a variável contém "(UiAPP)"
+# if [[ $item == *"(UiAPP)"* ]]; then
+# #echo "A variável contém '(UiAPP)'."
+# cat <<EOF >> $scriptMenu
+#         $i) bash "$fname" && break;;
+# EOF
+# else
+# # if for um processo em backgroud
+# menu_session=$(basename "$fname" .sh | sed 's/ /_/g')
+# key=$RANDOM
+# cat <<EOF >> $scriptMenu
+#         $i) bash "$fname" && break;;
+# EOF
+# fi

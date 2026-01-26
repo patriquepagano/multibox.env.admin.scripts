@@ -1,0 +1,33 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="Z3AQulWzumI0mrwOqUwq3vlg3OpEWjVR6RLREONYSfAlWV80eE8oPkrSbfRwdGS6lP9IkD"
+# app vars
+app="com.rednetapp.nasiyetw"
+fakeName="B_NASIYE TV (9.0.99)"
+apkSection="clones"
+apkName="ac.103"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+# {B_NASIYE TV} [com.rednetapp.nasiyetw] (9.0.99)
+

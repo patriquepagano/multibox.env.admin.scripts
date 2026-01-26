@@ -1,0 +1,37 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="u8iL8NKEBCxJVujbnGx63GiUKSHy3tUgatn3cXp2XdN6ivNoFkqEGWVjR7Vaq8T9aYKIbK"
+# app vars
+app="com.exploudapps.maxnettv"
+fakeName="Max Net TV (12.2)"
+apkSection="clones"
+apkName="ac.204"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Max Net TV} [com.exploudapps.maxnettv] (12.2)
+
+
+

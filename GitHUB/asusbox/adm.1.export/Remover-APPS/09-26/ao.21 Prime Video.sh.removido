@@ -1,0 +1,33 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="EdI1rhPL2Ic6zs9f3LzXHsL8QhGbeh5mGWK3UVDidI4HA8RulIWv7QvWfSfXgoa5CADFlf"
+# app vars
+app="com.amazon.avod.thirdpartyclient"
+fakeName="Prime Video (3.0.395.1345)"
+apkSection="oem"
+apkName="ao.21"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+# {Prime Video} [com.amazon.avod.thirdpartyclient] (3.0.395.1345)
+

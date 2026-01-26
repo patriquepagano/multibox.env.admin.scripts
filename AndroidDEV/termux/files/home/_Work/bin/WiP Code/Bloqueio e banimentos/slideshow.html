@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Offline Slideshow</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: black;
+}
+canvas {
+    display: block;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="cv"></canvas>
+
+<script>
+const slides = [
+    { img: "imgs/1.png", time: 33 }, // papai noel
+    { img: "imgs/2.png", time: 11 }, // qrcode
+    { img: "imgs/3.png", time: 25 } // logo linux
+];
+
+const canvas = document.getElementById("cv");
+const ctx = canvas.getContext("2d");
+
+let i = 0;
+let remaining = 0;
+let img = new Image();
+
+function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.onresize = resize;
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // draw image
+    let iw = img.width;
+    let ih = img.height;
+    let cw = canvas.width;
+    let ch = canvas.height;
+
+    let scale = Math.min(cw / iw, ch / ih);
+    let w = iw * scale;
+    let h = ih * scale;
+    let x = (cw - w) / 2;
+    let y = (ch - h) / 2;
+
+    ctx.drawImage(img, x, y, w, h);
+
+    // draw countdown number
+    ctx.fillStyle = "rgba(0,0,0,0.5)";
+    ctx.fillRect(cw - 140, ch - 140, 120, 120);
+
+    ctx.fillStyle = "#00ff88";
+    ctx.font = "bold 33px Arial";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "top";
+    ctx.fillText(remaining, canvas.width - 5, 5);
+}
+
+function nextSlide() {
+    const s = slides[i];
+    remaining = s.time;
+
+    img.src = s.img;
+    img.onload = () => draw();
+
+    draw();
+
+    let tick = setInterval(() => {
+        remaining--;
+        draw();
+
+        if (remaining <= 0) {
+            clearInterval(tick);
+            i = (i + 1) % slides.length;
+            nextSlide();
+        }
+    }, 1000);
+}
+
+nextSlide();
+</script>
+
+</body>
+</html>

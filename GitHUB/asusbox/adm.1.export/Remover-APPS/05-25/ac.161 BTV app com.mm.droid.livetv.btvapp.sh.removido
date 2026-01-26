@@ -1,0 +1,41 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="VPG2FAFKDaOH3qncTqc6zTglHOtJbkjZvXcsIo0YMEIZEPGjEvUDXi76dhoQHNXGxYrVhz"
+# app vars
+app="com.mm.droid.livetv.btvapp"
+fakeName="BTV App (2.1.2)"
+apkSection="clones"
+apkName="ac.161"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /data/data/com.mm.droid.livetv.btvapp/files
+mkdir -p /data/data/com.mm.droid.livetv.btvapp/files
+chmod 440 /data/data/com.mm.droid.livetv.btvapp/files
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {BTV App} [com.mm.droid.livetv.btvapp] (2.1.2)
+
+
+

@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="6zrbY7cQibgYJgiBmPCY3zOHE0ucDmUX5QkBGJ20DD1fvJe0JY6z9oBf2Pd5ZHI9cOkihM"
+# app vars
+app="xtvapps.bemtv"
+fakeName="BemTV (1.17.10)"
+apkSection="clones"
+apkName="ac.120"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {BemTV} [xtvapps.bemtv] (1.17.10)

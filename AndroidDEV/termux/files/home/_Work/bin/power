@@ -1,0 +1,7 @@
+#!/system/bin/sh
+
+export var="$1"
+
+path=$( cd "${0%/*}" && pwd -P )
+cd "$path/.power"
+x

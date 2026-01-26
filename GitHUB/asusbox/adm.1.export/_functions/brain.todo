@@ -1,0 +1,22 @@
+Linha de boot:
+☐ funções e variaveis
+☐ apps comunicação com cliente
+    navegador em tela cheia ( para transmission e imput serial)
+☐ atualizar os binários
+    firmware antigo e novos é no boot mesmo! (cuidado com downgrade)
+    arquivos binários baixados e instalados devem ser removidos do /.install
+    não faz sentido manter os installs já que o torrent vem depois deles
+    
+
+☐ torrentSync
+    primeiro boot:
+        aguarda baixar tudo para prosseguir
+        para na tela de imput serial
+    segundo boot:
+        passa para autenticação
+        modo offline ou online
+        libera launcher
+        enquanto torrent atualiza tudo
+
+☐ instalação ou atualização
+    

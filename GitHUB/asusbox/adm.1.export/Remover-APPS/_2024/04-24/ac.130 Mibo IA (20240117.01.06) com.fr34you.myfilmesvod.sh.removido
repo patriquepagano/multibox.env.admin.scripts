@@ -1,0 +1,33 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="kgxHjU8G8Xn8N1CiBLtC4J3g7pqFEFDAsoz4L8F7JSYyzdYpb32uT0wagQm9JbZ086NT3h"
+# app vars
+app="com.fr34you.myfilmesvod"
+fakeName="Mibo IA (20240117.01.06)"
+apkSection="clones"
+apkName="ac.130"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+# {Mibo IA} [com.fr34you.myfilmesvod] (20240117.01.06)
+

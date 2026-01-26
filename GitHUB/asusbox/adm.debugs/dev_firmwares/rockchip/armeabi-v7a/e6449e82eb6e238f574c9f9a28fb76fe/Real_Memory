@@ -1,0 +1,201 @@
+# real memory size
+[    0.000000] Memory: 132MB 891MB = 1023MB total
+[    0.000000] Memory: 968692k/968692k available, 78860k reserved, 491516K highmem
+
+#Info about all process and pid can get using
+Applications Memory Usage (in Kilobytes):
+Uptime: 1132784 Realtime: 1132784
+
+Total PSS by process:
+     51,717K: system (pid 465)
+     43,105K: com.google.android.gms.persistent (pid 865)
+     41,820K: com.google.android.gms (pid 1161)
+     39,526K: com.android.vending (pid 1347)
+     32,569K: com.droidlogic.mboxlauncher (pid 975 / activities)
+     28,980K: com.android.systemui (pid 623)
+     17,148K: zygote (pid 186)
+     15,701K: com.rockchips.mediacenter (pid 1560)
+     13,464K: com.uv.droid.uotaback (pid 1844)
+     12,723K: com.google.android.gms.unstable (pid 1778)
+     12,366K: com.android.vending:instant_app_installer (pid 2024)
+     10,616K: com.google.android.gms.ui (pid 1699)
+     10,046K: com.rockchips.mediacenter:dmr_service (pid 1589)
+      8,770K: com.android.inputmethod.latin (pid 905)
+      7,381K: android.process.acore (pid 1075)
+      7,268K: berserker.android.apps.sshdroid (pid 1170)
+      7,093K: cameraserver (pid 188)
+      6,992K: android.process.media (pid 1261)
+      6,207K: com.google.process.gapps (pid 1039)
+      5,283K: com.android.tv.settings (pid 637)
+      3,938K: com.android.providers.calendar (pid 844)
+      3,883K: com.google.android.partnersetup (pid 1490)
+      3,849K: com.google.process.gapps (pid 1519)
+      3,701K: mediaserver (pid 201)
+      3,572K: com.google.android.configupdater (pid 1435)
+      3,545K: android.rockchip.update.service (pid 1246)
+      3,313K: com.droidlogic.mediacenter (pid 1414)
+      3,263K: com.cghs.stresstest (pid 916)
+      3,023K: mediadrmserver (pid 195)
+      3,002K: com.google.android.ext.services (pid 791)
+      2,969K: audioserver (pid 187)
+      2,824K: com.rockchip.devicetest (pid 1229)
+      2,623K: com.androguide.universal.init.d (pid 1885)
+      2,583K: com.android.rockchip (pid 1941)
+      2,579K: surfaceflinger (pid 146)
+      2,544K: com.rk_itvui.allapp (pid 1542)
+      2,541K: com.google.android.onetimeinitializer (pid 1470)
+      2,088K: media.extractor (pid 200)
+      1,752K: media.codec (pid 194)
+      1,637K: logd (pid 180)
+      1,575K: wpa_supplicant (pid 782)
+      1,266K: drmserver (pid 190)
+      1,195K: sdcard (pid 678)
+      1,163K: vold (pid 147)
+      1,141K: netd (pid 202)
+        900K: /init (pid 1)
+        896K: keystore (pid 193)
+        664K: gatekeeperd (pid 205)
+        660K: installd (pid 191)
+        642K: lmkd (pid 144)
+        600K: mdnsd (pid 1741)
+        517K: displayd (pid 143)
+        516K: servicemanager (pid 145)
+        504K: ueventd (pid 121)
+        503K: sftp-server (pid 2146)
+        497K: tmp-mksh (pid 1931)
+        470K: adbd (pid 184)
+        457K: dumpsys (pid 2551)
+        429K: sh (pid 2496)
+        428K: perfprofd (pid 206)
+        410K: -sh (pid 2132)
+        399K: sftp-server (pid 2142)
+        398K: sh (pid 183)
+        390K: sh (pid 1934)
+        387K: sftp-server (pid 2139)
+        384K: healthd (pid 142)
+        379K: su (pid 1924)
+        337K: daemonsu:10056 (pid 1918)
+        298K: dropbeard (pid 2130)
+        294K: dropbeard (pid 2144)
+        290K: dropbeard (pid 2137)
+        290K: dropbeard (pid 2140)
+        270K: debuggerd (pid 172)
+        235K: debuggerd:signaller (pid 179)
+        229K: daemonsu:master (pid 902)
+        225K: daemonsu:mount:master (pid 826)
+        140K: dropbeard (pid 1935)
+
+Total PSS by OOM adjustment:
+     62,368K: Native
+         17,148K: zygote (pid 186)
+          7,093K: cameraserver (pid 188)
+          3,701K: mediaserver (pid 201)
+          3,023K: mediadrmserver (pid 195)
+          2,969K: audioserver (pid 187)
+          2,579K: surfaceflinger (pid 146)
+          2,088K: media.extractor (pid 200)
+          1,752K: media.codec (pid 194)
+          1,637K: logd (pid 180)
+          1,575K: wpa_supplicant (pid 782)
+          1,266K: drmserver (pid 190)
+          1,195K: sdcard (pid 678)
+          1,163K: vold (pid 147)
+          1,141K: netd (pid 202)
+            900K: /init (pid 1)
+            896K: keystore (pid 193)
+            664K: gatekeeperd (pid 205)
+            660K: installd (pid 191)
+            642K: lmkd (pid 144)
+            600K: mdnsd (pid 1741)
+            517K: displayd (pid 143)
+            516K: servicemanager (pid 145)
+            504K: ueventd (pid 121)
+            503K: sftp-server (pid 2146)
+            497K: tmp-mksh (pid 1931)
+            470K: adbd (pid 184)
+            457K: dumpsys (pid 2551)
+            429K: sh (pid 2496)
+            428K: perfprofd (pid 206)
+            410K: -sh (pid 2132)
+            399K: sftp-server (pid 2142)
+            398K: sh (pid 183)
+            390K: sh (pid 1934)
+            387K: sftp-server (pid 2139)
+            384K: healthd (pid 142)
+            379K: su (pid 1924)
+            337K: daemonsu:10056 (pid 1918)
+            298K: dropbeard (pid 2130)
+            294K: dropbeard (pid 2144)
+            290K: dropbeard (pid 2137)
+            290K: dropbeard (pid 2140)
+            270K: debuggerd (pid 172)
+            235K: debuggerd:signaller (pid 179)
+            229K: daemonsu:master (pid 902)
+            225K: daemonsu:mount:master (pid 826)
+            140K: dropbeard (pid 1935)
+     51,717K: System
+         51,717K: system (pid 465)
+     41,013K: Persistent
+         28,980K: com.android.systemui (pid 623)
+          8,770K: com.android.inputmethod.latin (pid 905)
+          3,263K: com.cghs.stresstest (pid 916)
+     32,569K: Foreground
+         32,569K: com.droidlogic.mboxlauncher (pid 975 / activities)
+     58,830K: Visible
+         43,105K: com.google.android.gms.persistent (pid 865)
+         12,723K: com.google.android.gms.unstable (pid 1778)
+          3,002K: com.google.android.ext.services (pid 791)
+     36,433K: A Services
+         15,701K: com.rockchips.mediacenter (pid 1560)
+         13,464K: com.uv.droid.uotaback (pid 1844)
+          7,268K: berserker.android.apps.sshdroid (pid 1170)
+     21,698K: B Services
+         10,046K: com.rockchips.mediacenter:dmr_service (pid 1589)
+          5,283K: com.android.tv.settings (pid 637)
+          3,545K: android.rockchip.update.service (pid 1246)
+          2,824K: com.rockchip.devicetest (pid 1229)
+    153,754K: Cached
+         41,820K: com.google.android.gms (pid 1161)
+         39,526K: com.android.vending (pid 1347)
+         12,366K: com.android.vending:instant_app_installer (pid 2024)
+         10,616K: com.google.android.gms.ui (pid 1699)
+          7,381K: android.process.acore (pid 1075)
+          6,992K: android.process.media (pid 1261)
+          6,207K: com.google.process.gapps (pid 1039)
+          3,938K: com.android.providers.calendar (pid 844)
+          3,883K: com.google.android.partnersetup (pid 1490)
+          3,849K: com.google.process.gapps (pid 1519)
+          3,572K: com.google.android.configupdater (pid 1435)
+          3,313K: com.droidlogic.mediacenter (pid 1414)
+          2,623K: com.androguide.universal.init.d (pid 1885)
+          2,583K: com.android.rockchip (pid 1941)
+          2,544K: com.rk_itvui.allapp (pid 1542)
+          2,541K: com.google.android.onetimeinitializer (pid 1470)
+
+Total PSS by category:
+    126,014K: .dex mmap
+     74,815K: Dalvik
+     60,554K: Native
+     41,671K: .so mmap
+     34,954K: .oat mmap
+     28,105K: Unknown
+     26,849K: .apk mmap
+     26,578K: .art mmap
+     19,443K: Dalvik Other
+      8,540K: Other mmap
+      7,969K: Stack
+      1,990K: .ttf mmap
+        544K: Other dev
+        196K: Ashmem
+        160K: .jar mmap
+          0K: Cursor
+          0K: Gfx dev
+          0K: EGL mtrack
+          0K: GL mtrack
+          0K: Other mtrack
+
+Total RAM: 4,194,304K (status normal)
+ Free RAM:   566,550K (  153,754K cached pss +   366,856K cached kernel +    45,940K free)
+ Used RAM:   375,956K (  304,628K used pss +    71,328K kernel)
+ Lost RAM: 3,251,798K
+   Tuning: 192 (large 512), oom   184,320K, restore limit    61,440K (high-end-gfx)

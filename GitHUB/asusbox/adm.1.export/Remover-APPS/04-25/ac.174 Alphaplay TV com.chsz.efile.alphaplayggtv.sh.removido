@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="zDPJTF22OUWst8FBibBjNfB5rfPdZPtjF8zBmc68ExYrEpX2oa9ub9XGO4vwYnTjWonYW2"
+# app vars
+app="com.chsz.efile.alphaplayggtv"
+fakeName="Alphaplay TV (ag5.2.4-20240830)"
+apkSection="clones"
+apkName="ac.174"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# alphaplay.apk = {Alphaplay TV} [com.chsz.efile.alphaplayggtv] (ag5.2.4-20240830).png 
+#    input text "27705819"

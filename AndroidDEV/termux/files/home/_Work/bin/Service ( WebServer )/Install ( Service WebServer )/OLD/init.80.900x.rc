@@ -1,0 +1,8 @@
+on boot
+    start init80900x
+
+service init80900x /system/bin/init.80.900x.sh
+    disabled
+    user root
+    group root
+    seclabel u:r:su:s0

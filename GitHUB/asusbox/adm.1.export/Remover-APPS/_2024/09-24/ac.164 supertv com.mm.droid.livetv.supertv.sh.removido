@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="uVTpdc0ZNttNQzAx8OCGiJmQjfH59Jk0lxulJKTwJiC1hSL14i7hvIyv4GMshKcy4orrDa"
+# app vars
+app="com.mm.droid.livetv.supertv"
+fakeName="Super tv.  (5.5.0)"
+apkSection="clones"
+apkName="ac.164"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Super tv. } [com.mm.droid.livetv.supertv] (5.5.0)
+

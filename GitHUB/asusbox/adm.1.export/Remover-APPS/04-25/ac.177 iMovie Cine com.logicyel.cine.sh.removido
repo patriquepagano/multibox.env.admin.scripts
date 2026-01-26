@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="eo3cTgdQGrv3wxIwfMuxNOW6LwWHuCkpbtskCLXlfyrKFChN7hVQrU0T1dZMeBMEm3k3Ij"
+# app vars
+app="com.logicyel.cine"
+fakeName="iMovie Cine (stb-1.23)"
+apkSection="clones"
+apkName="ac.177"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# iMovie Cine_stb-1.23.apk = {iMovie Cine} [com.logicyel.cine] (stb-1.23)

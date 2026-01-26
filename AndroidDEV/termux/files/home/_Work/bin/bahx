@@ -1,0 +1,400 @@
+#!/system/bin/sh
+path=$( cd "${0%/*}" && pwd -P )
+clear
+Log="/data/trueDT/peer/TMP/init.p2p.LOG.old.log"
+toolx="/system/bin/busybox"
+
+
+
+
+
+echo "end"
+exit
+
+
+
+
+# este code fica dentro do init p2p. deve rodar quando?
+# ? no inicio do loop antes de entrar no while, se tiver novo update é o boot updater que vai resetar o script forçando a baixar e extrair o novo pack
+
+# extrair o torrent
+mkdir -p "/data/trueDT/DownloadList"
+Senha7z="123"
+
+Dir="/storage/MULTIBOX/Updates"
+$toolx find "$Dir" -type f -name "*.upd" | sort | while read File; do
+	echo "$File" #>> /storage/torrentCreator/.install.FileList
+    /system/bin/7z e -aoa -y -p$Senha7z "$File" -oc:"/data/trueDT/DownloadList"
+done
+
+
+
+
+
+
+
+# quando criar o torrent botar a extensão .key ( para confundir os curiosos )
+rm -rf /storage/torrentCreator > /dev/null 2>&1
+mkdir -p /storage/torrentCreator
+cp /data/trueDT/DownloadList/.install.torrent /storage/torrentCreator/.install.key
+
+rm /storage/torrentCreator/FileList.txt > /dev/null 2>&1
+
+# criar uma lista de arquivos
+Dir="/storage/MULTIBOX/Updates/.install/"
+$toolx find "$Dir" -type f -name "*" | sort | while read File; do
+	echo "$File" >> /storage/torrentCreator/.install.FileList
+done
+
+# criar o marcador da data ou versão do pack
+echo "$($toolx stat -c '%Y' "$Dir" | /system/bin/busybox cut -d "." -f 1)" > /storage/torrentCreator/.install.version
+echo -n "$($toolx stat -c '%y' "$Dir" | /system/bin/busybox cut -d "." -f 1)" >> /storage/torrentCreator/.install.version
+
+# comprimir os 3 files torrent em 7z encripted
+# Pacote.atualização.do.admin
+# Pacote.atualização.do.usuário
+Senha7z="123"
+cd "/storage/torrentCreator/"
+/system/bin/7z a -mx=9 -p$Senha7z -mhe=on -t7z -y "/storage/MULTIBOX/Updates/.install.Pacote.atualização.do.admin.upd" "*" > /dev/null 2>&1
+/system/bin/7z a -mx=9 -p$Senha7z -mhe=on -t7z -y "/storage/MULTIBOX/Updates/.preferências.pessoais.do.usuario.upd" "*" > /dev/null 2>&1
+
+
+
+
+
+
+
+/system/usr/bin/rsync --progress \
+-avz \
+--delete \
+--recursive \
+"/storage/emulated/0/.DataUpdates/.install/" \
+/storage/MULTIBOX/Updates/.install/
+
+
+# Usage: /system/bin/smbd [-DaioPh?V] [-d debuglevel] [-l log basename] [-p port]
+#        [-O socket options] [-s services file]
+#         -D                    Become a daemon (default)
+#         -a                    Append to log file (default)
+#         -i                    Run interactive (not a daemon)
+#         -o                    Overwrite log file, don't append
+#         -h                    Print usage
+#         -?                    Print usage
+#         -V                    Print version
+#         -d debuglevel         Set the debuglevel
+#         -l log basename.      Basename for log/debug files
+#         -p port               Listen on the specified port
+#         -O socket options     Socket options
+#         -s services file.     Filename of services file
+/system/bin/smbd -i -V -s /system/lib/smb.conf
+/system/bin/samba-rc start
+
+
+
+
+/system/bin/busybox ln -sf $FolderPath/asusbox/.install /data/asusbox/
+
+    Clink=`/system/bin/busybox readlink -v "/data/asusbox/.install"` > /dev/null 2>&1
+    # test if symlink is broken (by seeing if it links to an existing file)
+    if [ ! -e "$Clink" ] ; then
+        InstallFolder="DISABLED"
+        echo "Symlink /data/.install esta desativado"
+        if [ ! $InstallFolder == "ENABLED" ]; then
+            echo "ADM DEBUG ########################################################"
+            echo "ADM DEBUG ### verificando se existe storage ext4 AsusBOX-PC"
+            .installAsusBOX-PC
+        fi
+
+
+            if [ ! -f "/storage/ExternalDriveInUse.LOCKED" ]; then
+                echo "User Info = Velocidade de escrita do drive = $CheckSpeed MB" #>> "$Log"
+                export SetP2PFolder="/storage/$UUID/MultiBOX/DataUpdates"
+                echo -n "$UUID" > "/storage/ExternalDriveInUse.LOCKED"
+            else
+                echo "User Info = Apenas um drive é permitido por TVBOX"
+                mv "/storage/$UUID/MULTIBOX" "/storage/$UUID/MULTIBOX [apenas um drive por tvbox é permitido] [$RANDOM]"
+            fi
+            # rm "/data/trueDT/BenchResults/SLOWDrive.log" > /dev/null 2>&1
+            # .Enable.Folder.ExternalDrive.DataUpdates
+
+
+
+
+
+# politicas de uso:
+# o cliente tem que ser alertado que apenas um drive pode ser utilizado na box!
+# obs. este code tem q ficar dentro do service init p2p rodando continuo esta checagem
+
+function .Check.ExternalDrive () {
+    echo "User Info = Verificando se existe drive externo conectado" >> "$Log"
+    # ainda não resolvi a parte se tiver varios drivers conectados ????
+    UUID=`$toolx blkid | $toolx grep 'vfat' | $toolx grep -v vold | $toolx cut -d '"' -f 2`
+    if [ -d "/storage/$UUID/MULTIBOX" ]; then
+        SetP2PFolder="/storage/$UUID/MULTIBOX"
+        echo "P2PDirFolder=\"$SetP2PFolder\""
+    fi
+}
+
+
+
+
+
+.Check.ExternalDrive
+
+
+
+
+
+
+    echo "ADM DEBUG ### Warn function [.Enable.Folder.ExternalDrive.DataUpdates]" >> "$Log"
+    source "/storage/P2PDir.Enabled.var"
+    if [ ! "$SetP2PFolder" == "$P2PDirFolder" ]; then
+        .killP2P
+        echo "User Info = [Ativando memória Externa para armazenamento arquivos] $(date +"%d/%m/%Y %H:%M:%S")" >> "$Log"
+        echo "User Info = [Drive Externo em uso] $($toolx df -h | $toolx grep "MultiBOX" | $toolx head -n 1)" >> "$Log"        
+        rm "/storage/NAND.LOCKED" > /dev/null 2>&1
+        echo -n "P2PDirFolder=\"$SetP2PFolder\"" > "/storage/P2PDir.Enabled.var"
+    else
+        echo "User Info = [Drive Externo em uso] $($toolx df -h | $toolx grep "MultiBOX" | $toolx head -n 1)" >> "$Log"
+        rm "/storage/NAND.LOCKED" > /dev/null 2>&1
+        #echo -n "P2PDirFolder=\"$SetP2PFolder\"" > "/storage/P2PDir.Enabled.var"
+    fi
+
+
+
+-eq # equal
+-ne # not equal
+-lt # less than
+-le # less than or equal
+-gt # greater than
+-ge # greater than or equal
+
+echo "
+
+pendrive sandisk 16gb é tão lento que o transmission buga para baixar o pack .install-
+
+responsabilidade de download dos torrentes é do service boot start
+
+[] mudar o padrão para fat32
+* user formata o drive diretamente na box
+* user cria uma pasta chamada = MULTIBOX ( tudo em caixa alta )
+
+
+
+
+
+Fat 32:
++ Dou a possibilidade para o cliente migrar seus arquivos de HDD velho pequeno para um novo!
++ compatibilidade drive acessivel em tvs, pcs cliente, tvbox qlq uma, openwrt
++ não me preocuparia com montagem
++ certeza que não vai aparecer drive corrupto em algums firmwares
++ perfeito para portabilizar a ideia que o user leva seu drive com seus cursos para tocar na tv ou note de alguem
++ modo tvlegal + fotos ficaria acessivel pra cliente via tv, android, projetor é muito mais transparente
++ em algum modo profile posso abilitar gerenciador de arquivos.. e o cliente pode querer conectar outros drivers em fat32 tudo se encherga
+
+- não teria controle sobre o ponto de montagem o user precisaria reiniciar
+- não aceita arquivos com mais de 4GB [sem downloads grandes seria um retrocesso!]
+- não teria como dar permissoes a arquivos ou rodar scripts direto do hdd externo
+
+e se o pendrive for lento?
+posso fazer um teste de velocidade apos a montagem e jogar na tela ?
+"
+
+
+
+
+
+
+
+
+# problemas de montagem.. pode ser as frescuras do ext4, não monta de jeito nenhum
+# /dev/block/sdb1: LABEL="MultiBOX" UUID="f23bba2f-c790-4455-af19-27552352e593" TYPE="ext4"
+# - binario tune2fs não alterou uuid = tune2fs /dev/block/sdb1 -U f23bba2f-c790-4455-af19-27552352e595
+# - binario $toolx tune2fs não tem opção -U
+
+# script formatou hdd 1TB e listou já particionado. tentar montar agora para uso teste
+
+
+
+
+
+
+function DownloadFiles () {
+echo "$multilinks" | while IFS= read -r LineDownload ; do
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### download link > $LineDownload"
+    FileOK="false" # ate que se prove o contrario não baixou o arquivo
+    /system/bin/wget -N --no-check-certificate --timeout=1 --tries=7 -P /data/ "$LineDownload" > "/data/trueDT/Torrents/$FileName-wget.log" 2>&1
+    CheckWgetCode=`/system/bin/$toolx cat "/data/trueDT/Torrents/$FileName-wget.log" | /system/bin/$toolx grep "HTTP request sent, awaiting response..."`
+    #rm "/data/trueDT/Torrents/$FileName-wget.log"
+        # Se tiver acesso finaliza esta função
+        if [ "$CheckWgetCode" == "HTTP request sent, awaiting response... 200 OK" ] ; then
+            echo "ADM DEBUG ### Wget :) $CheckWgetCode"
+            FileOK="true"
+            break # fecha a função por completo
+        fi
+        if [ "$CheckWgetCode" == "HTTP request sent, awaiting response... 304 Not Modified" ] ; then
+            echo "ADM DEBUG ### Wget :) $CheckWgetCode"
+            FileOK="true"
+            break # fecha a função por completo
+        fi     
+done
+}
+
+function LoopForceDownloadLauncher () { # entra em looping até baixar o arquivo de boot
+while true; do
+export multilinks="http://45.79.133.216/hostFiles/{Simple TV Launcher} [org.cosinus.launchertv] (1.5.3).apk
+http://45.79.48.215/hostFiles/{Simple TV Launcher} [org.cosinus.launchertv] (1.5.3).apk"
+
+    echo "ADM DEBUG ########################################################"
+    echo "ADM DEBUG ### Entrando na função > LoopForceDownloadLauncher"
+    DownloadFiles 
+	if [ "$BootFileInstall" == "false" ]; then
+        echo "ADM DEBUG ### Nova tentativa em loop para baixar"
+        logcat -c
+    else
+        break
+    fi
+done
+}
+
+# # debug
+# /system/bin/$toolx mount -o remount,rw /system
+# rm "/data/{Simple TV Launcher} [org.cosinus.launchertv] (1.5.3).apk"
+# rm "/system/app/launcher.apk"
+
+
+#############################################################################################################################
+# --- > Download Launcher
+LoopForceDownloadLauncher
+
+# # limpando old apks
+# if [ -f "/system/app/acr.browser.barebones_4.5.1.apk" ]; then
+#     /system/bin/$toolx mount -o remount,rw /system
+#     rm "/system/app/acr.browser.barebones_4.5.1.apk"
+# fi
+
+# --- > copiar launcher para /system/app
+if [ ! -f "/system/app/launcher.apk" ]; then
+    /system/bin/$toolx mount -o remount,rw /system
+    /system/bin/$toolx cp "/data/{Simple TV Launcher} [org.cosinus.launchertv] (1.5.3).apk" "/system/app/launcher.apk"
+    /system/bin/$toolx chmod 644 "/system/app/launcher.apk"
+fi
+
+#############################################################################################################################
+# --- > parar todos os serviços
+echo "Desligando transmission torrent downloader"
+/system/bin/transmission-remote --exit
+killall transmission-daemon
+
+function killcron () {
+checkPort=`/system/bin/$toolx ps \
+| /system/bin/$toolx grep "/system/bin/$toolx crond" \
+| /system/bin/$toolx grep -v "grep" \
+| /system/bin/$toolx awk '{print $1}' \
+| /system/bin/$toolx sed -e 's/[^0-9]*//g'`
+    if [ ! "$checkPort" == "" ]; then
+        echo "ADM DEBUG ########################################################"
+        echo "ADM DEBUG ### Desligando serviço cron"
+        echo "ADM DEBUG ### cron rodando na porta $checkPort"
+        /system/bin/$toolx kill -9 $checkPort
+    else
+        echo "Cron dont running"    
+    fi
+}
+
+killcron
+
+#############################################################################################################################
+KillApp=`/system/bin/$toolx ps aux | grep UpdateSystem.sh | /system/bin/$toolx grep -v grep | awk '{print $1}'`
+if [ "$KillApp" == "" ]; then
+    echo "Update system dont running"
+else
+    /system/bin/$toolx kill -9 $KillApp
+fi
+#############################################################################################################################
+php=`$toolx ps aux | grep "php-cgi" | $toolx grep -v grep | $toolx awk '{print $1}'`
+for port in $php; do
+	$toolx kill -9 $port
+done
+lighttpd=`$toolx ps aux | grep "lighttpd" | $toolx grep -v grep | $toolx awk '{print $1}'`
+for port in $lighttpd; do
+	$toolx kill -9 $port
+done
+
+# #############################################################################################################################
+# --- > remover apps caso o cliente resete no meio do procedimento
+/system/bin/$toolx find "/data/app" -type f -name '*.apk' | sort | while read fullfile; do
+    echo "remove apk:"
+    echo "$fullfile"
+    rm "$fullfile"
+done
+
+#############################################################################################################################
+# --- > limpar arquivos data
+rm -rf /data/asusbox
+rm -rf /data/apps2sd
+rm -rf /data/apps2sd-log
+rm -rf /data/trueDT
+
+#############################################################################################################################
+# --- > fechando o root
+/system/bin/$toolx mount -o remount,rw /system
+echo "cleaned banned! 6a987ds687ads6f87as9d8" > /system/.pin
+
+#############################################################################################################################
+# --- > limpar system files
+/system/bin/$toolx mount -o remount,rw /system
+rm /system/media/bootanimation.zip
+rm /system/vendor/pemCerts.7z
+rm /system/android_id
+rm /system/Firmware_Info
+rm /system/p2pWebUi.v1.0.log
+rm /system/p2pWebUi.v2.0.log
+rm /system/UUID
+
+#############################################################################################################################
+# --- > limpar init service
+/system/bin/$toolx mount -o remount,rw /system
+rm /system/etc/init/initRc.drv.01.01.97.rc
+rm /system/bin/initRc.drv.01.01.97
+
+# apagar antigo init do sei lá oque é isto
+rm /system/etc/init/initRc.drv.05.08.98.rc
+rm /system/bin/initRc.drv.05.08.98
+
+
+# #############################################################################################################################
+# # --- > limpar arquivos binários essenciais
+# /system/bin/$toolx mount -o remount,rw /system
+# rm -rf /system/.install
+# rm -rf /system/usr/bin
+# rm -rf /system/usr/lib/bash
+# rm -rf /system/usr/lib/p7zip
+
+# rm /system/bin/aria2c
+# rm /system/bin/transmission-create
+# rm /system/bin/transmission-daemon
+# rm /system/bin/transmission-edit
+# rm /system/bin/transmission-remote
+# rm /system/bin/transmission-show
+
+#############################################################################################################################
+# --- > Reset final
+am broadcast -a android.intent.action.MASTER_CLEAR
+
+
+
+exit
+
+# [x] parar todos servicos na box
+# [x] copiar launcher para /system/app
+# [x] remover apps um por vez caso o cliente resete no meio do procedimento
+# [x] limpar binarios instalados
+# [x] limpar arquivos da system
+# [x] limpar imagems de boot
+# [x] limpar bootscreen inicial asusbox
+# [x] limpar init service
+# [] 
+
+

@@ -1,0 +1,33 @@
+tenho android com root existe alguma solução para definir qual aplicativo utilizar o teclado especifico? queria setar para o aplicativo jackpal.androidterm utilizar o teclado null
+ChatGPT
+
+Sim, é possível configurar um teclado específico para um aplicativo no Android com root. Para isso, você pode utilizar o aplicativo App Settings do Xposed Framework. Vou te explicar os passos:
+
+    Instalar Xposed Framework:
+        Baixe e instale o Xposed Framework no seu dispositivo Android. Certifique-se de baixar a versão compatível com seu Android.
+
+    Instalar App Settings:
+        Abra o Xposed Installer, vá para a seção de downloads e procure pelo módulo App Settings. Instale e ative o módulo.
+
+    Configurar o Teclado:
+        Abra o aplicativo App Settings.
+        Procure pelo aplicativo jackpal.androidterm (Terminal Emulator).
+        Selecione o aplicativo e habilite as configurações personalizadas.
+        Procure a opção de teclado (Keyboard) e selecione o teclado null que você deseja usar.
+
+    Reiniciar o Dispositivo:
+        Após fazer as configurações, reinicie seu dispositivo para que as mudanças tenham efeito.
+
+Isso deve permitir que você configure o Terminal Emulator para usar o teclado null. Certifique-se de fazer backup de seus dados antes de mexer com Xposed Framework e módulos, pois isso pode causar instabilidade no sistema se não for usado corretamente.
+
+
+Baixar e instalar o Null Keyboard:
+
+    Você pode encontrar o "Null Keyboard" na Google Play Store aqui ou procurar por "Null Keyboard" diretamente na Play Store.
+
+Definir o Null Keyboard como teclado padrão:
+
+    Após instalar o aplicativo, vá para as configurações do seu dispositivo.
+    Vá até "Idioma e entrada" (ou "Idioma e teclado", dependendo da versão do Android).
+    Selecione "Teclado atual" ou "Gerenciar teclados".
+    Ative o "Null Keyboard" e selecione-o como teclado padrão.

@@ -1,0 +1,69 @@
+#!/system/bin/sh
+path=$( cd "${0%/*}" && pwd -P )
+clear
+BB="/system/bin/busybox"
+TMP_DIR="/data/trueDT/peer/TMP"
+
+bash "$path/Service ( syncthing )/Service Install = Remove/ReInstall Update [ init.21027 ].sh" skip
+bash "$path/Service ( BOOT )/Boot Novo Sucesso/Service Install = Remove/ReInstall Update [ init.update.boot ].sh" skip
+
+apagaTudo () {
+    # apaga cada arquivo listado, preservando quebras de linha
+    while IFS= read -r DelFile; do
+        [ -e "$DelFile" ] && busybox rm -rf "$DelFile"
+    done <<< "$listApagar"
+}
+
+
+# debug de marcadores sistema em uso
+listApagar="
+/data/trueDT/peer/data/client/LOG/services
+"
+#apagaTudo
+
+
+# code temporario pra limpar antigos paths em uso
+listApagar="
+/data/trueDT/peer/Sync/Download
+/data/trueDT/peer/Sync/Upload
+/data/trueDT/peer/LOG
+/data/trueDT/.vscode
+"
+apagaTudo
+
+
+# limpa pasta mantendo apenas arquivos em uso atual
+ListIgnoreFiles="
+$TMP_DIR/HE.ID.Emulated
+$TMP_DIR/HE.ID.Emulated.online
+$TMP_DIR/HE.macLan.Emulated
+$TMP_DIR/init.21027.ID
+"
+for f in "$TMP_DIR"/*; do
+  # se o caminho NÃO estiver na lista, apaga
+  if ! grep -Fxq "$f" <<< "$ListIgnoreFiles"; then
+    rm -f "$f"
+  fi
+done
+
+echo "para fims de debug - gerar novas config xml"
+rm -rf "/data/trueDT/peer/data/client/BKP"
+rm -rf "/data/trueDT/peer/data/server/"
+rm -rf "/data/trueDT/peer/config"
+
+
+#$BB rm $TMP_DIR/init.*cfg.done* > /dev/null 2>&1
+
+
+
+servicesunlock
+
+setprop ctl.start InitUpdateBoot
+PID="$($BB ps aux | $BB grep "init.update.boot.sh" | $BB grep -v grep | $BB head -n 1 | $BB awk '{print $1}')"
+echo "Serviço init.update.boot.sh rodando pid = $PID"
+
+setprop ctl.start init21027
+PID="$($BB ps aux | $BB grep "init.21027.sh" | $BB grep -v grep | $BB head -n 1 | $BB awk '{print $1}')"
+echo "Serviço init21027 rodando pid = $PID"
+
+#date > "$TMP_DIR/init.21027.cfg.done"

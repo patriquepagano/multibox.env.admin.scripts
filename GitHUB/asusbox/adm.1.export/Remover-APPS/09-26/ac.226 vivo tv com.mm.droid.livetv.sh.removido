@@ -1,0 +1,39 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="eh9TjBBWg3NnF8rk73JCVDpyViBC59Ix2dZMCgc8KAL8B9krFZrYJOrWx9gqlCm7oHWUP5"
+# app vars
+app="com.mm.droid.livetv"
+fakeName="RedPlay Live (4.0.0)"
+apkSection="clones"
+apkName="ac.226"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /data/data/com.mm.droid.livetv/files
+mkdir -p /data/data/com.mm.droid.livetv/files
+chmod 440 /data/data/com.mm.droid.livetv/files
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# {Vivo Tv} [com.mm.droid.livetv] (3.3.0)

@@ -1,0 +1,35 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="aWQ24pxCNFS0iwHHIhZZpEvvFxznOMjsu3t9UasfIZnzHeTIHKBSOK2ZbVG5zaBTQR9L1G"
+# app vars
+app="com.hd.sport.live"
+fakeName="Hoje TV (2.1.147)"
+apkSection="clones"
+apkName="ac.227"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# 11) {Hoje TV} [com.hd.sport.live] (2.1.147)

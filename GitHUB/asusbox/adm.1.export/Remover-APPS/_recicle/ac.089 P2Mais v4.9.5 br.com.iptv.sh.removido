@@ -1,0 +1,39 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="IxGuQwKxH4aIsmcpneqcYZ6QYNgW0gulu6ohwzhf0vVgD96pR3xfSvjML8Ru5SaXwePd47"
+# app vars
+app="br.com.iptv"
+fakeName="P2Mais v4.9.5 (4.9.5)"
+apkSection="clones"
+apkName="ac.089"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# pede acesso a arquivos
+# {P2Mais v4.9.5} [br.com.iptv] (4.9.5)
+
+# input text "sspcapital"
+# input text "rkn4323"
+

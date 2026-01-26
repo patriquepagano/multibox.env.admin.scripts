@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="zmVVuS5TAqmpDGYmhfUuJzlZoYe36G6dO7xxE2KmtQQihYrbxjrvnhJDJAl2a0UAUxDDRE"
+# app vars
+app="ott.i5.mw.client.tv.launcher"
+fakeName="AZTV+ (1.3.44)"
+apkSection="clones"
+apkName="ac.134"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="yes"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {AZTV+} [ott.i5.mw.client.tv.launcher] (1.3.44)

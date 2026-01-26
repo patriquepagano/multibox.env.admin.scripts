@@ -1,0 +1,33 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="40eYyPs0oKlOQkoT5c6PThG7CVg2nqYy6nEWwljtIFHvMnuLVunFn2rITuEPdoPBURslIU"
+# app vars
+app="com.szdq.elinksmart.vtv"
+fakeName="VTV"
+apkSection="clones"
+apkName="ac.056"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="yes"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+

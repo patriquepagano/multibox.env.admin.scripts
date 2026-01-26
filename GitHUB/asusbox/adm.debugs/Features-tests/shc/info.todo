@@ -1,0 +1,34 @@
+https://github.com/cliffalbert/UnSHc-arm
+
+mesmo editando o script ainda deu algum erro e nao descriptografou
+
+
+root:/data/data/com.termux/files/home/ :) "/data/asusbox/adm.debugs/shc/unshc.sh" /data/asusbox/adm.2.install/UpdateSystem-generate.sh
+ _   _       _____ _   _
+| | | |     /  ___| | | |
+| | | |_ __ \ `--.| |_| | ___
+| | | | '_ \ `--. \  _  |/ __|
+| |_| | | | /\__/ / | | | (__
+ \___/|_| |_\____/\_| |_/\___|
+
+--- UnSHc - The shc decrypter.
+--- Version: 0.8arm
+------------------------------
+UnSHc is used to decrypt script encrypted with SHc
+Original idea from Luiz Octavio Duarte (LOD)
+Updated and modernized by Yann CAM
+- SHc   : [http://www.datsi.fi.upm.es/~frosal/]
+- UnSHc : [https://www.asafety.fr/unshc-the-shc-decrypter/]
+------------------------------
+
+[*] Input file name to decrypt [/data/asusbox/adm.2.install/UpdateSystem-generate.sh]
+/data/data/com.termux/files/usr/bin/objdump: /data/asusbox/adm.2.install/UpdateSystem-generate.sh: file format not recognized
+/data/data/com.termux/files/usr/bin/objdump: /data/asusbox/adm.2.install/UpdateSystem-generate.sh: file format not recognized
+[-] Unable to define arc4() call address...
+
+
+
+
+
+
+

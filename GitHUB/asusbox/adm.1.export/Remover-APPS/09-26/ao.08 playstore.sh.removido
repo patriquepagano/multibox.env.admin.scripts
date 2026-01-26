@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="oSUhluuZu3FgwvXR5ms0PAGfp1hDbvgaBl9v9j2T0HNuSWQGaF6Gb4mhtWvmw6y4FZjw2l"
+# app vars
+app="com.android.vending"
+fakeName="Google Play Store (45.7.17-23 [0] [PR] 744026385)"
+apkSection="oem"
+apkName="ao.08"
+path="/data/asusbox/.install/04.akp.oem"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+# {Google Play Store} [com.android.vending] (45.7.17-23 [0] [PR] 744026385)
+
+
+

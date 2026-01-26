@@ -1,0 +1,70 @@
+# old sistema
+# export bootLog="/storage/emulated/0/Android/data/asusbox/.www/boot.log"
+
+export bootLog="/data/trueDT/peer/chat/log.log"
+
+busybox rm "/data/trueDT/peer/chat/user.log"
+
+busybox cat <<EOF > "/data/trueDT/peer/chat/index.log"
+<div class="container">
+    <div class="row text-left">
+        <div class="col-md-6">
+            <b>Como não ter sua box banida:</b>
+            <ol>
+                <li>Não altere os logins dos aplicativos compartilhados.</li>
+                <li>Tenha paciência com o revendedor em aguardar atualização.</li>
+                <li>Trate o revendedor de maneira humana sem ofensas.</li>
+            </ol>                        
+        </div>
+        <div class="col-md-6">
+            <b>Novos recursos graças as doações em bitcoin:</b>
+            <ol>
+                <li><button onclick="window.location.href='/contato.php'">Formulário de contato</button></li>    
+                <br>
+                <li><button onclick="window.location.href='/revendedor.php'">Quero ser Revendedor!</button></li>
+            </ol>
+        </div>
+</div>
+<div class="row center">
+    <hr>
+    <b>Para doar bitcoins:<br> Instale o app mercado pago, compre bitcoins e transfira para nossa carteira.</b><br>
+    <img src="bitcoin.png" alt="bitcoin" class="img-fluid w-100" style="max-width: 250px;">
+</div>
+EOF
+
+
+busybox cat <<EOF > "/data/trueDT/peer/chat/news.log"
+<div class="container">
+    <div class="row text-left">
+        <div class="col-md-6">
+            <b>Estamos trabalhando para trazer aqui os seguintes recursos:</b>
+            <ol>
+                <li>Ferramenta neste painel para formatar hdd usb.</li>
+                <li>Baixar filmes e series para HDD.</li>
+                <li>Registrar seu tvbox e manter as preferencias apos hard reset.</li>
+            </ol>                        
+        </div>
+        <div class="col-md-6">
+            <b>Novos recursos graças as doações em bitcoin:</b>
+            <ol>
+                <li>( suporte para revendedores )</li>
+                <li>Postar sugestões ou críticas ao desenvolvedor do firmware.</li>
+                <li>Ouvidoria e controle de qualidade de atendimento.</li>
+                <li>Formulário de contato ( suporte para revendedores )  <button onclick="window.location.href='/contato.php'">Clique aqui</button></li></li>
+            </ol>
+            <hr>
+        </div>
+</div>
+<div class="row center">
+    <hr>
+    <b>Para doar bitcoins:<br> Instale o app mercado pago, compre bitcoins e transfira para nossa carteira.</b><br>
+    <img src="bitcoin.png" alt="bitcoin" class="img-fluid w-100" style="max-width: 250px;">
+</div>
+EOF
+
+busybox cat <<EOF > "/data/trueDT/peer/chat/log.log"
+Start Log system
+EOF
+
+
+

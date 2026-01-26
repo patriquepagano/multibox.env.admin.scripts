@@ -1,0 +1,45 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="WbzBRfzgtg5VnhKQlTZe8L0rhAGkul0T4K4HsFaaNh06vdchEkJFWd64Ch6dKM2lHDlPaG"
+# app vars
+app="com.mm.droid.livetv.tve"
+fakeName="TV EXPRESS (Sr Martins oficial )"
+apkSection="clones"
+apkName="ac.224"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /storage/emulated/0/tve
+rm -rf /data/data/com.mm.droid.livetv.tve/files
+mkdir -p /data/data/com.mm.droid.livetv.tve/files
+chmod 440 /data/data/com.mm.droid.livetv.tve/files
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+#
+
+
+
+#
+
+
+
+
+# input text "a70072025@gmail.com"
+# input text "25800852"
+
+
+
+# {TV EXPRESS} [com.mm.droid.livetv.tve] (Sr Martins oficial )

@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="5jl3LEkhyWij32TVQCZ2nMY2FROt6X9BMeHbt8bFL3f5WDufOJllOaGEzxGowBv5ymD9MC"
+# app vars
+app="com.blutv.apu"
+fakeName="Blue Live (1.05)"
+apkSection="clones"
+apkName="ac.217"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Blue Live} [com.blutv.apu] (1.05)
+
+

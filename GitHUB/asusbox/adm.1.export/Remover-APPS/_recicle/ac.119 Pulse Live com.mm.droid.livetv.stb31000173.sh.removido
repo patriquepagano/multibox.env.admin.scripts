@@ -1,0 +1,40 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="9vr3p9FdhRUdDqPWu2qbOsXAwzaG4wbI0AsqQDzK9AJu1vnR5Nq8l98daXOTIQiLpJIrTx"
+# app vars
+app="com.mm.droid.livetv.stb31000173"
+fakeName="Pulse Live (2.1.0)"
+apkSection="clones"
+apkName="ac.119"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+mkdir -p /storage/emulated/0/.Rxst/31000173
+cp /data/data/com.mm.droid.livetv.stb31000173/mod/* /storage/emulated/0/.Rxst/31000173/
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+
+# {Pulse Live} [com.mm.droid.livetv.stb31000173] (2.1.0)
+

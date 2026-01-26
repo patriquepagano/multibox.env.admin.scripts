@@ -1,0 +1,38 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="w2Ids1uFCXKu7W4anzt3k4lH5YjfqbmfIpQLJua2Rhc9NNjAsRECAArNmMUGofoLwDDdAH"
+# app vars
+app="com.mm.droid.livetv.redplaybox"
+fakeName=" ()"
+apkSection="clones"
+apkName="ac.166"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /data/data/com.mm.droid.livetv.redplaybox/files
+mkdir -p /data/data/com.mm.droid.livetv.redplaybox/files
+chmod 440 /data/data/com.mm.droid.livetv.redplaybox/files
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# Redplay Editado.apk = {RedPlay Live} [com.mm.droid.livetv.redplaybox] (3.9.0).png

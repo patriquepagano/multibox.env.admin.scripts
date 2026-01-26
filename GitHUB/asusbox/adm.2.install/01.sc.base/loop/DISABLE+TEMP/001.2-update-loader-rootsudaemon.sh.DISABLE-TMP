@@ -1,0 +1,40 @@
+# esta etapa vai rescrever o rootsu do asusbox, os novos firmwares já vai vir com o path do initRC padrao
+
+shellBin=`echo IyEvc3lzdGVtL2Jpbi9zaA== | /system/bin/busybox base64 -d`
+loaderFile="/system/bin/rootsudaemon.sh"
+
+function CheckLoader () {    
+    /system/bin/busybox cat $loaderFile | /system/bin/busybox grep -q "ver='20.12.2020'"
+    # if last execution for igual a 1 é erro
+    if [ $? = 1 ]; then
+        echo "ADM DEBUG ########################################################"
+        echo "ADM DEBUG ### função CheckLoader #################################"
+        echo "ADM DEBUG ### loader precisa ser gravado"
+        WriteLoader
+    fi
+}
+
+function WriteLoader () {
+echo "ADM DEBUG ########################################################"
+echo "ADM DEBUG ### função WriteLoader #################################"
+echo "ADM DEBUG ### gravando arquivo  > $loaderFile"
+/system/bin/busybox mount -o remount,rw /system
+/system/bin/busybox cat << EOF > $loaderFile
+$shellBin
+/system/xbin/daemonsu --auto-daemon &
+ver='20.12.2020'
+EOF
+/system/bin/busybox chmod 700 $loaderFile
+# força o loop caso não grave
+CheckLoader
+}
+
+# verifica o arquivo se existir para atualizar o firmware antigo
+if [ -f $loaderFile ]; then
+    CheckLoader
+fi
+
+
+
+
+

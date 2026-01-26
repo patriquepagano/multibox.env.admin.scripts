@@ -1,0 +1,43 @@
+{MiXplorer} [com.mixplorer] (6.49.3)
+{Pluto TV} [tv.pluto.android] (3.7.0-oculus)
+{Terminal Emulator} [jackpal.androidterm] (1.0.70)
+{Google Play services} [com.google.android.gms] (22.15.14 (040300-441847897))
+{Google Play Store} [com.android.vending] (49.3.40-23 [0] [PR] 852465888)
+{SmartTube} [com.teamsmart.videomanager.tv] (30.48)
+{Top TV Launcher 2} [dxidev.toptvlauncher2] (1.39)
+{Android System WebView} [com.google.android.webview] (119.0.6045.193)
+{YouTube} [com.google.android.youtube.tv] (2.07.02)
+{Disney+} [com.disney.disneyplus] (4.15.0+rc3-2025.09.04)
+{Prime Video} [com.amazon.amazonvideo.livingroom] (6.17.0+v15.1.0.291-armv7a)
+
+{NEW ONE P2P} [com.newone.p2p1] (1.0.7)
+{Apps2SD PRO} [in.co.pricealert.apps2sd] (16)
+{Tele Latino} [com.global.latinotv] (5.46.5)
+
+{YouCine} [com.world.youcinetv] (1.15.1)
+{Hoje TV} [com.hd.sport.live] (2.2.188)
+{MAGIS} [com.android.mgstv] (5.0.4)
+{Loon} [com.digitizercommunity.loontv] (2.0.95)
+{Alphaplay} [com.chsz.efile.alphaplay] (a5.2.1-20240619)
+{Obsidian} [md.obsidian] (1.10.6)
+{P2Mais v5.9.1} [br.com.kerhkhd] (5.9.1)
+
+{WPlay Pro} [io.wareztv.android.pro] (4.2.8)
+
+
+{Vivo Player} [iptv.vivo.player] (3.3.6)
+{MediaPlayerIbo} [com.ibostore.meplayerib4k] (229.6)
+{YouTube Premium ®FOR} [io.gh.reisxd.tizentube.fortaleza] (: Fortaleza EC ®)
+{STV} [com.bx.livf] (20250701)
+
+{Tourolive T1} [com.new2tourosat.app] (2.4.4)
+{Wapp IBO} [com.wapp.ibo] (3.9)
+{Max Net TV} [com.exploudapps.maxnettv] (12.3)
+{Netflix} [com.netflix.mediaclient] (8.143.5 build 19 52400)
+{DUNA XTP} [iptvsmart.iboxt] (1.18)
+
+
+
+
+
+{UniTV Free} [com.integration.unitvsiptv] (5.3.1)

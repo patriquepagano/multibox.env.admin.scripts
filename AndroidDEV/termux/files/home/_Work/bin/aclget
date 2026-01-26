@@ -1,0 +1,12 @@
+#!/system/bin/sh
+
+path=$( cd "${0%/*}" && pwd -P )
+clear
+
+echo "Aguarde gerando pack acl backup"
+cd /storage/DevMount/
+getfacl -R . > "${path}/acl_backup.txt"
+/system/bin/7z a -t7z -mx=9 -y "${path}/acl_backup.7z" "${path}/acl_backup.txt"
+rm "${path}/acl_backup.txt"
+du -hs "$path/acl_backup.7z"
+

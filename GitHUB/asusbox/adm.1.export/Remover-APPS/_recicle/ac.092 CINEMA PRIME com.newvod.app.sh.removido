@@ -1,0 +1,37 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="dmQ1hTGpctmqCqwVSFO08xwBiWW5b1RpYrqXXWjZPZb1qw0cDgcQfvC0J6DfZTQY2n9iI8"
+# app vars
+app="com.newvod.app"
+fakeName="CINEMA PRIME (1.9.0)"
+apkSection="clones"
+apkName="ac.092"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+
+
+# {CINEMA PRIME} [com.newvod.app] (1.9.0)

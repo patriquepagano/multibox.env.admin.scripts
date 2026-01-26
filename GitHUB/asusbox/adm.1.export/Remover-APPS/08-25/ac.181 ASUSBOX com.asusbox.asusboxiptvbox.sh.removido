@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="RY15SioQnGfuJF3HsQsLwPzYORhXgCp1wAd5wpuK4Lme7kvm5Fr07P1BzqSfHC4OsLNe0t"
+# app vars
+app="com.asusbox.asusboxiptvbox"
+fakeName="ASUSBOX (3.1)"
+apkSection="clones"
+apkName="ac.181"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+#
+
+#
+
+
+
+
+# {ASUSBOX} [com.asusbox.asusboxiptvbox] (3.1)

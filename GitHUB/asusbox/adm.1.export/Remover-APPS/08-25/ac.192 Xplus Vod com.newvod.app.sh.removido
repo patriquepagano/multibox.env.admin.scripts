@@ -1,0 +1,40 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="xxlNoLwgrQu7hzjXKJc9lGd9kDWiwXS172QAmdMasC2Ng9GgMsYGgw9Fx9FKvhBAPcLAot"
+# app vars
+app="com.newvod.app"
+fakeName="Xplus Vod (2.52)"
+apkSection="clones"
+apkName="ac.192"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Xplus Vod} [com.newvod.app] (2.52)
+
+# input text '20io8rrubogg44'
+
+# login via card
+
+

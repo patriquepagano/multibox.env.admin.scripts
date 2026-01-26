@@ -1,0 +1,11 @@
+tag="Cloud"
+group="Linode"
+HostName="asusbox-a1"
+ext="vps"
+user="root"
+IP="45.79.133.216"
+homeDev="/root/"
+key="~/_Work/_keys/digitalOcean/id_rsa"
+port="22"
+
+

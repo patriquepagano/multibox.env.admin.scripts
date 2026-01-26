@@ -1,0 +1,38 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="8V390NZ61TN9LeYM6mlx8nmjqxO6kjG81oSE53f0DKFLBWgvsWJZFt7exLUW1MWOorrPuB"
+# app vars
+app="com.gtv.app"
+fakeName="GTV (1.00)"
+apkSection="clones"
+apkName="ac.098"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+
+# {GTV} [com.gtv.app] (1.00).apk
+
+
+

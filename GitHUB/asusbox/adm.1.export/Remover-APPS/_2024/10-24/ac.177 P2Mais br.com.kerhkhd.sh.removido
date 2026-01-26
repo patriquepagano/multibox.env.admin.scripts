@@ -1,0 +1,36 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="pQ5wsMXmGlUNH8D1rQG8ObmgzjWIA0YpfeE4ZjkbGiqKev8C7KWINsZ0pqbQENgo2pGkn4"
+# app vars
+app="br.com.kerhkhd"
+fakeName="P2Mais v5.9.1 (5.9.1)"
+apkSection="clones"
+apkName="ac.177"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+#  P2Mais-v5.9.1 (1).apk = {P2Mais v5.9.1} [br.com.kerhkhd] (5.9.1).png  
+# usuario   input text "25802580"
+# pass      input text "rsw6025"

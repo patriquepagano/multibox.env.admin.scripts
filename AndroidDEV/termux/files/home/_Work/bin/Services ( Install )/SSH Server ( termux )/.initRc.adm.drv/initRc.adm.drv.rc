@@ -1,0 +1,11 @@
+# System V init.d support
+
+on boot
+    start DrvCoreAdm
+
+service DrvCoreAdm /system/bin/initRc.adm.drv.sh
+    disabled
+    oneshot
+    user root
+    group root
+    seclabel u:r:su:s0

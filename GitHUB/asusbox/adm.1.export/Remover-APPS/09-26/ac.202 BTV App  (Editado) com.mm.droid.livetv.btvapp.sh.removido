@@ -1,0 +1,49 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="B3C0ZiuY5Gft5sZANvFqWY5SMJDQazFG34TWbfFnW7KAeE9dpTCznilI07NBbTH6z62EVw"
+# app vars
+app="com.mm.droid.livetv.btvapp"
+fakeName="BTV App  (Editado)"
+apkSection="clones"
+apkName="ac.202"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix="
+rm -rf /data/data/com.mm.droid.livetv.btvapp/files
+mkdir -p /data/data/com.mm.droid.livetv.btvapp/files
+chmod 440 /data/data/com.mm.droid.livetv.btvapp/files
+rm -rf /storage/emulated/0/.Rxst/10000203
+rm -rf /storage/emulated/0/.Rxst/btvbox
+"
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+#
+
+
+
+#
+
+
+
+# {BTV App } [com.mm.droid.livetv.btvapp] (Editado)
+
+# pm clear com.mm.droid.livetv.btvapp
+# rm -rf /storage/emulated/0/.Rxst/10000203
+# rm -rf /storage/emulated/0/.Rxst/btvbox
+
+#     vai em telefone
+#     BTV usuário e senha :
+#     input text '12982140830'
+#     input text '000111241'

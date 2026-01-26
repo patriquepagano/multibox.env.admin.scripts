@@ -1,0 +1,5 @@
+#!/system/bin/sh
+
+cd /storage/DevMount/AndroidDEV/termux/files/home/_Work/bin
+x
+

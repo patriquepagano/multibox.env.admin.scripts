@@ -1,0 +1,6 @@
+--2021-02-03 11:56:02--  https://buildbot.libretro.com/nightly/android/latest/armeabi-v7a/mame2000_libretro_android.so.zip
+Resolving buildbot.libretro.com... 172.67.140.58, 104.21.38.224, 2606:4700:3033::6815:26e0, ...
+Connecting to buildbot.libretro.com|172.67.140.58|:443... connected.
+HTTP request sent, awaiting response... 304 Not Modified
+File ‘/sdcard/RetroArch/cores/mame2000_libretro_android.so.zip’ not modified on server. Omitting download.
+

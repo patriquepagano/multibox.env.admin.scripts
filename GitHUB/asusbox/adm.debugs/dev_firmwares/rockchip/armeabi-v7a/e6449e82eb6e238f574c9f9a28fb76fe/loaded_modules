@@ -1,0 +1,4 @@
+# modulos nativos do firmware
+ssv6x5x 491209 0 - Live 0x00000000
+vcodec_service 40153 0 - Live 0x00000000
+drmboot 8008 0 - Live 0x00000000 (P)

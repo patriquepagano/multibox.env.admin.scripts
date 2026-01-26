@@ -1,0 +1,34 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="ecpgyTGiG6QCPFrPSdrPPi6PMkEFeoyYsxOfF1LyAAD5tiLfuzuFRmmd2agv87JJD1TucF"
+# app vars
+app="br.com.claro.now.smarttvclient"
+fakeName="Claro tv+ (1.23.1.0)"
+apkSection="clones"
+apkName="ac.121"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix=""
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+AppGrantLoop=""
+
+### Tasks ###############################################################################
+
+
+
+
+
+
+
+
+# {Claro tv+} [br.com.claro.now.smarttvclient] (1.23.1.0)

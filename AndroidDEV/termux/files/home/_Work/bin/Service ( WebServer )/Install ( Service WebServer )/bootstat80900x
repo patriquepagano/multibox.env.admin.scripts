@@ -1,0 +1,17 @@
+#!/system/bin/sh
+
+export PATH=/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin:/system/usr/bin
+export LD_LIBRARY_PATH=/system/lib:/system/usr/lib
+
+# /system/bin/busybox chmod 660 /data/asusbox/.sc/boot/.w.conf/*.conf
+# /system/bin/busybox chmod 660 /data/asusbox/.sc/boot/.w.conf/*.ini
+
+date >> /sdcard/aaaaaaaaaaaaaaaaaaa
+
+if [ ! -d /data/trueDT/peer/LOG ]; then
+    mkdir -p /data/trueDT/peer/LOG
+fi
+
+/system/bin/lighttpd -D -f /system/etc/lighttpd.conf -m /system/usr/lib
+
+

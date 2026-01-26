@@ -1,0 +1,41 @@
+#!/system/bin/sh
+#
+export DIR=`dirname $(dirname "$0")`
+
+
+
+# comprimir
+Senha7z="HopUYMlWQTWIqvZR4IiyUuDWY59yXjwkQWFjcTJsfbvkjHy0kptcueAl3VFE5seKZdLwpA"
+# app vars
+app="com.asusbox.asusboxiptvbox"
+fakeName="AsusBOX"
+apkSection="clones"
+apkName="ac.035"
+path="/data/asusbox/.install/05.akp.cl"
+admExport=$(dirname "$0")
+# app configs
+LauncherIntegrated="no"
+manualAKPfix='
+# Limpa o cache para forçar um update da nova lista (algums apps precisa disto)
+# desativado o limpar o cache no momento vou rodar sem isto
+#pm clear $app
+'
+# data configs
+clearAppDataOnBoot="no"
+ConfigDataVersion="1.0.0"
+manualDTFfix=""
+manualDTFfixForced=''
+AppGrantLoop="android.permission.READ_EXTERNAL_STORAGE"
+
+### Tasks ###############################################################################
+# 
+
+
+
+#
+
+
+
+# http://45.79.48.215/asusbox/as.02.akp
+
+
