@@ -1,5 +1,5 @@
 
 
-SHCBootVersion="1769388204 = 25/01/2026 21:43:24 | 1769388204 = 25/01/2026 21:43:24 = novo sistema geoIP e novo db telemetria"
+SHCBootVersion="1770174206 = 04/02/2026 00:03:26 | loader shel debug code https"
 
 

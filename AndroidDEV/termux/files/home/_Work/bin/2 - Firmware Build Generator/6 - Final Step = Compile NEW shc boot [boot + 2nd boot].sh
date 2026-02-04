@@ -19,7 +19,6 @@ dateEpoch="$(busybox date +%s)"
 echo ""
 echo ""
 echo "Digite qual mudança feita neste código de boot? ( mensagem será exibida para clientes )"
-echo "$dateEpoch = $dateHuman |"
 read wip
 
 # gerando o marcador de versão do boot para ser empacotado junto.

@@ -1,0 +1,421 @@
+#!/system/bin/sh
+
+mkdir -p "$DESTINO"
+
+pause_screen() {
+  printf "Pressione ENTER para voltar ao menu."
+  read _
+}
+
+ensure_repo() {
+  if [ ! -d "$DESTINO" ]; then
+    echo "Destino nao encontrado: $DESTINO"
+    return 1
+  fi
+  cd "$DESTINO" || return 1
+  return 0
+}
+
+set_git_ssh() {
+  if [ -f "$key" ]; then
+    chmod 600 "$key"
+    export GIT_SSH_COMMAND="$SSH_BIN -i \"$key\" -o IdentitiesOnly=yes"
+  fi
+}
+
+show_status() {
+  ensure_repo || return
+  echo "Repo: $DESTINO"
+  git status -sb
+  pause_screen
+}
+
+show_diff() {
+  ensure_repo || return
+  choice_diff="$(printf '%s\n' \
+    "1 - Diff (unstaged) - mostra mudancas ainda nao adicionadas" \
+    "2 - Diff (staged) - mostra o que ja foi preparado com git add" \
+    "3 - Diff --stat - resumo por arquivo (sem abrir pager)" \
+    "0 - voltar" \
+    | "$FZF_BIN" --prompt="Diff: ")"
+
+  case "$choice_diff" in
+    "1 - Diff (unstaged) - mostra mudancas ainda nao adicionadas")
+      GIT_PAGER=cat git diff
+      ;;
+    "2 - Diff (staged) - mostra o que ja foi preparado com git add")
+      GIT_PAGER=cat git diff --cached
+      ;;
+    "3 - Diff --stat - resumo por arquivo (sem abrir pager)")
+      GIT_PAGER=cat git diff --stat
+      ;;
+    *)
+      return
+      ;;
+  esac
+  pause_screen
+}
+
+stash_menu() {
+  ensure_repo || return
+  choice_stash="$(printf '%s\n' \
+    "1 - Stash salvar - guarda mudancas sem commitar" \
+    "2 - Stash listar - ver mudancas guardadas" \
+    "3 - Stash aplicar - recupera sem apagar da lista" \
+    "4 - Stash pop - recupera e remove da lista" \
+    "5 - Stash drop - apaga um stash" \
+    "0 - voltar" \
+    | "$FZF_BIN" --prompt="Stash: ")"
+
+  case "$choice_stash" in
+    "1 - Stash salvar - guarda mudancas sem commitar")
+      printf "Descricao (ENTER = auto): "
+      read SDESC
+      if [ -z "$SDESC" ]; then
+        git stash push
+      else
+        git stash push -m "$SDESC"
+      fi
+      ;;
+    "2 - Stash listar - ver mudancas guardadas")
+      git stash list
+      ;;
+    "3 - Stash aplicar - recupera sem apagar da lista")
+      stash_ref="$(git stash list | "$FZF_BIN" --prompt="Escolha o stash: " | cut -d: -f1)"
+      [ -n "$stash_ref" ] && git stash apply "$stash_ref"
+      ;;
+    "4 - Stash pop - recupera e remove da lista")
+      stash_ref="$(git stash list | "$FZF_BIN" --prompt="Escolha o stash: " | cut -d: -f1)"
+      [ -n "$stash_ref" ] && git stash pop "$stash_ref"
+      ;;
+    "5 - Stash drop - apaga um stash")
+      stash_ref="$(git stash list | "$FZF_BIN" --prompt="Escolha o stash: " | cut -d: -f1)"
+      if [ -n "$stash_ref" ]; then
+        printf "Digite sim para confirmar o drop: "
+        read CONFIRM
+        [ "$CONFIRM" = "sim" ] && git stash drop "$stash_ref"
+      fi
+      ;;
+    *)
+      return
+      ;;
+  esac
+  pause_screen
+}
+
+sync_safe() {
+  ensure_repo || return
+  set_git_ssh
+  branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+  if [ "$branch" = "HEAD" ] || [ -z "$branch" ]; then
+    echo "Branch atual indefinida (detached HEAD)."
+    pause_screen
+    return
+  fi
+  echo "Atualizando branch: $branch"
+  git fetch origin
+  git pull --rebase origin "$branch"
+  pause_screen
+}
+
+checkout_branch() {
+  ensure_repo || return
+  branch="$(git for-each-ref --format='%(refname:short)' refs/heads refs/remotes/origin | "$FZF_BIN" --prompt="Checkout: ")"
+  [ -z "$branch" ] && return
+  case "$branch" in
+    origin/*)
+      local_branch="${branch#origin/}"
+      git checkout -B "$local_branch" "$branch"
+      ;;
+    *)
+      git checkout "$branch"
+      ;;
+  esac
+  pause_screen
+}
+
+log_short() {
+  ensure_repo || return
+  GIT_PAGER=cat git log --oneline -n 10
+  pause_screen
+}
+
+reset_menu() {
+  ensure_repo || return
+  choice_reset="$(printf '%s\n' \
+    "1 - Reset --soft - desfaz commit e mantem staged" \
+    "2 - Reset --mixed - desfaz commit e volta para unstaged" \
+    "0 - voltar" \
+    | "$FZF_BIN" --prompt="Reset: ")"
+
+  case "$choice_reset" in
+    "1 - Reset --soft - desfaz commit e mantem staged")
+      printf "Ref (ENTER = HEAD~1): "
+      read RREF
+      [ -z "$RREF" ] && RREF="HEAD~1"
+      printf "Digite sim para confirmar: "
+      read CONFIRM
+      [ "$CONFIRM" = "sim" ] && git reset --soft "$RREF"
+      ;;
+    "2 - Reset --mixed - desfaz commit e volta para unstaged")
+      printf "Ref (ENTER = HEAD~1): "
+      read RREF
+      [ -z "$RREF" ] && RREF="HEAD~1"
+      printf "Digite sim para confirmar: "
+      read CONFIRM
+      [ "$CONFIRM" = "sim" ] && git reset --mixed "$RREF"
+      ;;
+    *)
+      return
+      ;;
+  esac
+  pause_screen
+}
+
+clean_untracked() {
+  ensure_repo || return
+  printf "Digite sim para apagar arquivos nao rastreados: "
+  read CONFIRM
+  if [ "$CONFIRM" = "sim" ]; then
+    git clean -fd
+  fi
+  pause_screen
+}
+
+show_remotes() {
+  ensure_repo || return
+  git remote -v
+  pause_screen
+}
+
+create_branch_publish() {
+  ensure_repo || return
+  set_git_ssh
+
+  printf "Nome do novo branch: "
+  read BRANCH_NAME
+  if [ -z "$BRANCH_NAME" ]; then
+    echo "Nome do branch vazio."
+    pause_screen
+    return
+  fi
+
+  if echo "$BRANCH_NAME" | grep -q "[[:space:]]"; then
+    echo "Nome invalido: nao pode ter espacos."
+    pause_screen
+    return
+  fi
+
+  if ! git check-ref-format --branch "$BRANCH_NAME"; then
+    echo "Nome invalido: evite caracteres especiais e nomes como '..' ou terminando com '/'."
+    pause_screen
+    return
+  fi
+
+  if git show-ref --verify --quiet "refs/heads/$BRANCH_NAME"; then
+    echo "Branch ja existe: $BRANCH_NAME"
+    pause_screen
+    return
+  fi
+
+  git checkout -b "$BRANCH_NAME" || return
+
+  git add -A
+  if git diff --cached --quiet; then
+    echo "Sem mudancas para commitar no novo branch."
+    pause_screen
+    return
+  fi
+
+  printf "Descricao do commit (ENTER = data): "
+  read DESC
+  [ -z "$DESC" ] && DESC="Update $(date +'%Y-%m-%d %H:%M:%S')"
+  git commit -m "$DESC"
+  git push -u origin "$BRANCH_NAME"
+  pause_screen
+}
+
+update_repo() {
+  cd "$DESTINO" || return
+  chmod 600 "$key"
+  export GIT_SSH_COMMAND="$SSH_BIN -i \"$key\" -o IdentitiesOnly=yes"
+  git remote remove origin >/dev/null 2>&1 || true
+  git remote add origin "$REPO_SSH"
+
+  if git diff --quiet && git diff --cached --quiet; then
+    echo "No changes to upload."
+    sleep 3
+    return 0
+  fi
+
+  git add -A
+  if git diff --cached --quiet; then
+    echo "No staged changes to upload."
+    sleep 3
+    return 0
+  fi
+
+  printf "Commit description (ENTER = use date): "
+  read DESC
+  [ -z "$DESC" ] && DESC="Update $(date +'%Y-%m-%d %H:%M:%S')"
+  git commit -m "$DESC"
+  git push origin main
+  echo "Uploaded changes."
+}
+
+first_upload() {
+  cd "$DESTINO" || return
+  chmod 600 "$key"
+  export GIT_SSH_COMMAND="$SSH_BIN -i \"$key\" -o IdentitiesOnly=yes"
+  git init -b main
+  git checkout -B main
+  git remote remove origin >/dev/null 2>&1 || true
+  git remote add origin "$REPO_SSH"
+  git add -A
+  if git diff --cached --quiet; then
+    echo "init $(date +'%Y-%m-%d %H:%M:%S')" > "$DESTINO/.init"
+    git add -A
+  fi
+  git commit -m "Initial upload $(date +'%Y-%m-%d %H:%M:%S')" || true
+  git push -u --force origin main
+}
+
+force_download() {
+  cd "$DESTINO" || return
+  chmod 600 "$key"
+  export GIT_SSH_COMMAND="$SSH_BIN -i \"$key\" -o IdentitiesOnly=yes"
+
+  if [ ! -d "$DESTINO/.git" ]; then
+    git init
+    git branch -M main
+  fi
+
+  branch_name="$1"
+  [ -z "$branch_name" ] && branch_name="main"
+
+  git remote remove origin >/dev/null 2>&1 || true
+  git remote add origin "$REPO_SSH"
+  if git fetch origin "$branch_name"; then
+    git checkout -B "$branch_name" "origin/$branch_name"
+    git reset --hard "origin/$branch_name"
+    git clean -fd
+    echo "Download concluido. Arquivos locais sobrescritos. Branch: $branch_name"
+  else
+    echo "Falha no download (fetch origin $branch_name)."
+    return 1
+  fi
+}
+
+while :; do
+  current_branch=""
+  if [ -d "$DESTINO/.git" ]; then
+    current_branch="$(cd "$DESTINO" && git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+  fi
+  [ -z "$current_branch" ] && current_branch="desconhecido"
+
+  choice="$(printf '%s\n' \
+    "1 - atualizar (${friendlyName}) - adiciona, commita e envia" \
+    "2 - Enviar primeiro commit ou apagar tudo - forca push inicial" \
+    "3 - Baixar tudo e sobrescrever tudo - reset hard + clean" \
+    "4 - Status rapido - ver o que mudou" \
+    "5 - Diff - ver detalhes das mudancas" \
+    "6 - Stash - guardar/restaurar mudancas" \
+    "7 - Sync seguro - fetch + pull --rebase" \
+    "8 - Trocar branch - mudar de branch" \
+    "9 - Log curto - ultimos commits" \
+    "10 - Reset - desfazer commits locais" \
+    "11 - Limpar untracked - apagar arquivos nao rastreados" \
+    "12 - Mostrar remotes - ver URLs do origin" \
+    "13 - Criar branch e publicar - nova linha do tempo" \
+    "0 - sair" \
+    | "$FZF_BIN" --prompt="Branch atual: $current_branch | Escolha uma opcao: ")"
+
+  case "$choice" in
+    "1 - atualizar (${friendlyName}) - adiciona, commita e envia")
+      update_repo
+      ;;
+    "2 - Enviar primeiro commit ou apagar tudo - forca push inicial")
+      printf "Digite sim para continuar: "
+      read CONFIRM
+      if [ "$CONFIRM" != "sim" ]; then
+        echo "Cancelado."
+        pause_screen
+        continue
+      fi
+      first_upload
+      ;;
+    "3 - Baixar tudo e sobrescrever tudo - reset hard + clean")
+      printf "Digite sim para continuar: "
+      read CONFIRM
+      if [ "$CONFIRM" != "sim" ]; then
+        echo "Cancelado."
+        pause_screen
+        continue
+      fi
+      if [ ! -d "$DESTINO" ]; then
+        echo "Destino nao encontrado: $DESTINO"
+        pause_screen
+        continue
+      fi
+      set_git_ssh
+      if [ ! -d "$DESTINO/.git" ]; then
+        git -C "$DESTINO" init
+        git -C "$DESTINO" branch -M main
+        git -C "$DESTINO" remote remove origin >/dev/null 2>&1 || true
+        git -C "$DESTINO" remote add origin "$REPO_SSH"
+      fi
+      git -C "$DESTINO" fetch origin --prune >/dev/null 2>&1
+      branch_remote="$(git -C "$DESTINO" for-each-ref --format='%(refname:short)' refs/remotes/origin | "$FZF_BIN" --prompt="Escolha o branch para baixar: ")"
+      if [ -z "$branch_remote" ]; then
+        echo "Nenhum branch selecionado."
+        pause_screen
+        continue
+      fi
+      branch_remote="${branch_remote#origin/}"
+      force_download "$branch_remote"
+      ;;
+    "4 - Status rapido - ver o que mudou")
+      show_status
+      ;;
+    "5 - Diff - ver detalhes das mudancas")
+      show_diff
+      ;;
+    "6 - Stash - guardar/restaurar mudancas")
+      stash_menu
+      ;;
+    "7 - Sync seguro - fetch + pull --rebase")
+      sync_safe
+      ;;
+    "8 - Trocar branch - mudar de branch")
+      checkout_branch
+      ;;
+    "9 - Log curto - ultimos commits")
+      log_short
+      ;;
+    "10 - Reset - desfazer commits locais")
+      reset_menu
+      ;;
+    "11 - Limpar untracked - apagar arquivos nao rastreados")
+      clean_untracked
+      ;;
+    "12 - Mostrar remotes - ver URLs do origin")
+      show_remotes
+      ;;
+    "13 - Criar branch e publicar - nova linha do tempo")
+      create_branch_publish
+      ;;
+    "0 - sair")
+      break
+      ;;
+    "")
+      echo "Nenhuma opcao selecionada."
+      pause_screen
+      ;;
+    *)
+      echo "Opcao invalida."
+      pause_screen
+      ;;
+  esac
+done
+
+

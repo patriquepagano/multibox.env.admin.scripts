@@ -30,6 +30,7 @@ duration=$SECONDS
 echo "$(($duration / 60)) minutos e $(($duration % 60)) segundos para concluir." >> $bootLog 2>&1
 
 
+
 # mostra na aba news.php a key da box
 # antes de liberar a instalação para eu determinar um filtro de quais box quero limpar
 mkdir -p /data/trueDT/peer/Sync/sh.all
@@ -42,7 +43,6 @@ KEY : $Placa=$CpuSerial=$MacLanReal
 echo "
 Atualizado com sucesso!!!
 KEY : $Placa=$CpuSerial
-
 " > "$bootLog" 2>&1
 
 

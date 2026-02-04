@@ -90,9 +90,29 @@ du -hs /data/trueDT/BKP/pemCerts.7z
 echo "
 Uptime var = $checkUptime
 cat uptime = $(cat /proc/uptime)
-
+CPU Serial = $(busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }')
 "
 
+
+
+# English comment: Show /proc/cpuinfo Serial (if present)
+busybox cat /proc/cpuinfo 2>/dev/null | busybox grep -iE '^(Serial|Hardware|Revision)\s*:'
+
+# English comment: Common efuse/unifykey locations (often Amlogic)
+for p in \
+  /sys/class/efuse/uuid \
+  /sys/class/efuse/mac \
+  /sys/class/efuse/serial \
+  /sys/class/unifykeys/* \
+  /sys/devices/platform/*efuse*/* \
+  /sys/bus/nvmem/devices/*/nvmem \
+; do
+  if [ -e "$p" ]; then
+    busybox echo "== $p =="
+    busybox head -c 128 "$p" 2>/dev/null | busybox hexdump -C 2>/dev/null || busybox cat "$p" 2>/dev/null
+    busybox echo
+  fi
+done
 
 
 

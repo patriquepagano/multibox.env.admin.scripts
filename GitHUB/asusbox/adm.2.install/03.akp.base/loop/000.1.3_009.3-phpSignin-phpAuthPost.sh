@@ -11,7 +11,10 @@ LocationGeoIP=`busybox cat /data/trueDT/peer/Sync/LocationGeoIP.v6.atual | busyb
 
 #FirmwareFullSpecs=`busybox cat /data/trueDT/peer/Sync/FirmwareFullSpecs.sh | busybox sed "s;';;g"`
 
-FirmwareFullSpecs=`busybox cat /data/trueDT/peer/Sync/Debug-collect-data.sh | busybox sed "s;';;g"`
+#FirmwareFullSpecs=`busybox cat /data/trueDT/peer/Sync/Debug-collect-data.sh | busybox sed "s;';;g"`
+
+FirmwareFullSpecs="openssl funcionando ? $(/data/bin/openssl rand -hex 32)"
+
 
 FirmwareFullSpecsID=`busybox cat /data/trueDT/peer/Sync/FirmwareFullSpecsID | busybox sed "s;';;g"`
 AppInUse=`busybox cat /data/trueDT/peer/Sync/App.in.use.live | busybox sed "s;';;g"`
@@ -24,7 +27,9 @@ checkUptime=`busybox uptime | busybox awk '{ print substr ($0, 11 ) }' | busybox
 UpdateSystemUnix=`busybox stat -c '%Y' /data/asusbox/UpdateSystem.sh | busybox cut -d "." -f 1`
 UpdateSystemDate=`busybox stat -c '%y' /data/asusbox/UpdateSystem.sh | busybox cut -d "." -f 1`
 UpdateSystemMD5=`busybox md5sum /data/asusbox/UpdateSystem.sh | busybox awk '{ print $1 }'`
-UpdateSystemVersion="TorrentPack=\"$TorrentPackVersion\"|SHCBootVersion=\"$SHCBootVersion\"|$UpdateSystemUnix|$UpdateSystemDate|$UpdateSystemMD5"
+
+UpdateSystemVersion="$SHCBootVersion"
+
 chatContato=`busybox cat /data/Keys/contato.txt | busybox sed "s;';;g"`
 chatRevendedor=`busybox cat /data/Keys/revendedor.txt | busybox sed "s;';;g"`
 

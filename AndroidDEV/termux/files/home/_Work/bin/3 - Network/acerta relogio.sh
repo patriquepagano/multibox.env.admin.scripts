@@ -1,7 +1,9 @@
+#!/system/bin/sh
+# Menu switch DNS - BusyBox / root limitado
+# Compatível com Android TV boxes com BusyBox
+clear
+path="$( cd "${0%/*}" && pwd -P )"
 
-# não tem nada de errado com este script, ele funciona perfeitamente. a questão é que o usuario tem que selecionar seu fuso horario correto nas configurações do sistema android.
-# caso contrário, o horário exibido continuará errado mesmo após a correção via ntp ou http date.
-# criar um guia de configuração no manual do usario para que clientes possam corrigir seu horario desta maneira vai servir para qualquer pais
 
 
 BB=/system/bin/busybox
@@ -75,4 +77,18 @@ else
 fi
 
 setprop persist.sys.timezone $TIMEZONE
+
+
+
+
+
+if [ ! "$1" = "skip" ]; then
+    echo "Press any key to exit."
+    read -r bah
+fi
+
+
+
+
+
 
