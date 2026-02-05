@@ -1,5 +1,5 @@
 
 
-SHCBootVersion="1770174206 = 04/02/2026 00:03:26 | loader shel debug code https"
+SHCBootVersion="1770257352 = 04/02/2026 23:09:12 | uuidDevice new"
 
 

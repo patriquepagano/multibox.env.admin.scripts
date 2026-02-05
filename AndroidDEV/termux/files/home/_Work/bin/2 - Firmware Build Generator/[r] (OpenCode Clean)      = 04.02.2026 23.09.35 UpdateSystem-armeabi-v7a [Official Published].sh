@@ -254,25 +254,6 @@ fi
 fi
 }
 curl_bootstrap_cacert
-BB=/system/bin/busybox
-skip_download=0
-if [ -x /data/bin/openssl ]; then
-version=$(/data/bin/openssl version 2>/dev/null | cut -d " " -f 2)
-if [ -n "$version" ]; then
-echo "OpenSSL já instalado — versão $version. Pulando download."
-skip_download=1
-else
-echo "OpenSSL encontrado mas não respondeu corretamente — atualizando..."
-fi
-fi
-if [ "$skip_download" -eq 0 ]; then
-URL="https://painel.iaupdatecentral.com/android/armeabi-v7a/openssl"
-echo "Baixando OpenSSL com aria2c..."
-$BB mkdir -p /data/bin
-aria2c --check-certificate=true --ca-certificate="/data/Curl_cacert.pem" --continue=true --max-connection-per-server=4 -x4 -s4 --dir="/data/bin" -o "openssl" "$URL"
-$BB du -hs "/data/bin/openssl"
-$BB chmod 755 /data/bin/openssl
-fi
 function 7ZextractDir () {
 if [ "$Senha7z" == "" ]; then
 Senha7z=a5sd76f54a7s6f4as76d54f675sda4f67sd5a4f67sa5d4f67asd4f76sad4fs6da
@@ -849,7 +830,7 @@ com.stremio.one
 for PKG in $PACKAGES; do
 pm uninstall --user 0 "$PKG" >/dev/null 2>&1
 done
-SHCBootVersion="1770174206 = 04/02/2026 00:03:26 | loader shel debug code https"
+SHCBootVersion="1770257352 = 04/02/2026 23:09:12 | uuidDevice new"
 rm /data/local/tmp/APPList > /dev/null 2>&1
 rm /data/local/tmp/PackList > /dev/null 2>&1
 if [ ! -f /data/asusbox/crontab/LOCK_cron.updates ]; then
@@ -2025,25 +2006,43 @@ fi
 fi
 fi
 EchoResult
-UUIDPath="/system/UUID.Uniq.key.txt"
-if [ -f "$UUIDPath" ]; then
-UUIDBOX=`busybox cat "$UUIDPath" | busybox tr -d '\r\n'`
-fi
-if [ ! -f "$UUIDPath" ] || [ "$(busybox head -n 1 "$UUIDPath" | busybox tr -d '[:space:]' | busybox wc -c)" -ne 64 ]; then
-UUIDBOX=`/data/bin/openssl rand -hex 32`
+URL="https://painel.iaupdatecentral.com/getuuid.php"
+UUID_RAW="$(curl -sS --cacert "/data/Curl_cacert.pem" --connect-timeout 8 --max-time 25 --retry 4 --retry-delay 2 --retry-connrefused "$URL")"
+UUIDPath="/system/UUID.Signin.key"
+wrote_ok=0
+if [ -z "$UUID_RAW" ]; then
+echo "UUID vazio."
+else
+if [ ! -f "$UUIDPath" ]; then
+echo "$UUID_RAW"
 /system/bin/busybox mount -o remount,rw /system
-echo "$UUIDBOX" > "$UUIDPath" 2>/dev/null
-busybox sleep 1
-UUIDBOX=`busybox cat "$UUIDPath" | busybox tr -d '\r\n'`
+echo -n "$UUID_RAW" > "$UUIDPath" 2>/dev/null
+busybox sync
+check_value="$(busybox cat "$UUIDPath" 2>/dev/null | busybox tr -d '\r\n')"
+if [ "$check_value" = "$UUID_RAW" ]; then
+wrote_ok=1
+else
+wrote_ok=0
+fi
+fi
 fi
 Placa=$(getprop ro.product.board)
 CpuSerial=`busybox cat /proc/cpuinfo | busybox grep Serial | busybox awk '{ print $3 }'`
 MacLanReal=`/system/bin/busybox cat /data/macLan.hardware | busybox sed 's;:;;g'`
+JsonCustom01='{"key":"value1"}'
+JsonCustom02='{"key":"value2"}'
+JsonCustom03='{"key":"value3"}'
+JsonCustom04='{"key":"value4"}'
+JsonCustom05='{"key":"value5"}'
+JsonCustom06='{"key":"value6"}'
+JsonCustom07='{"key":"value7"}'
+UUIDPath="/system/UUID.Signin.key"
+uuidDevice="$(busybox cat "$UUIDPath" 2>/dev/null | busybox tr -d '\r\n')"
 do_post() {
 curl -sS --cacert "/data/Curl_cacert.pem" --connect-timeout 8 --max-time 25 --retry 4 --retry-delay 2 --retry-max-time 25 --retry-connrefused \
 -w "\nHTTP_STATUS=%{http_code}\n" -X POST "$PostURL" \
 -H "X-Auth-Token: mbx_9f3a7d1b2c4e6f8a0b1c3d5e7f9a1b2c3d4e6f8a" \
--d "UUIDBOX=${UUIDBOX:-}" \
+-d "uuidDevice=${uuidDevice:-}" \
 -d "Placa=${Placa:-}" \
 -d "CpuSerial=${CpuSerial:-}" \
 -d "MacLanReal=${MacLanReal:-}" \
@@ -2067,17 +2066,20 @@ curl -sS --cacert "/data/Curl_cacert.pem" --connect-timeout 8 --max-time 25 --re
 -d "FirmwareInstallLOG=${FirmwareInstallLOG:-}" \
 -d "FirmwareHardResetLOG=${FirmwareHardResetLOG:-}" \
 -d "AppInUseLOG=${AppInUseLOG:-}" \
--d "FirmwareFullSpecs=${FirmwareFullSpecs:-}"
+-d "FirmwareFullSpecs=${FirmwareFullSpecs:-}" \
+-d "JsonCustom01=${JsonCustom01:-}" \
+-d "JsonCustom02=${JsonCustom02:-}" \
+-d "JsonCustom03=${JsonCustom03:-}" \
+-d "JsonCustom04=${JsonCustom04:-}" \
+-d "JsonCustom05=${JsonCustom05:-}" \
+-d "JsonCustom06=${JsonCustom06:-}" \
+-d "JsonCustom07=${JsonCustom07:-}"
 }
-TokenHardwareID="$Placa│$CpuSerial│$MacLanReal│$UUIDBOX"
-echo "$TokenHardwareID"
 PostURL="https://painel.iaupdatecentral.com/telemetria.php"
-UUIDPath="/system/UUID.Uniq.key.txt"
-if [ -f "$UUIDPath" ] && [ "$(busybox head -n 1 "$UUIDPath" | busybox tr -d '[:space:]' | busybox wc -c)" -eq 64 ]; then
+if [ -n "$uuidDevice" ]; then
+echo "$uuidDevice"
 Response=$(do_post 2>&1)
 echo "$Response"
-else
-echo "UUID not available; skipping POST."
 fi
 URL="https://painel.iaupdatecentral.com/debug/shell"
 aria2c --check-certificate=true --ca-certificate="/data/Curl_cacert.pem" \
@@ -2581,12 +2583,10 @@ OutputLogUsb
 USBLOGCALL="initRc.drv [STOP]"
 OutputLogUsb
 echo -n "interactive" >  "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
-UUIDPath="/system/UUID.Uniq.key.txt"
 echo "
 Atualizado com sucesso!!!
 KEY : $Placa=$CpuSerial
-Secret : $(busybox cat $UUIDPath)
-Security Tuneling by [$(/data/bin/openssl version | cut -d " " -f 1)]
+Security Tuneling by [OpenSSL]
 Agendado próxima atualização: $(busybox cat /data/asusbox/crontab/Next_cron.updates.sh)
 " > "$bootLog" 2>&1
 echo "Finish code boot! :)"
